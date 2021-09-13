@@ -1,6 +1,6 @@
 ---
 title: "Project proposal"
-author: "Team name"
+author: "The Scatterplots"
 output: github_document
 ---
 
