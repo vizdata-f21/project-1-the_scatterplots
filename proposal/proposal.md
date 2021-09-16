@@ -29,7 +29,12 @@ parks and we are hoping to explore these in our project.
 
 ## Questions
 
-The two questions you want to answer.
+1- What is the relationship between spending per resident and park size
+in different U.S. regions and/or cities over time?
+
+2- How many amenities do parks with the top 10 and bottom 10 rankings in
+2020 have and how does this vary based on proportion of the top 10 and
+bottom 10 cities’ land is parkland in 2020?
 
 ## Analysis plan
 
