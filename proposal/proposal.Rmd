@@ -20,7 +20,7 @@ Make sure to load the data and use inline code for some of this information.
 parks <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-06-22/parks.csv')
 ```
 
-
+`r ncol(parks)`
 ## Questions
 
 The two questions you want to answer.
