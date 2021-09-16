@@ -6,19 +6,19 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r load-packages, message = FALSE}
+```{r load-packages, warning = FALSE, message = FALSE}
 library(tidyverse)
+```
+
+```{r - read in dataset, warning = FALSE, message = FALSE}
+parks <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-06-22/parks.csv')
 ```
 
 ## Dataset
 
-Our dataset comes from The Trust for Public Land’s ParkScore Index, an annually released report which ranks the parks of the 100 most populated cities in the United States according to 4 key metrics: access, investment, amenities, and acreage.
+Our dataset comes from The Trust for Public Land’s ParkScore Index, an annually released report which ranks the parks of the 100 most populated cities in the United States according to 4 key metrics: access, investment, amenities, and acreage. There are `r nrow(parks)` rows and `r ncol(parks)` columns in the data set ranging from 2012 through 2020.
 
 The COVID-19 Pandemic has laid bare a multitude of inequities that exist in the United States. While many people were able to flock to their local parks in order to get out of the house, many others were not. Our group is interested in exploring the Parks Access dataset in order to answer questions regarding access and equity to the nation’s largest cities’ parks. The Citylab article accompanying the dataset from TidyTuesday discussed a number of reasons for unequal access to quality parks and we are hoping to explore these in our project.
-
-```{r - read in dataset}
-parks <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-06-22/parks.csv')
-```
 
 ## Questions
 

@@ -6,33 +6,28 @@ The Scatterplots
 library(tidyverse)
 ```
 
-    ## Warning in system("timedatectl", intern = TRUE): running command 'timedatectl'
-    ## had status 1
-
-## Dataset
-
-A brief description of your dataset including its provenance,
-dimensions, etc. as well as the reason why you chose this dataset.
-
-Make sure to load the data and use inline code for some of this
-information.
-
 ``` r
 parks <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-06-22/parks.csv')
 ```
 
-    ## Rows: 713 Columns: 28
+## Dataset
 
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## chr  (5): city, park_pct_city_data, pct_near_park_data, spend_per_resident_d...
-    ## dbl (23): year, rank, med_park_size_data, med_park_size_points, park_pct_cit...
+Our dataset comes from The Trust for Public Land’s ParkScore Index, an
+annually released report which ranks the parks of the 100 most populated
+cities in the United States according to 4 key metrics: access,
+investment, amenities, and acreage. There are 713 rows and 28 columns in
+the data set ranging from 2012 through 2020.
 
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+The COVID-19 Pandemic has laid bare a multitude of inequities that exist
+in the United States. While many people were able to flock to their
+local parks in order to get out of the house, many others were not. Our
+group is interested in exploring the Parks Access dataset in order to
+answer questions regarding access and equity to the nation’s largest
+cities’ parks. The Citylab article accompanying the dataset from
+TidyTuesday discussed a number of reasons for unequal access to quality
+parks and we are hoping to explore these in our project.
 
-28 \#\# Questions
+## Questions
 
 The two questions you want to answer.
 
