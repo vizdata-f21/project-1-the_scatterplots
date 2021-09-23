@@ -63,4 +63,10 @@ package and guidance found at the following link.
 intend to display which proportions of each cities’ land is parkland
 through the size of the points on the map (using the variable
 `park_pct_city_data`) and next to the point we will annotate the plot
-with the respective ranking of that city.
+with the respective ranking of that city. For a second visualization, we
+will plot the points data for the various amenities provided in the data
+set on a map where the points will be mapped to size (ie: more points
+for `splashground_points` or `playground_points` for example will result
+in a larger point) and shape will be mapped to amenity type. This will
+allow us to compare the proportion of parkland in the 10 top and bottom
+cities map to the amenties map and see if there is any correlation.
