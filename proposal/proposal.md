@@ -33,8 +33,8 @@ parks and we are hoping to explore these in our project.
 in different U.S. regions and/or cities over time?
 
 2- How many amenities do parks with the top 10 and bottom 10 rankings in
-2020 have and how does this vary based on proportion of the top 10 and
-bottom 10 cities’ land is parkland in 2020?
+2020 have and how does this vary based on what proportion of the top 10
+and bottom 10 cities’ land is parkland in 2020?
 
 ## Analysis plan
 
@@ -45,15 +45,22 @@ resident in order to create “bins” that each city-year can fall into as
 well as a categorical variable describing which region of the US the
 cities fall into. We plan on testing various visualizations that allow
 us to explore these categorical differences and then making the decision
-of which best suits our research question.
+of which best suits our research question. We will create our final
+visualizations based on which relationship (spending per resident and
+park size vs. region or vs. city) we find to be the most compelling and
+works best on a visualization.
 
 2- To answer the second question, we are planning to create a geographic
-plot of the 20 cities that rank within either the top 10 or bottom 10.
-We intend to use the variables `rank` and `park_pct_city_data`. We will
-also use additional data to plot the points geographically on a map of
-the United States. We will initially attempt to do this through
-geocoding, using the ggmap package and guidance found at the following
-link. (<https://www.jessesadler.com/post/geocoding-with-r/>) In this
-map, we intend to display which proportions of each cities’ land is
-parkland through the size of the points on the map (using the variable
-`park_pct_city_data`).
+plot of the 20 cities that rank within the top 10 and bottom 10. By
+focusing in on the top and bottom 10, we are able to get a general idea
+of what the best and worst cities have to offer park-wise, without
+overwhelming the plot with all 100 cities. We intend to use the
+variables `rank` and `park_pct_city_data`. We will also use additional
+data to plot the points geographically on a map of the United States. We
+will initially attempt to do this through geocoding, using the ggmap
+package and guidance found at the following link.
+(<https://www.jessesadler.com/post/geocoding-with-r/>) In this map, we
+intend to display which proportions of each cities’ land is parkland
+through the size of the points on the map (using the variable
+`park_pct_city_data`) and next to the point we will annotate the plot
+with the respective ranking of that city.

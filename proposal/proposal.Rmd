@@ -55,7 +55,7 @@ find to be the most compelling and works best on a visualization.
 
 
 2- To answer the second question, we are planning to create a geographic plot
-of the 20 cities that rank within either the top 10 or bottom 10. By focusing
+of the 20 cities that rank within the top 10 and bottom 10. By focusing
 in on the top and bottom 10, we are able to get a general idea of what the best
 and worst cities have to offer park-wise, without overwhelming the plot with 
 all 100 cities. We intend to use the variables `rank` and `park_pct_city_data`.
