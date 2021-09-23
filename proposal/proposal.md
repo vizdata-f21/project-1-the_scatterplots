@@ -69,4 +69,4 @@ set on a map where the points will be mapped to size (ie: more points
 for `splashground_points` or `playground_points` for example will result
 in a larger point) and shape will be mapped to amenity type. This will
 allow us to compare the proportion of parkland in the 10 top and bottom
-cities map to the amenties map and see if there is any correlation.
+cities map to the amenities map and see if there is any correlation.
