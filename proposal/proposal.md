@@ -59,14 +59,24 @@ variables `rank` and `park_pct_city_data`. We will also use additional
 data to plot the points geographically on a map of the United States. We
 will initially attempt to do this through geocoding, using the ggmap
 package and guidance found at the following link.
-(<https://www.jessesadler.com/post/geocoding-with-r/>) In this map, we
-intend to display which proportions of each cities’ land is parkland
-through the size of the points on the map (using the variable
-`park_pct_city_data`) and next to the point we will annotate the plot
-with the respective ranking of that city. For a second visualization, we
-will plot the points data for the various amenities provided in the data
-set on a map where the points will be mapped to size (ie: more points
-for `splashground_points` or `playground_points` for example will result
-in a larger point) and shape will be mapped to amenity type. This will
-allow us to compare the proportion of parkland in the 10 top and bottom
-cities map to the amenities map and see if there is any correlation.
+(<https://www.jessesadler.com/post/geocoding-with-r/>). Another method
+that might work is to use the `us.cities` dataset in the maps package.
+This data set has the longitude and latitude of all US cities with a
+population greater than \~ 40,000. We will join this dataset with the
+relevant variables from the `parks` data set in order to plot the `rank`
+and `park_pct_city_data` variables at the right location on the map.
+
+Reference for us.cities; page 32:
+<https://cran.r-project.org/web/packages/maps/maps.pdf>
+
+In this map, we intend to display which proportions of each cities’ land
+is parkland through the size of the points on the map (using the
+variable `park_pct_city_data`) and next to the point we will annotate
+the plot with the respective ranking of that city. For a second
+visualization, we will plot the points data for the various amenities
+provided in the data set on a map where the points will be mapped to
+size (ie: more points for `splashground_points` or `playground_points`
+for example will result in a larger point) and shape will be mapped to
+amenity type. This will allow us to compare the proportion of parkland
+in the 10 top and bottom cities map to the amenities map and see if
+there is any correlation.
