@@ -1,6 +1,31 @@
 Project title
 ================
-by Team name
+The Scatterplots
+
+    ## Warning in system("timedatectl", intern = TRUE): running command 'timedatectl'
+    ## had status 1
+
+    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
+
+    ## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
+    ## ✓ tibble  3.1.4     ✓ dplyr   1.0.7
+    ## ✓ tidyr   1.1.3     ✓ stringr 1.4.0
+    ## ✓ readr   2.0.1     ✓ forcats 0.5.1
+
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## x dplyr::filter() masks stats::filter()
+    ## x dplyr::lag()    masks stats::lag()
+
+    ## Rows: 713 Columns: 28
+
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr  (5): city, park_pct_city_data, pct_near_park_data, spend_per_resident_d...
+    ## dbl (23): year, rank, med_park_size_data, med_park_size_points, park_pct_cit...
+
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 ## Introduction
 
@@ -10,7 +35,22 @@ dataset on the TidyTuesday repository, paraphrasing on your own terms.
 Imagine that your project is a standalone document and the grader has no
 prior knowledge of the dataset.
 
-## Question 1 &lt;- Update title to relate to the question you’re answering
+Our dataset comes from The Trust for Public Land’s ParkScore Index, an
+annually released report which ranks the parks of the 100 most populated
+cities in the United States according to 4 key metrics: access,
+investment, amenities, and acreage. There are 713 rows and 28 columns in
+the data set ranging from 2012 through 2020.
+
+The COVID-19 Pandemic has laid bare a multitude of inequities that exist
+in the United States. While many people were able to flock to their
+local parks in order to get out of the house, many others were not. Our
+group is interested in exploring the Parks Access dataset in order to
+answer questions regarding access and equity to the nation’s largest
+cities’ parks. The Citylab article accompanying the dataset from
+TidyTuesday discussed a number of reasons for unequal access to quality
+parks and we are hoping to explore these in our project.
+
+## What is the relationship between spending per resident and park size in different U.S. regions and/or cities over time?
 
 ### Introduction
 
@@ -42,7 +82,7 @@ R or lattice plotting functions.
 your analysis. Identify any trends revealed (or not revealed) by the
 plots. Speculate about why the data looks the way it does.
 
-## Question 2 &lt;- Update title to relate to the question you’re answering
+## How many amenities do parks with the top 10 and bottom 10 rankings in 2020 have and how does this vary based on what proportion of the top 10 and bottom 10 cities’ land is parkland in 2020?
 
 ### Introduction
 

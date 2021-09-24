@@ -1,25 +1,40 @@
 ---
 title: Project title
-author: by Team name
+author: The Scatterplots
 output: github_document
 ---
 
 ```{r load-packages, echo = FALSE}
-# load packages here
+library(tidyverse)
 ```
 
 ```{r load-data, echo = FALSE}
-# load data here
+parks <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-06-22/parks.csv')
 ```
 
 ## Introduction
-
 (1-2 paragraphs)
 Brief introduction to the dataset.
 You may repeat some of the information about the dataset provided in the introduction to the dataset on the TidyTuesday repository, paraphrasing on your own terms.
 Imagine that your project is a standalone document and the grader has no prior knowledge of the dataset.
 
-## Question 1 <- Update title to relate to the question you’re answering
+
+Our dataset comes from The Trust for Public Land’s ParkScore Index, an annually
+released report which ranks the parks of the 100 most populated cities in the
+United States according to 4 key metrics: access, investment, amenities, and
+acreage. There are `r nrow(parks)` rows and `r ncol(parks)` columns in the data
+set ranging from 2012 through 2020.
+
+
+The COVID-19 Pandemic has laid bare a multitude of inequities that exist in the
+United States. While many people were able to flock to their local parks in 
+order to get out of the house, many others were not. Our group is interested in
+exploring the Parks Access dataset in order to answer questions regarding access
+and equity to the nation’s largest cities’ parks. The Citylab article
+accompanying the dataset from TidyTuesday discussed a number of reasons for
+unequal access to quality parks and we are hoping to explore these in our project.
+
+## What is the relationship between spending per resident and park size in different U.S. regions and/or cities over time?
 
 ### Introduction
 
@@ -46,7 +61,7 @@ All plots must be made with ggplot2. Do not use base R or lattice plotting funct
 In the Discussion section, interpret the results of your analysis. Identify any trends revealed (or not revealed) by the plots.
 Speculate about why the data looks the way it does.
 
-## Question 2 <- Update title to relate to the question you’re answering
+## How many amenities do parks with the top 10 and bottom 10 rankings in 2020 have and how does this vary based on what proportion of the top 10 and bottom 10 cities’ land is parkland in 2020?
 
 ### Introduction
 
