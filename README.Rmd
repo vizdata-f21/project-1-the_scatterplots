@@ -52,6 +52,15 @@ The two plots should be of different types, and at least one of the two plots ne
 
 ```{r question 1}
 #data wrangling
+fivenum(parks$spend_per_resident_data)
+parks <- parks %>% 
+  mutate(bins = case_when(
+    between(spend_per_resident_data, 0, 59) ~ "1st quartile",
+    between(spend_per_resident_data, 60, 84) ~ "2nd quartile",
+    between(spend_per_resident_data, 85, 131) ~ "3rd quartile",
+    TRUE ~ "4th quartile"
+  ))
+
 parks <- parks %>%
   mutate(across(starts_with("spend_per_resident_data"), ~gsub("\\$", "", .) 
                   %>% as.numeric))
