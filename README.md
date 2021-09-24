@@ -2,31 +2,6 @@ Project title
 ================
 The Scatterplots
 
-    ## Warning in system("timedatectl", intern = TRUE): running command 'timedatectl'
-    ## had status 1
-
-    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
-
-    ## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
-    ## ✓ tibble  3.1.4     ✓ dplyr   1.0.7
-    ## ✓ tidyr   1.1.3     ✓ stringr 1.4.0
-    ## ✓ readr   2.0.1     ✓ forcats 0.5.1
-
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## x dplyr::filter() masks stats::filter()
-    ## x dplyr::lag()    masks stats::lag()
-
-    ## Rows: 713 Columns: 28
-
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## chr  (5): city, park_pct_city_data, pct_near_park_data, spend_per_resident_d...
-    ## dbl (23): year, rank, med_park_size_data, med_park_size_points, park_pct_cit...
-
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
 ## Introduction
 
 (1-2 paragraphs) Brief introduction to the dataset. You may repeat some
@@ -71,6 +46,31 @@ either color mapping or facets.
 
 ``` r
 #data wrangling
+fivenum(parks$spend_per_resident_data)
+```
+
+    ## Warning in Ops.factor(x[floor(d)], x[ceiling(d)]): '+' not meaningful for
+    ## factors
+
+    ## [1] NA NA NA NA NA
+
+``` r
+parks <- parks %>% 
+  mutate(bins = case_when(
+    between(spend_per_resident_data, 0, 59) ~ "1st quartile",
+    between(spend_per_resident_data, 60, 84) ~ "2nd quartile",
+    between(spend_per_resident_data, 85, 131) ~ "3rd quartile",
+    TRUE ~ "4th quartile"
+  ))
+```
+
+    ## Warning: between() called on numeric vector with S3 class
+
+    ## Warning: between() called on numeric vector with S3 class
+    
+    ## Warning: between() called on numeric vector with S3 class
+
+``` r
 parks <- parks %>%
   mutate(across(starts_with("spend_per_resident_data"), ~gsub("\\$", "", .) 
                   %>% as.numeric))
@@ -118,6 +118,29 @@ of different types, and at least one of the two plots needs to use
 either color mapping or facets.
 
 ### Analysis
+
+``` r
+### data wrangling
+
+#top/bottom 10 cities
+parks_2020 <- parks %>%
+  filter(year == 2020,
+         rank <= 10 | rank >= 88)
+
+#matching cities dataframe with parks dataframe
+cities <- cities %>%
+  filter(state != "Maine") %>%
+  mutate(city = case_when(city == "Washington" ~ "Washington, D.C.",
+                          city == "Charlotte" ~ "Charlotte/Mecklenburg County",
+                          TRUE ~ city)) %>%
+  select(city, latitude, longitude) %>%
+  rbind(tibble(city = c("Arlington, Virginia"),
+               latitude = c(38.8816),
+               longitude = c(-77.0910)))
+
+#merging cities and parks dataframes
+parks_2020_coords <- left_join(parks_2020, cities, by = "city")
+```
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
 section, provide the code that generates your plots. Use scale functions

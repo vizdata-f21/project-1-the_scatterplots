@@ -4,12 +4,14 @@ author: The Scatterplots
 output: github_document
 ---
 
-```{r load-packages, echo = FALSE}
+```{r load-packages, echo = FALSE, message = FALSE, warning = FALSE}
 library(tidyverse)
+library(jsonlite)
 ```
 
 ```{r load-data, echo = FALSE}
-parks <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-06-22/parks.csv')
+parks <- read.csv("~/R/project-1-the_scatterplots/data/parks.csv")
+cities <- fromJSON("~/R/project-1-the_scatterplots/data/cities.json")
 ```
 
 ## Introduction
@@ -100,6 +102,29 @@ For each plot, provide a clear explanation as to why this plot (e.g. boxplot, ba
 The two plots should be of different types, and at least one of the two plots needs to use either color mapping or facets.
 
 ### Analysis
+
+```{r question-2}
+### data wrangling
+
+#top/bottom 10 cities
+parks_2020 <- parks %>%
+  filter(year == 2020,
+         rank <= 10 | rank >= 88)
+
+#matching cities dataframe with parks dataframe
+cities <- cities %>%
+  filter(state != "Maine") %>%
+  mutate(city = case_when(city == "Washington" ~ "Washington, D.C.",
+                          city == "Charlotte" ~ "Charlotte/Mecklenburg County",
+                          TRUE ~ city)) %>%
+  select(city, latitude, longitude) %>%
+  rbind(tibble(city = c("Arlington, Virginia"),
+               latitude = c(38.8816),
+               longitude = c(-77.0910)))
+
+#merging cities and parks dataframes
+parks_2020_coords <- left_join(parks_2020, cities, by = "city")
+```
 
 (2-3 code blocks, 2 figures, text/code comments as needed)
 In this section, provide the code that generates your plots. Use scale functions to provide nice axis labels and guides.
