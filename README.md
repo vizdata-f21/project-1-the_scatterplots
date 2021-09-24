@@ -69,6 +69,24 @@ either color mapping or facets.
 
 ### Analysis
 
+``` r
+#data wrangling
+parks <- parks %>%
+  mutate(across(starts_with("spend_per_resident_data"), ~gsub("\\$", "", .) 
+                  %>% as.numeric))
+  
+#to remove the $ and change from a categorical variable to a numerical variable 
+
+ggplot(data = parks, mapping = aes(x = year, y = spend_per_resident_data, group = city)) + 
+  geom_line()
+```
+
+![](README_files/figure-gfm/question%201-1.png)<!-- -->
+
+``` r
+#only had a few minutes to play around with this, but some ideas for next steps: facet by region, select only cities that have data from each year (see how many this would be, it looks like a lot start after 2012), 
+```
+
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
 section, provide the code that generates your plots. Use scale functions
 to provide nice axis labels and guides. You are welcome to use theme
