@@ -90,8 +90,7 @@ parks_q1 <- parks_q1 %>%
 ggplot(data = parks_q1, mapping = aes(x = year, y = spend_per_resident, group = city)) + 
   geom_line()
 
-
-#  some idea for next steps: facet by region 
+#in our proposal we said med_park_size_data would also be part of this viz so we need to make sure thats included in the dataset parks_q1
 ```
 
 
