@@ -4,9 +4,14 @@ The Scatterplots
 
 ## Introduction
 
-(1-2 paragraphs) Brief introduction to the dataset. You may repeat some
-of the information about the dataset provided in the introduction to the
-dataset on the TidyTuesday repository, paraphrasing on your own terms.
+(1-2 paragraphs)
+
+Brief introduction to the dataset.
+
+You may repeat some of the information about the dataset provided in the
+introduction to the dataset on the TidyTuesday repository, paraphrasing
+on your own terms.
+
 Imagine that your project is a standalone document and the grader has no
 prior knowledge of the dataset.
 
@@ -36,11 +41,14 @@ interested in this question.
 ### Approach
 
 (1-2 paragraphs) Describe what types of plots you are going to make to
-address your question. For each plot, provide a clear explanation as to
-why this plot (e.g. boxplot, barplot, histogram, etc.) is best for
-providing the information you are asking about. The two plots should be
-of different types, and at least one of the two plots needs to use
-either color mapping or facets.
+address your question.
+
+For each plot, provide a clear explanation as to why this plot
+(e.g. boxplot, barplot, histogram, etc.) is best for providing the
+information you are asking about.
+
+The two plots should be of different types, and at least one of the two
+plots needs to use either color mapping or facets.
 
 ### Analysis
 
@@ -71,20 +79,30 @@ parks <- parks %>%
     ## Warning: between() called on numeric vector with S3 class
 
 ``` r
-parks <- parks %>%
+parks_q1 <- parks %>%
   mutate(across(starts_with("spend_per_resident_data"), ~gsub("\\$", "", .) 
-                  %>% as.numeric))
-  
-#to remove the $ and change from a categorical variable to a numerical variable 
+                  %>% as.numeric)) %>% 
+  select(year, city, spend_per_resident_data) %>% 
+  pivot_wider(names_from = "year", 
+              values_from = "spend_per_resident_data") %>% 
+  drop_na() %>% 
+  pivot_longer(cols = starts_with("20"),
+               names_to = "year", 
+               values_to = "spend_per_resident")
 
-ggplot(data = parks, mapping = aes(x = year, y = spend_per_resident_data, group = city)) + 
-  geom_line()
+# to remove the $ and change from a categorical variable to a numerical variable 
+# selected relevant variables, pivot wider to see what cities have data from every year
+# drop na's from cities that do not have spending data from every year
+# pivot longer to return dataset to a structure that can be plotted on a line plot
+
+ggplot(data = parks_q1, mapping = aes(x = year, y = spend_per_resident, group = city)) + 
+  geom_line() 
 ```
 
 ![](README_files/figure-gfm/question%201-1.png)<!-- -->
 
 ``` r
-#only had a few minutes to play around with this, but some ideas for next steps: facet by region, select only cities that have data from each year (see how many this would be, it looks like a lot start after 2012), 
+#  some idea for next steps: facet by region 
 ```
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
