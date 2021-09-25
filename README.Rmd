@@ -62,13 +62,6 @@ The two plots should be of different types, and at least one of the two plots ne
 ```{r question 1}
 #data wrangling
 fivenum(parks$spend_per_resident_data)
-parks <- parks %>% 
-  mutate(bins = case_when(
-    between(spend_per_resident_data, 0, 59) ~ "1st quartile",
-    between(spend_per_resident_data, 60, 84) ~ "2nd quartile",
-    between(spend_per_resident_data, 85, 131) ~ "3rd quartile",
-    TRUE ~ "4th quartile"
-  ))
 
 parks_q1 <- parks %>%
   mutate(across(starts_with("spend_per_resident_data"), ~gsub("\\$", "", .) 
@@ -81,13 +74,22 @@ parks_q1 <- parks %>%
                names_to = "year", 
                values_to = "spend_per_resident")
 
+parks_q1 <- parks_q1 %>% 
+  mutate(bins = case_when(
+    between(spend_per_resident, 0, 59) ~ "1st quartile",
+    between(spend_per_resident, 60, 84) ~ "2nd quartile",
+    between(spend_per_resident, 85, 131) ~ "3rd quartile",
+    TRUE ~ "4th quartile"
+  ))
+
 # to remove the $ and change from a categorical variable to a numerical variable 
 # selected relevant variables, pivot wider to see what cities have data from every year
 # drop na's from cities that do not have spending data from every year
 # pivot longer to return dataset to a structure that can be plotted on a line plot
 
 ggplot(data = parks_q1, mapping = aes(x = year, y = spend_per_resident, group = city)) + 
-  geom_line() 
+  geom_line()
+
 
 #  some idea for next steps: facet by region 
 ```
