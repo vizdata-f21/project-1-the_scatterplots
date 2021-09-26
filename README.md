@@ -64,7 +64,7 @@ fivenum(parks$spend_per_resident_data)
 
 ``` r
 parks_q1 <- parks %>%
-  select(year, city, spend_per_resident_data, med_park_size_data) %>% 
+  select(year, city, spend_per_resident_data) %>% 
   mutate(across(starts_with("spend_per_resident_data"), ~gsub("\\$", "", .) 
                   %>% as.numeric)) %>% 
   pivot_wider(names_from = "year", 
@@ -72,7 +72,17 @@ parks_q1 <- parks %>%
   drop_na() %>% 
   pivot_longer(cols = starts_with("20"),
                names_to = "year", 
-               values_to = "spend_per_resident")
+               values_to = "spend_per_resident") 
+
+#I'll come back to this! 
+
+#parks_q1$year <- as.factor(parks_q1$year)
+
+#parks %>% 
+  #select(city, year, med_park_size_data) %>% 
+  #right_join(parks_q1, by = c("city","year")) %>%
+  #print() 
+
 
   #from K: i tried to add `med_park_size_data` in the select() function, but then it only returns data on memphis, not sure why this is happening cause i never call city into a pivot function and that worked 
 #posted on discussion about this, hopefully we get a response soon 
@@ -107,7 +117,7 @@ ggplot(data = parks_q1, mapping = aes(x = year, y = spend_per_resident, group = 
 #SUGGESTION FROM MINE: This is just a suggestion, in case your original plan doesn't yield as compelling a plot as you'd like: you might consider whether the park is located in a metropolitan city or not and explore relationships about other amenities in the park depending on this variable.
   #create a binary variable if in metropolitan city or not 
 
-us_cities <- us.cities #from maps package
+us_cities <- maps::us.cities #from maps package
 ```
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
