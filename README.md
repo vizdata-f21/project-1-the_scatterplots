@@ -2,18 +2,7 @@ Project title
 ================
 The Scatterplots
 
-## Introduction
-
-(1-2 paragraphs)
-
-Brief introduction to the dataset.
-
-You may repeat some of the information about the dataset provided in the
-introduction to the dataset on the TidyTuesday repository, paraphrasing
-on your own terms.
-
-Imagine that your project is a standalone document and the grader has no
-prior knowledge of the dataset.
+### Introduction
 
 Our dataset comes from The Trust for Public Land’s ParkScore Index, an
 annually released report which ranks the parks of the 100 most populated
@@ -31,12 +20,6 @@ TidyTuesday discussed a number of reasons for unequal access to quality
 parks and we are hoping to explore these in our project.
 
 ## What is the relationship between spending per resident and park size in different U.S. regions and/or cities over time?
-
-### Introduction
-
-(1-2 paragraphs) Introduction to the question and what parts of the
-dataset are necessary to answer the question. Also discuss why you’re
-interested in this question.
 
 ### Approach
 
