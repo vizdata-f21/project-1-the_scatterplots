@@ -63,22 +63,6 @@ fivenum(parks$spend_per_resident_data)
     ## [1] NA NA NA NA NA
 
 ``` r
-parks <- parks %>% 
-  mutate(bins = case_when(
-    between(spend_per_resident_data, 0, 59) ~ "1st quartile",
-    between(spend_per_resident_data, 60, 84) ~ "2nd quartile",
-    between(spend_per_resident_data, 85, 131) ~ "3rd quartile",
-    TRUE ~ "4th quartile"
-  ))
-```
-
-    ## Warning: between() called on numeric vector with S3 class
-
-    ## Warning: between() called on numeric vector with S3 class
-    
-    ## Warning: between() called on numeric vector with S3 class
-
-``` r
 parks_q1 <- parks %>%
   mutate(across(starts_with("spend_per_resident_data"), ~gsub("\\$", "", .) 
                   %>% as.numeric)) %>% 
@@ -90,19 +74,27 @@ parks_q1 <- parks %>%
                names_to = "year", 
                values_to = "spend_per_resident")
 
+parks_q1 <- parks_q1 %>% 
+  mutate(bins = case_when(
+    between(spend_per_resident, 0, 59) ~ "1st quartile",
+    between(spend_per_resident, 60, 84) ~ "2nd quartile",
+    between(spend_per_resident, 85, 131) ~ "3rd quartile",
+    TRUE ~ "4th quartile"
+  ))
+
 # to remove the $ and change from a categorical variable to a numerical variable 
 # selected relevant variables, pivot wider to see what cities have data from every year
 # drop na's from cities that do not have spending data from every year
 # pivot longer to return dataset to a structure that can be plotted on a line plot
 
 ggplot(data = parks_q1, mapping = aes(x = year, y = spend_per_resident, group = city)) + 
-  geom_line() 
+  geom_line()
 ```
 
 ![](README_files/figure-gfm/question%201-1.png)<!-- -->
 
 ``` r
-#  some idea for next steps: facet by region 
+#in our proposal we said med_park_size_data would also be part of this viz so we need to make sure thats included in the dataset parks_q1
 ```
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
@@ -158,7 +150,25 @@ cities <- cities %>%
 
 #merging cities and parks dataframes
 parks_2020_coords <- left_join(parks_2020, cities, by = "city")
+
+#creating an indicator variable for rank
+parks_2020_coords <- parks_2020_coords %>%
+  mutate(rank_div = ifelse(rank <= 10, "top", "bottom"))
+
+### testing out mapping
+ggplot() +
+  geom_polygon(data = map_data("state"), aes(x = long, y = lat, group = group),
+               fill = "white", color = "#3c3b6e") +
+  geom_point(data = parks_2020_coords,
+             aes(x = longitude, y = latitude, color = rank_div,
+                 size = park_pct_city_points),
+             show.legend = F) +
+  labs(x = NULL, y = NULL) +
+  coord_map() + 
+  theme_void()
 ```
+
+![](README_files/figure-gfm/question-2-1.png)<!-- -->
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
 section, provide the code that generates your plots. Use scale functions
