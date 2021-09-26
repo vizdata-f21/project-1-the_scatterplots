@@ -63,26 +63,10 @@ fivenum(parks$spend_per_resident_data)
     ## [1] NA NA NA NA NA
 
 ``` r
-parks <- parks %>% 
-  mutate(bins = case_when(
-    between(spend_per_resident_data, 0, 59) ~ "1st quartile",
-    between(spend_per_resident_data, 60, 84) ~ "2nd quartile",
-    between(spend_per_resident_data, 85, 131) ~ "3rd quartile",
-    TRUE ~ "4th quartile"
-  ))
-```
-
-    ## Warning: between() called on numeric vector with S3 class
-
-    ## Warning: between() called on numeric vector with S3 class
-    
-    ## Warning: between() called on numeric vector with S3 class
-
-``` r
 parks_q1 <- parks %>%
+  select(year, city, spend_per_resident_data, med_park_size_data) %>% 
   mutate(across(starts_with("spend_per_resident_data"), ~gsub("\\$", "", .) 
                   %>% as.numeric)) %>% 
-  select(year, city, spend_per_resident_data) %>% 
   pivot_wider(names_from = "year", 
               values_from = "spend_per_resident_data") %>% 
   drop_na() %>% 
@@ -90,19 +74,40 @@ parks_q1 <- parks %>%
                names_to = "year", 
                values_to = "spend_per_resident")
 
+  #from K: i tried to add `med_park_size_data` in the select() function, but then it only returns data on memphis, not sure why this is happening cause i never call city into a pivot function and that worked 
+#posted on discussion about this, hopefully we get a response soon 
+
+parks_q1 <- parks_q1 %>% 
+  mutate(bins = case_when(
+    between(spend_per_resident, 0, 59) ~ "1st quartile",
+    between(spend_per_resident, 60, 84) ~ "2nd quartile",
+    between(spend_per_resident, 85, 131) ~ "3rd quartile",
+    TRUE ~ "4th quartile"
+  ))
+
 # to remove the $ and change from a categorical variable to a numerical variable 
 # selected relevant variables, pivot wider to see what cities have data from every year
 # drop na's from cities that do not have spending data from every year
 # pivot longer to return dataset to a structure that can be plotted on a line plot
 
 ggplot(data = parks_q1, mapping = aes(x = year, y = spend_per_resident, group = city)) + 
-  geom_line() 
+  geom_line(mapping = aes(color = bins))
 ```
 
 ![](README_files/figure-gfm/question%201-1.png)<!-- -->
 
 ``` r
-#  some idea for next steps: facet by region 
+    #it looks like the quartile / color changes for some cities over time, interesting observation prob could draw conclusion from 
+
+#NOTE: include med_park_size_data in parks_q1
+
+#in our proposal we said med_park_size_data would also be part of this viz so we need to make sure thats included in the dataset parks_q1
+  #from K: i tried to add it in the select() function, but then it only returns data on memphis 
+
+#SUGGESTION FROM MINE: This is just a suggestion, in case your original plan doesn't yield as compelling a plot as you'd like: you might consider whether the park is located in a metropolitan city or not and explore relationships about other amenities in the park depending on this variable.
+  #create a binary variable if in metropolitan city or not 
+
+us_cities <- us.cities #from maps package
 ```
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
