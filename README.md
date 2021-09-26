@@ -163,7 +163,25 @@ cities <- cities %>%
 
 #merging cities and parks dataframes
 parks_2020_coords <- left_join(parks_2020, cities, by = "city")
+
+#creating an indicator variable for rank
+parks_2020_coords <- parks_2020_coords %>%
+  mutate(rank_div = ifelse(rank <= 10, "top", "bottom"))
+
+### testing out mapping
+ggplot() +
+  geom_polygon(data = map_data("state"), aes(x = long, y = lat, group = group),
+               fill = "white", color = "#3c3b6e") +
+  geom_point(data = parks_2020_coords,
+             aes(x = longitude, y = latitude, color = rank_div,
+                 size = park_pct_city_points),
+             show.legend = F) +
+  labs(x = NULL, y = NULL) +
+  coord_map() + 
+  theme_void()
 ```
+
+![](README_files/figure-gfm/question-2-1.png)<!-- -->
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
 section, provide the code that generates your plots. Use scale functions
