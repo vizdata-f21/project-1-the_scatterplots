@@ -21,6 +21,20 @@ parks and we are hoping to explore these in our project.
 
 ## What is the relationship between spending per resident and park size in different U.S. regions and/or cities over time?
 
+### Introduction
+
+To answer our first question (above), we used the “parks” dataset and
+analyzed the relationship between the variables
+“spend\_per\_resident\_data”, “city”, “med\_park\_size\_data”, and
+“year”. We thought it’d very interesting to look into how the spending
+on parks varies across different cities and over the course of the last
+decade. We were also curious and wanted to analyze how spending per
+resident and park size varies across different regions/cities. Our group
+felt as though those were four of the most compelling variables in the
+dataset and we were all unsure of what the relationship would be between
+spending per resident and park size versus year and then region/city, so
+we were excited to create visualizations based upon those variables.
+
 ### Approach
 
 (1-2 paragraphs) Describe what types of plots you are going to make to
@@ -32,6 +46,20 @@ information you are asking about.
 
 The two plots should be of different types, and at least one of the two
 plots needs to use either color mapping or facets.
+
+To answer our first question addressing the relationship between
+spending per resident and year, we first created a new variable, called
+“bins”, to break down the spending per resident for each city into
+four quartiles (where the 1st quartile had the least spending per
+resident and the 4th quartile had the most). This allowed us to analyze
+how spending trends shifted over time for each quartile. For this
+visualization, we created a line graph where each line represents a city
+and the color represents the quartile (or “bin”) that the city falls
+into. The line graph allowed us to illustrate the trends in different
+cities’ spending per resident over time (from 2012-2020) in what we felt
+was the clearest way to demonstrate that relationship.
+
+# add second graph approach
 
 ### Analysis
 
@@ -168,7 +196,7 @@ ggplot() +
   geom_point(data = parks_2020_coords,
              aes(x = longitude, y = latitude, color = rank_div,
                  size = park_pct_city_points),
-             show.legend = F) +
+             show.legend = FALSE) +
   labs(x = NULL, y = NULL) +
   coord_map() + 
   theme_void()
@@ -188,6 +216,8 @@ R or lattice plotting functions.
 (1-3 paragraphs) In the Discussion section, interpret the results of
 your analysis. Identify any trends revealed (or not revealed) by the
 plots. Speculate about why the data looks the way it does.
+
+For the second question, our first visualization
 
 ## Presentation
 
