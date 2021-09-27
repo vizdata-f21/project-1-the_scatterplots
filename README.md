@@ -115,7 +115,7 @@ ggplot(data = parks_q1, mapping = aes(x = year, y = spend_per_resident, group = 
   geom_line(mapping = aes(color = bins))
 ```
 
-![](README_files/figure-gfm/question%201-1.png)<!-- -->
+<img src="README_files/figure-gfm/question 1-1.png" width="90%" />
 
 ``` r
     #it looks like the quartile / color changes for some cities over time, interesting observation prob could draw conclusion from 
@@ -201,20 +201,44 @@ parks_2020_coords <- left_join(parks_2020, cities, by = "city")
 parks_2020_coords <- parks_2020_coords %>%
   mutate(rank_div = ifelse(rank <= 10, "top", "bottom"))
 
+#dodging overlapping points
+parks_2020_coords <- parks_2020_coords %>%
+  mutate(longitude = case_when(rank == 1 ~ -93.5,
+                              rank == 3 ~ -92.6,
+                              rank == 2 ~ -76.6,
+                              rank == 4 ~ -77.5,
+                              rank == 89 ~ -96.7,
+                              rank == 94 ~ -97.5,
+                              TRUE ~ longitude),
+         updown = ifelse(rank %in% c(3, 89, 2), "down", "up"))
+
 ### testing out mapping
 ggplot() +
   geom_polygon(data = map_data("state"), aes(x = long, y = lat, group = group),
-               fill = "white", color = "#3c3b6e") +
+               fill = "white", color = "gray60") +
   geom_point(data = parks_2020_coords,
              aes(x = longitude, y = latitude, color = rank_div,
-                 size = park_pct_city_points),
-             show.legend = FALSE) +
-  labs(x = NULL, y = NULL) +
+                 size = as.numeric(str_extract(park_pct_city_data,"\\d+"))/100)) +
+  geom_text(data = parks_2020_coords %>% filter(updown == "up"),
+            aes(x = longitude, y = latitude, label = paste0("#",rank)),
+            size = 3.5, vjust = -.7, family = "bold") +
+  geom_text(data = parks_2020_coords %>% filter(updown == "down"),
+            aes(x = longitude, y = latitude, label = paste0("#",rank)),
+            size = 3.5, vjust = 1.7, family = "bold") +
+  scale_size_continuous(labels = scales::percent) +
+  scale_color_manual(values = c("#D55E00", "#009E73")) + 
+  labs(x = NULL, y = NULL, size = "% of city that\nis parkland",
+       title = "Top and bottom 10 city rankings of parks",
+       subtitle = "scaled by % of city that is parkland") +
   coord_map() + 
-  theme_void()
+  theme_void() +
+  guides(color = "none") + 
+  theme(legend.position = c(.92,.3),
+        plot.title = element_text(hjust = 0.1),
+        plot.subtitle = element_text(hjust = 0.1))
 ```
 
-![](README_files/figure-gfm/question-2-1.png)<!-- -->
+<img src="README_files/figure-gfm/question-2-1.png" width="90%" />
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
 section, provide the code that generates your plots. Use scale functions
