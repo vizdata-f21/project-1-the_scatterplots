@@ -148,9 +148,21 @@ plots. Speculate about why the data looks the way it does.
 
 ### Introduction
 
-(1-2 paragraphs) Introduction to the question and what parts of the
-dataset are necessary to answer the question. Also discuss why you’re
-interested in this question.
+For our second question, we wanted to look at parks with the top and
+bottom 10 rankings in 2020 and compare the percentage of their land
+being parkland. We also wanted to compare the number of amenities each
+of those parks have, including dog parks, playgrounds, restrooms, etc.
+To address these questions, we merged the parks and cities datasets by
+city, and utilized the “city”, “longitude”, and “latitude” variables
+from the cities dataset, as well as the “rank” variable (to determine
+the top and bottom 10 park rankings) and variable for the amenities from
+the parks dataset. We thought this would be an interesting question to
+address as we wanted to illustrate and determine which variables were
+the most meaningful when determining the park rankings. We wanted to
+compare and interpret whether the top 10 parks had much more amenities
+than the bottom 10 parks, and also visualize where those parks are
+geographically in the US and how much of their cities’ respective land
+is parkland.
 
 ### Approach
 
