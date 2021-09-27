@@ -75,6 +75,11 @@ fivenum(parks$spend_per_resident_data)
     ## [1] NA NA NA NA NA
 
 ``` r
+# to remove the $ and change from a categorical variable to a numerical variable 
+# selected relevant variables, pivot wider to see what cities have data from every year
+# drop na's from cities that do not have spending data from every year
+# pivot longer to return dataset to a structure that can be plotted on a line plot
+
 parks_q1 <- parks %>%
   select(year, city, spend_per_resident_data) %>% 
   mutate(across(starts_with("spend_per_resident_data"), ~gsub("\\$", "", .) 
@@ -85,11 +90,6 @@ parks_q1 <- parks %>%
   pivot_longer(cols = starts_with("20"),
                names_to = "year", 
                values_to = "spend_per_resident") 
-
-# to remove the $ and change from a categorical variable to a numerical variable 
-# selected relevant variables, pivot wider to see what cities have data from every year
-# drop na's from cities that do not have spending data from every year
-# pivot longer to return dataset to a structure that can be plotted on a line plot
 
 parks_q1 <- parks_q1 %>% 
   mutate(year = as.numeric(year))
@@ -122,28 +122,29 @@ parks_q1 <- parks_q1 %>%
     between(med_park_size_data, 3.21, 5.0) ~ "2nd quartile",
     between(med_park_size_data, 5.01, 7.7) ~ "3rd quartile",
     TRUE ~ "4th quartile"
-  ))
+  )) 
 
-ggplot(data = parks_q1, mapping = aes(x = year, y = spend_per_resident, group = city)) + 
-  geom_line() 
-```
-
-<img src="README_files/figure-gfm/question 1-1.png" width="90%" />
-
-``` r
-ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data, 
-                     size = size_bins)) + 
+q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data, 
+                     size = size_bins, color = spend_bins)) + 
         geom_point() +  
-        labs(title = "Year: {frame_time}", x = "Spend per Resident", y = "Median Park Size") +
+        labs(title = "INSERT TITLE HERE",
+            subtitle = "Year: {frame_time}",
+             x = "Spending per Resident (in USD)", 
+             y = "Median Park Size (in acres)", 
+             size = "Size Bins", 
+            #it would be great if these legends had the actual values of the bins, maybe we change observation names? 
+             color = "Spend Bins") +
         transition_time(year)
+
+animate(q1_plot)
 ```
 
     ## Warning: No renderer available. Please install the gifski, av, or magick package
     ## to create animated output
 
-    ## NULL
-
 ``` r
+#gif_file <- save_gif(q1_plot(), width = 800, height = 450, res = 92)
+
 #figure this out 
 
 #anim_save(filename = question1_plot, animation = last_animation, path = NULL)
@@ -152,10 +153,17 @@ ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data,
 
 
 #ggplot2::ggsave
-
-#SUGGESTION FROM MINE: This is just a suggestion, in case your original plan doesn't yield as compelling a plot as you'd like: you might consider whether the park is located in a metropolitan city or not and explore relationships about other amenities in the park depending on this variable.
-  #create a binary variable if in metropolitan city or not 
 ```
+
+Links:
+<https://github.com/thomasp85/gganimate/wiki/Animation-Composition>
+<https://cran.r-project.org/web/packages/gganimate/gganimate.pdf>
+<https://gganimate.com/>
+<https://www.datanovia.com/en/blog/gganimate-how-to-create-plots-with-beautiful-animation-in-r/>
+<http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html>
+<https://ropensci.org/blog/2018/07/23/gifski-release/>
+<https://gif.ski/> <https://github.com/r-rust/gifski>
+<https://gganimate.com/articles/gganimate.html#rendering-1>
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
 section, provide the code that generates your plots. Use scale functions
