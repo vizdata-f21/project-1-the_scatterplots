@@ -9,6 +9,14 @@ library(tidyverse)
 library(jsonlite)
 library(scales)
 library(maps)
+
+#install.packages("cowplot")  # a gganimate dependency
+#devtools::install_github('thomasp85/gganimate')
+#remotes::install_github("thomasp85/gganimate@v0.1.1")
+
+library(gganimate)
+
+#gifski, av, or magick
 ```
 
 ```{r load-data, echo = FALSE}
@@ -36,7 +44,7 @@ unequal access to quality parks and we are hoping to explore these in our projec
 
 ### Introduction
 
-To answer our first question (above), we used the "parks" dataset and analyzed the relationship between the variables "spend_per_resident_data", "city", "med_park_size_data", and "year". We thought it'd very interesting to look into how the spending on parks varies across different cities and over the course of the last decade. We were also curious and wanted to analyze how spending per resident and park size varies across different regions/cities. Our group felt as though those were four of the most compelling variables in the dataset and we were all unsure of what the relationship would be between spending per resident and park size versus year and then region/city, so we were excited to create visualizations based upon those variables.
+To answer our first question (above), we used the "parks" dataset and analyzed the relationship between the variables "spend_per_resident_data", "city", "med_park_size_data", and "year". We thought it would be interesting to look into how the spending on parks varies across different cities and over the course of the last decade. We were also curious and wanted to analyze how spending per resident and park size varies across different regions/cities. Our group felt as though those were four of the most compelling variables in the dataset and we were all unsure of what the relationship would be between spending per resident and park size versus year and then region/city, so we were excited to create visualizations based upon those variables.
 
 ### Approach
 
@@ -63,50 +71,61 @@ parks_q1 <- parks %>%
                   %>% as.numeric)) %>% 
   pivot_wider(names_from = "year", 
               values_from = "spend_per_resident_data") %>% 
-  drop_na() %>% 
+  drop_na() %>% #this is where we lose it 
   pivot_longer(cols = starts_with("20"),
                names_to = "year", 
                values_to = "spend_per_resident") 
-
-#I'll come back to this! 
-
-#parks_q1$year <- as.factor(parks_q1$year)
-
-#parks %>% 
-  #select(city, year, med_park_size_data) %>% 
-  #right_join(parks_q1, by = c("city","year")) %>%
-  #print() 
-
-
-  #from K: i tried to add `med_park_size_data` in the select() function, but then it only returns data on memphis, not sure why this is happening cause i never call city into a pivot function and that worked 
-#posted on discussion about this, hopefully we get a response soon 
-
-parks_q1 <- parks_q1 %>% 
-  mutate(bins = case_when(
-    between(spend_per_resident, 0, 59) ~ "1st quartile",
-    between(spend_per_resident, 60, 84) ~ "2nd quartile",
-    between(spend_per_resident, 85, 131) ~ "3rd quartile",
-    TRUE ~ "4th quartile"
-  ))
 
 # to remove the $ and change from a categorical variable to a numerical variable 
 # selected relevant variables, pivot wider to see what cities have data from every year
 # drop na's from cities that do not have spending data from every year
 # pivot longer to return dataset to a structure that can be plotted on a line plot
 
+parks_q1 <- parks_q1 %>% 
+  mutate(year = as.numeric(year))
+glimpse(parks_q1)
+
+parks_q1 <- parks %>% 
+  select(city, year, med_park_size_data) %>% 
+  right_join(parks_q1, by = c("city","year")) 
+
+parks_q1 <- parks_q1 %>% 
+  arrange(city) %>% 
+  mutate(spend_bins = case_when(
+    between(spend_per_resident, 0, 59) ~ "1st quartile",
+    between(spend_per_resident, 60, 84) ~ "2nd quartile",
+    between(spend_per_resident, 85, 131) ~ "3rd quartile",
+    TRUE ~ "4th quartile"
+  ))
+
+  parks_q1 <- parks_q1 %>% 
+    mutate(size_bins = case_when(
+    between(med_park_size_data, 0, 3.2) ~ "1st quartile",
+    between(med_park_size_data, 3.21, 5.0) ~ "2nd quartile",
+    between(med_park_size_data, 5.01, 7.7) ~ "3rd quartile",
+    TRUE ~ "4th quartile"
+  ))
+
 ggplot(data = parks_q1, mapping = aes(x = year, y = spend_per_resident, group = city)) + 
-  geom_line(mapping = aes(color = bins))
-    #it looks like the quartile / color changes for some cities over time, interesting observation prob could draw conclusion from 
+  geom_line() 
 
-#NOTE: include med_park_size_data in parks_q1
+ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data, 
+                     size = size_bins)) + 
+        geom_point() +  
+        labs(title = "Year: {frame_time}", x = "Spend per Resident", y = "Median Park Size") +
+        transition_time(year)
 
-#in our proposal we said med_park_size_data would also be part of this viz so we need to make sure thats included in the dataset parks_q1
-  #from K: i tried to add it in the select() function, but then it only returns data on memphis 
+#figure this out 
+
+#anim_save(filename = question1_plot, animation = last_animation, path = NULL)
+
+#animate(q1_plot, renderer = ffmpeg_renderer())
+
+
+#ggplot2::ggsave
 
 #SUGGESTION FROM MINE: This is just a suggestion, in case your original plan doesn't yield as compelling a plot as you'd like: you might consider whether the park is located in a metropolitan city or not and explore relationships about other amenities in the park depending on this variable.
   #create a binary variable if in metropolitan city or not 
-
-us_cities <- maps::us.cities #from maps package
 ```
 
 
