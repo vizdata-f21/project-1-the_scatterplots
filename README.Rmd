@@ -16,8 +16,8 @@ library(maps)
 
 library(gganimate)
 
-#install.packages("gifski")
-#library(gifski)
+install.packages("gifski")
+library(gifski)
 library(png)
 
 #gifski, av, or magick
@@ -162,7 +162,6 @@ https://gganimate.com/articles/gganimate.html#rendering-1
 
 ```{r question 1 plot 2}
 #data wrangling
-
 ```
 
 (2-3 code blocks, 2 figures, text/code comments as needed)
