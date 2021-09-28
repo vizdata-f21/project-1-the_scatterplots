@@ -38,15 +38,15 @@ those variables.
 
 ### Approach
 
-(1-2 paragraphs) Describe what types of plots you are going to make to
-address your question.
+(1-2 paragraphs) *Describe what types of plots you are going to make to
+address your question.*
 
-For each plot, provide a clear explanation as to why this plot
+*For each plot, provide a clear explanation as to why this plot
 (e.g. boxplot, barplot, histogram, etc.) is best for providing the
-information you are asking about.
+information you are asking about.*
 
-The two plots should be of different types, and at least one of the two
-plots needs to use either color mapping or facets.
+*The two plots should be of different types, and at least one of the two
+plots needs to use either color mapping or facets.*
 
 To answer our first question addressing the relationship between
 spending per resident and year, we first created a new variable, called
@@ -91,6 +91,7 @@ parks_q1 <- parks %>%
                names_to = "year", 
                values_to = "spend_per_resident") 
 
+#making the year variable numeric so we can join med_park_size_data back 
 parks_q1 <- parks_q1 %>% 
   mutate(year = as.numeric(year))
 glimpse(parks_q1)
@@ -103,10 +104,12 @@ glimpse(parks_q1)
     ## $ spend_per_resident <dbl> 250.00, 224.00, 251.00, 165.00, 154.00, 145.00, 155…
 
 ``` r
+#joining based on city and year to include med_park_size_data in the dataset
 parks_q1 <- parks %>% 
   select(city, year, med_park_size_data) %>% 
   right_join(parks_q1, by = c("city","year")) 
 
+#creating quartile bins for spending per resident, ranges based on five number summary
 parks_q1 <- parks_q1 %>% 
   arrange(city) %>% 
   mutate(spend_bins = case_when(
@@ -116,6 +119,7 @@ parks_q1 <- parks_q1 %>%
     TRUE ~ "4th quartile"
   ))
 
+#creating quartile bins for median park size, ranges based on five number summary
   parks_q1 <- parks_q1 %>% 
     mutate(size_bins = case_when(
     between(med_park_size_data, 0, 3.2) ~ "1st quartile",
@@ -134,6 +138,7 @@ q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data,
              size = "Size Bins", 
             #it would be great if these legends had the actual values of the bins, maybe we change observation names? 
              color = "Spend Bins") +
+        scale_x_continuous(breaks = seq(from = 0, to = 400, by = 50)) + 
         transition_time(year)
 
 animate(q1_plot)
@@ -143,6 +148,8 @@ animate(q1_plot)
     ## to create animated output
 
 ``` r
+#NEED TO FIGURE OUT HOW TO ANIMATE THIS 
+
 #gif_file <- save_gif(q1_plot(), width = 800, height = 450, res = 92)
 
 #figure this out 
@@ -164,6 +171,13 @@ Links:
 <https://ropensci.org/blog/2018/07/23/gifski-release/>
 <https://gif.ski/> <https://github.com/r-rust/gifski>
 <https://gganimate.com/articles/gganimate.html#rendering-1>
+
+*note to self: what is the relationship between spending per resident
+and park size in different U.S. cities over time?*
+
+``` r
+#data wrangling
+```
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
 section, provide the code that generates your plots. Use scale functions
