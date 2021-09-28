@@ -235,6 +235,36 @@ ggplot(data = parks_amenities, mapping = aes(x = city, y = total_amenities, fill
   #geom_text(aes(label = rank), hjust = -.5, color = "black", family = "bold") +
   #coord_flip() +
   #labs(y = "Total Amenities", x = NULL)
+
+parks_2020_long <- parks_2020 %>%
+  select(rank, city, basketball_data, playground_data, restroom_data) %>%
+  pivot_longer(cols = c(basketball_data, playground_data, restroom_data),
+               names_to = "amenity",
+               values_to = "per_10k") %>%
+  mutate(city = case_when(city == "Charlotte/Mecklenburg County" ~ "Charlotte",
+                          city == "Arlington, Virginia" ~ "Arlington, VA",
+                          TRUE ~ city))
+
+top_plot <- ggplot(parks_2020_long %>% filter(rank <= 10),
+                   aes(x = per_10k, y = reorder(paste0("#", rank, " ", city), -rank),
+                       fill = amenity)) + 
+  geom_col() +
+  scale_fill_discrete(labels = c("Basketball courts", "Playgrounds", "Restrooms")) +
+  labs(fill = "Amenity", y = "", x = "Number per 10k residents", title = "Amenities per 10k residents",
+       subtitle = "of top and bottom 10 city rankings of parks") +
+  theme_minimal()
+
+bottom_plot <- ggplot(parks_2020_long %>% filter(rank > 10),
+                      aes(x = per_10k, y = reorder(paste0("  #", rank, " ", city), -rank),
+                          fill = amenity)) + 
+  geom_col() + 
+  scale_fill_discrete(labels = c("Basketball courts", "Playgrounds", "Restrooms")) +
+  xlim(0, 25) +
+  labs(fill = "Amenity", y = "", x = "Number per 10k residents") + 
+  theme_minimal()
+
+grid.arrange(top_plot, bottom_plot, nrow=2)
+
 ```
 
 
