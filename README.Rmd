@@ -10,6 +10,7 @@ library(jsonlite)
 library(scales)
 library(maps)
 
+
 #devtools::install_github('thomasp85/gganimate')
 #remotes::install_github("thomasp85/gganimate@v0.1.1")
 
