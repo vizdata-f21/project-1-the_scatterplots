@@ -128,8 +128,8 @@ parks_q1 <- parks_q1 %>%
   )) 
 
 q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data, 
-                     size = size_bins, color = spend_bins)) + 
-        geom_point() +  
+                               group = city)) + 
+        geom_point(aes(size = size_bins, color = spend_bins)) +   
         labs(title = "INSERT TITLE HERE",
             subtitle = "Year: {frame_time}",
              x = "Spending per Resident (in USD)", 
@@ -142,7 +142,7 @@ q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data,
         scale_color_manual(values = c("#8999b0","#738148","#7c5d2d","#447aab")) +
         transition_time(as.integer(year), range = c(2012L, 2020L))
 
-animate(q1_plot)
+animate(q1_plot, duration = 18)
 ```
 
     ## Warning: Using size for a discrete variable is not advised.
@@ -150,8 +150,27 @@ animate(q1_plot)
 <img src="README_files/figure-gfm/question 1-1.gif" width="90%" />
 
 ``` r
+q2 <- parks_q1 %>% 
+  filter(city == "Milwaukee")
+
+q2_plot<- ggplot(q2, aes(x = spend_per_resident, y = med_park_size_data, 
+                     size = size_bins, color = spend_bins)) + 
+        geom_point() +  
+        labs(title = "INSERT TITLE HERE",
+            subtitle = "Year: {frame_time}",
+             x = "Spending per Resident (in USD)", 
+             y = "Median Park Size (in acres)", 
+             size = "Size Bins", 
+            color = "Spend Bins") +
+        scale_x_continuous(breaks = seq(from = 0, to = 400, by = 50)) + 
+        scale_y_continuous(breaks = seq(from = 0, to = 20, by = 5)) +
+        scale_color_manual(values = c("#8999b0","#738148","#7c5d2d","#447aab")) +
+        transition_time(as.integer(year))
  #TO DO: Update Color Scale, Fix Y Axis, Try to make the plot wider, add title, rename/better name legends 
+print(q2_plot)
 ```
+
+    ## Warning: Using size for a discrete variable is not advised.
 
 Links:
 <https://github.com/thomasp85/gganimate/wiki/Animation-Composition>
@@ -162,6 +181,7 @@ Links:
 <https://ropensci.org/blog/2018/07/23/gifski-release/>
 <https://gif.ski/> <https://github.com/r-rust/gifski>
 <https://gganimate.com/articles/gganimate.html#rendering-1>
+<https://stackoverflow.com/questions/52899017/slow-down-gganimate-in-r>
 
 *note to self: what is the relationship between spending per resident
 and park size in different U.S. cities over time?*
