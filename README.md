@@ -1,4 +1,4 @@
-Project title
+Project title (DON’T FORGET THIS)
 ================
 The Scatterplots
 
@@ -139,7 +139,7 @@ q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data,
              color = "Spend Bins") +
         scale_x_continuous(breaks = seq(from = 0, to = 400, by = 50)) + 
         scale_y_continuous(breaks = seq(from = 0, to = 20, by = 5)) +
-        scale_color_manual(values = c("#997A6D","#3D7799","#C1D5E0","#B1BC6B")) +
+        scale_color_manual(values = c("#8999b0","#738148","#7c5d2d","#447aab")) +
         transition_time(as.integer(year), range = c(2012L, 2020L))
 
 animate(q1_plot)
@@ -233,7 +233,7 @@ cities <- cities %>%
                latitude = c(38.8816),
                longitude = c(-77.0910)))
 
-#merging cities and parks dataframes
+#merging cities and parks data frames
 parks_2020_coords <- left_join(parks_2020, cities, by = "city")
 
 #creating an indicator variable for rank
@@ -265,7 +265,7 @@ ggplot() +
             aes(x = longitude, y = latitude, label = paste0("#",rank)),
             size = 3.5, vjust = 1.7, family = "bold") +
   scale_size_continuous(labels = scales::percent) +
-  scale_color_manual(values = c("#D55E00", "#009E73")) + 
+  scale_color_manual(values = c("#bc8a31", "#315d1b")) + 
   labs(x = NULL, y = NULL, size = "% of city that\nis parkland",
        title = "Top and bottom 10 city rankings of parks",
        subtitle = "scaled by % of city that is parkland") +
@@ -314,13 +314,16 @@ ggplot(data = parks_amenities, mapping = aes(x = reorder(city, -rank))) +
   guides(fill = guide_legend(reverse = TRUE)) +
   labs(title = "Top and bottom 10 city rankings by amenities",
        y = "Total Amenities per 10K  Residents", x = NULL, fill = "Amenities") +
+  scale_fill_manual(values = c("#bc8a31", "#738148", "#3b5c75")) + 
   theme(plot.title = element_text(hjust = 0),
         plot.subtitle = element_text(hjust = 0)) +
   theme_minimal()
 ```
 
+    ## Scale for 'fill' is already present. Adding another scale for 'fill', which
+    ## will replace the existing scale.
+
 <img src="README_files/figure-gfm/question-2-vis-2-1.png" width="90%" />
-\`\`\`
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
 section, provide the code that generates your plots. Use scale functions
