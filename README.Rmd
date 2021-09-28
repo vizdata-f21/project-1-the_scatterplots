@@ -9,6 +9,7 @@ library(tidyverse)
 library(jsonlite)
 library(scales)
 library(maps)
+library(gridExtra)
 
 #install.packages("cowplot")  # a gganimate dependency
 #devtools::install_github('thomasp85/gganimate')
@@ -279,9 +280,9 @@ parks_2020_long <- parks_2020 %>%
   pivot_longer(cols = c(basketball_data, playground_data, restroom_data),
                names_to = "amenity",
                values_to = "per_10k") %>%
-  mutate(city = case_when(city == "Charlotte/Mecklenburg County" ~ "Charlotte",
-                          city == "Arlington, Virginia" ~ "Arlington, VA",
-                          TRUE ~ city))
+  mutate(city = case_when(as.character(city) == "Charlotte/Mecklenburg County" ~ "Charlotte",
+                          as.character(city) == "Arlington, Virginia" ~ "Arlington, VA",
+                          TRUE ~ as.character(city)))
 
 top_plot <- ggplot(parks_2020_long %>% filter(rank <= 10),
                    aes(x = per_10k, y = reorder(paste0("#", rank, " ", city), -rank),
