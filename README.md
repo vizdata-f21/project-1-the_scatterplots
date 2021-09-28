@@ -74,61 +74,100 @@ fivenum(parks$spend_per_resident_data)
     ## [1] NA NA NA NA NA
 
 ``` r
+# to remove the $ and change from a categorical variable to a numerical variable 
+# selected relevant variables, pivot wider to see what cities have data from every year
+# drop na's from cities that do not have spending data from every year
+# pivot longer to return dataset to a structure that can be plotted on a line plot
+
 parks_q1 <- parks %>%
   select(year, city, spend_per_resident_data) %>% 
   mutate(across(starts_with("spend_per_resident_data"), ~gsub("\\$", "", .) 
                   %>% as.numeric)) %>% 
   pivot_wider(names_from = "year", 
               values_from = "spend_per_resident_data") %>% 
-  drop_na() %>% 
+  drop_na() %>% #this is where we lose it 
   pivot_longer(cols = starts_with("20"),
                names_to = "year", 
                values_to = "spend_per_resident") 
 
-#I'll come back to this! 
-
-#parks_q1$year <- as.factor(parks_q1$year)
-
-#parks %>% 
-  #select(city, year, med_park_size_data) %>% 
-  #right_join(parks_q1, by = c("city","year")) %>%
-  #print() 
-
-
-  #from K: i tried to add `med_park_size_data` in the select() function, but then it only returns data on memphis, not sure why this is happening cause i never call city into a pivot function and that worked 
-#posted on discussion about this, hopefully we get a response soon 
-
+#making the year variable numeric so we can join med_park_size_data back 
 parks_q1 <- parks_q1 %>% 
-  mutate(bins = case_when(
+  mutate(year = as.numeric(year))
+glimpse(parks_q1)
+```
+
+    ## Rows: 333
+    ## Columns: 3
+    ## $ city               <fct> "Portland", "Portland", "Portland", "Portland", "Po…
+    ## $ year               <dbl> 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 201…
+    ## $ spend_per_resident <dbl> 250.00, 224.00, 251.00, 165.00, 154.00, 145.00, 155…
+
+``` r
+#joining based on city and year to include med_park_size_data in the dataset
+parks_q1 <- parks %>% 
+  select(city, year, med_park_size_data) %>% 
+  right_join(parks_q1, by = c("city","year")) 
+
+#creating quartile bins for spending per resident, ranges based on five number summary
+parks_q1 <- parks_q1 %>% 
+  arrange(city) %>% 
+  mutate(spend_bins = case_when(
     between(spend_per_resident, 0, 59) ~ "1st quartile",
     between(spend_per_resident, 60, 84) ~ "2nd quartile",
     between(spend_per_resident, 85, 131) ~ "3rd quartile",
     TRUE ~ "4th quartile"
   ))
 
-# to remove the $ and change from a categorical variable to a numerical variable 
-# selected relevant variables, pivot wider to see what cities have data from every year
-# drop na's from cities that do not have spending data from every year
-# pivot longer to return dataset to a structure that can be plotted on a line plot
+#creating quartile bins for median park size, ranges based on five number summary
+  parks_q1 <- parks_q1 %>% 
+    mutate(size_bins = case_when(
+    between(med_park_size_data, 0, 3.2) ~ "1st quartile",
+    between(med_park_size_data, 3.21, 5.0) ~ "2nd quartile",
+    between(med_park_size_data, 5.01, 7.7) ~ "3rd quartile",
+    TRUE ~ "4th quartile"
+  )) 
 
-ggplot(data = parks_q1, mapping = aes(x = year, y = spend_per_resident, group = city)) + 
-  geom_line(mapping = aes(color = bins))
+q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data, 
+                     size = size_bins, color = spend_bins)) + 
+        geom_point() +  
+        labs(title = "INSERT TITLE HERE",
+            subtitle = "Year: {frame_time}",
+             x = "Spending per Resident (in USD)", 
+             y = "Median Park Size (in acres)", 
+             size = "Size Bins", 
+            #it would be great if these legends had the actual values of the bins, maybe we change observation names? 
+             color = "Spend Bins") +
+        scale_x_continuous(breaks = seq(from = 0, to = 400, by = 50)) + 
+        scale_y_continuous(breaks = seq(from = 0, to = 20, by = 5)) +
+        scale_color_manual(values = c("#997A6D","#3D7799","#C1D5E0","#B1BC6B")) +
+        transition_time(as.integer(year), range = c(2012L, 2020L))
+
+animate(q1_plot)
 ```
 
-![](README_files/figure-gfm/question%201-1.png)<!-- -->
+    ## Warning: Using size for a discrete variable is not advised.
+
+<img src="README_files/figure-gfm/question 1-1.gif" width="90%" />
 
 ``` r
-    #it looks like the quartile / color changes for some cities over time, interesting observation prob could draw conclusion from 
+ #TO DO: Update Color Scale, Fix Y Axis, Try to make the plot wider, add title, rename/better name legends 
+```
 
-#NOTE: include med_park_size_data in parks_q1
+Links:
+<https://github.com/thomasp85/gganimate/wiki/Animation-Composition>
+<https://cran.r-project.org/web/packages/gganimate/gganimate.pdf>
+<https://gganimate.com/>
+<https://www.datanovia.com/en/blog/gganimate-how-to-create-plots-with-beautiful-animation-in-r/>
+<http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html>
+<https://ropensci.org/blog/2018/07/23/gifski-release/>
+<https://gif.ski/> <https://github.com/r-rust/gifski>
+<https://gganimate.com/articles/gganimate.html#rendering-1>
 
-#in our proposal we said med_park_size_data would also be part of this viz so we need to make sure thats included in the dataset parks_q1
-  #from K: i tried to add it in the select() function, but then it only returns data on memphis 
+*note to self: what is the relationship between spending per resident
+and park size in different U.S. cities over time?*
 
-#SUGGESTION FROM MINE: This is just a suggestion, in case your original plan doesn't yield as compelling a plot as you'd like: you might consider whether the park is located in a metropolitan city or not and explore relationships about other amenities in the park depending on this variable.
-  #create a binary variable if in metropolitan city or not 
-
-us_cities <- maps::us.cities #from maps package
+``` r
+#data wrangling
 ```
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
@@ -201,20 +240,43 @@ parks_2020_coords <- left_join(parks_2020, cities, by = "city")
 parks_2020_coords <- parks_2020_coords %>%
   mutate(rank_div = ifelse(rank <= 10, "top", "bottom"))
 
+#dodging overlapping points
+parks_2020_coords <- parks_2020_coords %>%
+  mutate(longitude = case_when(rank == 1 ~ -93.5,
+                              rank == 3 ~ -92.6,
+                              rank == 2 ~ -76.6,
+                              rank == 4 ~ -77.5,
+                              rank == 89 ~ -96.7,
+                              rank == 94 ~ -97.5,
+                              TRUE ~ longitude),
+         updown = ifelse(rank %in% c(3, 89, 2), "down", "up"))
+
 ### testing out mapping
 ggplot() +
   geom_polygon(data = map_data("state"), aes(x = long, y = lat, group = group),
-               fill = "white", color = "#3c3b6e") +
+               fill = "white", color = "gray60") +
   geom_point(data = parks_2020_coords,
              aes(x = longitude, y = latitude, color = rank_div,
-                 size = park_pct_city_points),
-             show.legend = FALSE) +
-  labs(x = NULL, y = NULL) +
+                 size = as.numeric(str_extract(park_pct_city_data,"\\d+"))/100)) +
+  geom_text(data = parks_2020_coords %>% filter(updown == "up"),
+            aes(x = longitude, y = latitude, label = paste0("#",rank)),
+            size = 3.5, vjust = -.7, family = "bold") +
+  geom_text(data = parks_2020_coords %>% filter(updown == "down"),
+            aes(x = longitude, y = latitude, label = paste0("#",rank)),
+            size = 3.5, vjust = 1.7, family = "bold") +
+  scale_size_continuous(labels = scales::percent) +
+  scale_color_manual(values = c("#D55E00", "#009E73")) + 
+  labs(x = NULL, y = NULL, size = "% of city that\nis parkland",
+       title = "Top and bottom 10 city rankings of parks",
+       subtitle = "scaled by % of city that is parkland") +
   coord_map() + 
-  theme_void()
+  theme_void() +
+  guides(color = "none") + 
+  theme(legend.position = c(.92,.3),
+        plot.title = element_text(hjust = 0.1),
+        plot.subtitle = element_text(hjust = 0.1))
 ```
 
-<<<<<<< HEAD
 <img src="README_files/figure-gfm/question-2-1.png" width="90%" />
 
 ``` r
@@ -251,14 +313,11 @@ ggplot(data = parks_amenities, mapping = aes(x = reorder(city, -rank))) +
   scale_fill_discrete(labels = c("Basketball Courts", "Playgrounds", "Restrooms")) +
   guides(fill = guide_legend(reverse = TRUE)) +
   labs(title = "Top and bottom 10 city rankings by amenities",
-       y = "Total Amenities", x = NULL, fill = "Amenities") +
+       y = "Total Amenities per 10K  Residents", x = NULL, fill = "Amenities") +
   theme(plot.title = element_text(hjust = 0),
         plot.subtitle = element_text(hjust = 0)) +
   theme_minimal()
 ```
-=======
-![](README_files/figure-gfm/question-2-1.png)<!-- -->
->>>>>>> b52fd1fc04175139b087f78293ff507ff92fb9b5
 
 <img src="README_files/figure-gfm/question-2-vis-2-1.png" width="90%" />
 \`\`\`
