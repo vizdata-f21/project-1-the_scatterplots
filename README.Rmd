@@ -91,7 +91,7 @@ parks_q1 <- parks %>%
 #making the year variable numeric so we can join med_park_size_data back 
 parks_q1 <- parks_q1 %>% 
   mutate(year = as.numeric(year))
-glimpse(parks_q1)
+view(parks_q1)
 
 #joining based on city and year to include med_park_size_data in the dataset
 parks_q1 <- parks %>% 
