@@ -246,10 +246,12 @@ parks_2020_coords <- parks_2020_coords %>%
            splashground_data)
 
 
-
 parks_amenities <- parks_2020_coords %>%
-  select(city, basketball_data, dogpark_data, playground_data, rec_sr_data,
-                    restroom_data, splashground_data, total_amenities)
+  pivot_longer(cols = c(basketball_data, dogpark_data, playground_data, rec_sr_data, restroom_data,
+           splashground_data), names_to = "amenity", values_to = "value")
+
+
+
 
 
 #parks_2020_coords <- parks_2020_coords %>%
@@ -258,22 +260,22 @@ parks_amenities <- parks_2020_coords %>%
    #                       rank >= 88 & rank < 93 ~ "3rd quartile",
     #                      rank >= 93 ~ "4th quartile"))
 
-ggplot(data = parks_amenities, mapping = aes(x = city, y = total_amenities, fill = total_amenities)) + 
-  geom_bar(stat = "identity") +
-  geom_text(data = parks_2020_coords, aes(label = rank), hjust = -.5, color = "black", family = "bold") +
+#ggplot(data = parks_amenities, mapping = aes(x = city, y = total_amenities, fill = total_amenities)) + 
+  #geom_bar(stat = "identity") +
+  #geom_text(data = parks_2020_coords, aes(label = rank), hjust = -.5, color = "black", family = "bold") +
+  #coord_flip() +
+  #labs(y = "Total Amenities", x = NULL)
+
+ggplot(data = parks_amenities, mapping = aes(x = reorder(city, -rank))) + 
+  geom_bar(stat = "identity", mapping = aes(y = value, fill = amenity)) +
+  geom_text(data = parks_2020_coords, mapping = aes(label = rank, y = total_amenities), hjust = -.5, 
+            color = "black",
+            family = "bold") +
   coord_flip() +
   labs(y = "Total Amenities", x = NULL)
 ```
 
 <img src="README_files/figure-gfm/question-2-vis-2-1.png" width="90%" />
-
-``` r
-#ggplot(data = parks_2020_coords, mapping = aes(x = reorder(city, -rank), y = total_amenities, fill = total_amenities)) + 
- # geom_bar(stat = "identity") +
-  #geom_text(aes(label = rank), hjust = -.5, color = "black", family = "bold") +
-  #coord_flip() +
-  #labs(y = "Total Amenities", x = NULL)
-```
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
 section, provide the code that generates your plots. Use scale functions
