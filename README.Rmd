@@ -120,7 +120,7 @@ parks_q1 <- parks_q1 %>%
 q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data, 
                                group = city)) + 
         geom_point(aes(size = size_bins, color = spend_bins)) +   
-        labs(title = "INSERT TITLE HERE",
+        labs(title = "Median Park Sizs vs. Spending Per Resident\n from 2012-2020 in U.S. Cities",
             subtitle = "Year: {frame_time}",
              x = "Spending per Resident (in USD)", 
              y = "Median Park Size (in acres)", 
@@ -133,25 +133,6 @@ q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data,
         transition_time(as.integer(year), range = c(2012L, 2020L))
 
 animate(q1_plot, duration = 18)
-
-q2 <- parks_q1 %>% 
-  filter(city == "Milwaukee")
-
-q2_plot<- ggplot(q2, aes(x = spend_per_resident, y = med_park_size_data, 
-                     size = size_bins, color = spend_bins)) + 
-        geom_point() +  
-        labs(title = "INSERT TITLE HERE",
-            subtitle = "Year: {frame_time}",
-             x = "Spending per Resident (in USD)", 
-             y = "Median Park Size (in acres)", 
-             size = "Size Bins", 
-            color = "Spend Bins") +
-        scale_x_continuous(breaks = seq(from = 0, to = 400, by = 50)) + 
-        scale_y_continuous(breaks = seq(from = 0, to = 20, by = 5)) +
-        scale_color_manual(values = c("#8999b0","#738148","#7c5d2d","#447aab")) +
-        transition_time(as.integer(year))
- #TO DO: Update Color Scale, Fix Y Axis, Try to make the plot wider, add title, rename/better name legends 
-print(q2_plot)
 ```
 
 Links: 
@@ -170,6 +151,12 @@ https://stackoverflow.com/questions/52899017/slow-down-gganimate-in-r
 
 ```{r question 1 plot 2}
 #data wrangling
+parks_phoenix <- parks_q1 %>% 
+  filter(city == "Atlanta") %>% 
+  print()
+
+ggplot(parks_phoenix, aes(x = year, y = spend_per_resident)) + 
+  geom_line(aes(size = med_park_size_data), lineend = "round")
 ```
 
 (2-3 code blocks, 2 figures, text/code comments as needed)

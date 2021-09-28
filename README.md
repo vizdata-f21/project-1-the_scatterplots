@@ -130,7 +130,7 @@ parks_q1 <- parks_q1 %>%
 q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data, 
                                group = city)) + 
         geom_point(aes(size = size_bins, color = spend_bins)) +   
-        labs(title = "INSERT TITLE HERE",
+        labs(title = "Median Park Sizs vs. Spending Per Resident\n from 2012-2020 in U.S. Cities",
             subtitle = "Year: {frame_time}",
              x = "Spending per Resident (in USD)", 
              y = "Median Park Size (in acres)", 
@@ -149,29 +149,6 @@ animate(q1_plot, duration = 18)
 
 <img src="README_files/figure-gfm/question 1-1.gif" width="90%" />
 
-``` r
-q2 <- parks_q1 %>% 
-  filter(city == "Milwaukee")
-
-q2_plot<- ggplot(q2, aes(x = spend_per_resident, y = med_park_size_data, 
-                     size = size_bins, color = spend_bins)) + 
-        geom_point() +  
-        labs(title = "INSERT TITLE HERE",
-            subtitle = "Year: {frame_time}",
-             x = "Spending per Resident (in USD)", 
-             y = "Median Park Size (in acres)", 
-             size = "Size Bins", 
-            color = "Spend Bins") +
-        scale_x_continuous(breaks = seq(from = 0, to = 400, by = 50)) + 
-        scale_y_continuous(breaks = seq(from = 0, to = 20, by = 5)) +
-        scale_color_manual(values = c("#8999b0","#738148","#7c5d2d","#447aab")) +
-        transition_time(as.integer(year))
- #TO DO: Update Color Scale, Fix Y Axis, Try to make the plot wider, add title, rename/better name legends 
-print(q2_plot)
-```
-
-    ## Warning: Using size for a discrete variable is not advised.
-
 Links:
 <https://github.com/thomasp85/gganimate/wiki/Animation-Composition>
 <https://cran.r-project.org/web/packages/gganimate/gganimate.pdf>
@@ -188,7 +165,28 @@ and park size in different U.S. cities over time?*
 
 ``` r
 #data wrangling
+parks_phoenix <- parks_q1 %>% 
+  filter(city == "Atlanta") %>% 
+  print()
 ```
+
+    ##      city year med_park_size_data spend_per_resident   spend_bins    size_bins
+    ## 1 Atlanta 2020               2.90             151.00 4th quartile 1st quartile
+    ## 2 Atlanta 2019               2.90             138.00 4th quartile 1st quartile
+    ## 3 Atlanta 2018               2.90             139.00 4th quartile 1st quartile
+    ## 4 Atlanta 2017               3.10             134.00 4th quartile 1st quartile
+    ## 5 Atlanta 2016               3.10             120.00 3rd quartile 1st quartile
+    ## 6 Atlanta 2015               3.10              98.00 3rd quartile 1st quartile
+    ## 7 Atlanta 2014               3.10              87.00 3rd quartile 1st quartile
+    ## 8 Atlanta 2013               2.95              90.33 3rd quartile 1st quartile
+    ## 9 Atlanta 2012               3.00              99.39 3rd quartile 1st quartile
+
+``` r
+ggplot(parks_phoenix, aes(x = year, y = spend_per_resident)) + 
+  geom_line(aes(size = med_park_size_data), lineend = "round")
+```
+
+<img src="README_files/figure-gfm/question 1 plot 2-1.png" width="90%" />
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
 section, provide the code that generates your plots. Use scale functions
