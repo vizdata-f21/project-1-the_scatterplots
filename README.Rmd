@@ -10,7 +10,7 @@ library(jsonlite)
 library(scales)
 library(maps)
 
-
+#install.packages("cowplot")  # a gganimate dependency
 #devtools::install_github('thomasp85/gganimate')
 #remotes::install_github("thomasp85/gganimate@v0.1.1")
 
@@ -27,8 +27,7 @@ knitr::opts_chunk$set(fig.width = 10,
 ```
 
 ```{r load-data, echo = FALSE}
-#parks <- read.csv("~/R/project-1-the_scatterplots/data/parks.csv")
-parks <- read.csv("~/R/STA313/Projects/project-1-the_scatterplots/data/parks.csv")
+parks <- read.csv("~/R/project-1-the_scatterplots/data/parks.csv")
 cities <- fromJSON("~/R/project-1-the_scatterplots/data/cities.json")
 ```
 
@@ -52,7 +51,16 @@ unequal access to quality parks and we are hoping to explore these in our projec
 
 ### Introduction
 
-To answer our first question (above), we used the "parks" dataset and analyzed the relationship between the variables "spend_per_resident_data", "city", "med_park_size_data", and "year". We thought it'd very interesting to look into how the spending on parks varies across different cities and over the course of the last decade. We were also curious and wanted to analyze how spending per resident and park size varies across different regions/cities. Our group felt as though those were four of the most compelling variables in the dataset and we were all unsure of what the relationship would be between spending per resident and park size versus year and then region/city, so we were excited to create visualizations based upon those variables.
+To answer our first question, we used the "parks" dataset and analyzed 
+the relationship between the variables "spend_per_resident_data", "city", 
+"med_park_size_data", and "year". We thought it'd very interesting to look into
+how the spending on parks varies across different cities and over the course of
+the last decade. We were also curious and wanted to analyze how spending per 
+resident and park size varies across different regions/cities. Our group felt 
+as though those were four of the most compelling variables in the dataset and 
+we were all unsure of what the relationship would be between spending per 
+resident and park size versus year and then region/city, so we were excited
+to create visualizations based upon those variables.
 
 ### Approach
 
@@ -92,7 +100,7 @@ parks_q1 <- parks %>%
 #making the year variable numeric so we can join med_park_size_data back 
 parks_q1 <- parks_q1 %>% 
   mutate(year = as.numeric(year))
-view(parks_q1)
+glimpse(parks_q1)
 
 #joining based on city and year to include med_park_size_data in the dataset
 parks_q1 <- parks %>% 
@@ -279,7 +287,7 @@ ggplot(data = parks_amenities, mapping = aes(x = reorder(city, -rank))) +
   scale_fill_discrete(labels = c("Basketball Courts", "Playgrounds", "Restrooms")) +
   guides(fill = guide_legend(reverse = TRUE)) +
   labs(title = "Top and bottom 10 city rankings by amenities",
-       y = "Total Amenities", x = NULL, fill = "Amenities") +
+       y = "Total Amenities per 10K  Residents", x = NULL, fill = "Amenities") +
   theme(plot.title = element_text(hjust = 0),
         plot.subtitle = element_text(hjust = 0)) +
   theme_minimal()
