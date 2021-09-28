@@ -26,27 +26,26 @@ parks and we are hoping to explore these in our project.
 To answer our first question (above), we used the “parks” dataset and
 analyzed the relationship between the variables
 “spend\_per\_resident\_data”, “city”, “med\_park\_size\_data”, and
-“year”. We thought it would be interesting to look into how the
-spending on parks varies across different cities and over the course of
-the last decade. We were also curious and wanted to analyze how spending
-per resident and park size varies across different regions/cities. Our
-group felt as though those were four of the most compelling variables in
-the dataset and we were all unsure of what the relationship would be
-between spending per resident and park size versus year and then
-region/city, so we were excited to create visualizations based upon
-those variables.
+“year”. We thought it’d very interesting to look into how the spending
+on parks varies across different cities and over the course of the last
+decade. We were also curious and wanted to analyze how spending per
+resident and park size varies across different regions/cities. Our group
+felt as though those were four of the most compelling variables in the
+dataset and we were all unsure of what the relationship would be between
+spending per resident and park size versus year and then region/city, so
+we were excited to create visualizations based upon those variables.
 
 ### Approach
 
-(1-2 paragraphs) *Describe what types of plots you are going to make to
-address your question.*
+(1-2 paragraphs) Describe what types of plots you are going to make to
+address your question.
 
-*For each plot, provide a clear explanation as to why this plot
+For each plot, provide a clear explanation as to why this plot
 (e.g. boxplot, barplot, histogram, etc.) is best for providing the
-information you are asking about.*
+information you are asking about.
 
-*The two plots should be of different types, and at least one of the two
-plots needs to use either color mapping or facets.*
+The two plots should be of different types, and at least one of the two
+plots needs to use either color mapping or facets.
 
 To answer our first question addressing the relationship between
 spending per resident and year, we first created a new variable, called
@@ -75,108 +74,61 @@ fivenum(parks$spend_per_resident_data)
     ## [1] NA NA NA NA NA
 
 ``` r
-# to remove the $ and change from a categorical variable to a numerical variable 
-# selected relevant variables, pivot wider to see what cities have data from every year
-# drop na's from cities that do not have spending data from every year
-# pivot longer to return dataset to a structure that can be plotted on a line plot
-
 parks_q1 <- parks %>%
   select(year, city, spend_per_resident_data) %>% 
   mutate(across(starts_with("spend_per_resident_data"), ~gsub("\\$", "", .) 
                   %>% as.numeric)) %>% 
   pivot_wider(names_from = "year", 
               values_from = "spend_per_resident_data") %>% 
-  drop_na() %>% #this is where we lose it 
+  drop_na() %>% 
   pivot_longer(cols = starts_with("20"),
                names_to = "year", 
                values_to = "spend_per_resident") 
 
-#making the year variable numeric so we can join med_park_size_data back 
+#I'll come back to this! 
+
+#parks_q1$year <- as.factor(parks_q1$year)
+
+#parks %>% 
+  #select(city, year, med_park_size_data) %>% 
+  #right_join(parks_q1, by = c("city","year")) %>%
+  #print() 
+
+
+  #from K: i tried to add `med_park_size_data` in the select() function, but then it only returns data on memphis, not sure why this is happening cause i never call city into a pivot function and that worked 
+#posted on discussion about this, hopefully we get a response soon 
+
 parks_q1 <- parks_q1 %>% 
-  mutate(year = as.numeric(year))
-glimpse(parks_q1)
-```
-
-    ## Rows: 333
-    ## Columns: 3
-    ## $ city               <fct> "Portland", "Portland", "Portland", "Portland", "Po…
-    ## $ year               <dbl> 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 201…
-    ## $ spend_per_resident <dbl> 250.00, 224.00, 251.00, 165.00, 154.00, 145.00, 155…
-
-``` r
-#joining based on city and year to include med_park_size_data in the dataset
-parks_q1 <- parks %>% 
-  select(city, year, med_park_size_data) %>% 
-  right_join(parks_q1, by = c("city","year")) 
-
-#creating quartile bins for spending per resident, ranges based on five number summary
-parks_q1 <- parks_q1 %>% 
-  arrange(city) %>% 
-  mutate(spend_bins = case_when(
+  mutate(bins = case_when(
     between(spend_per_resident, 0, 59) ~ "1st quartile",
     between(spend_per_resident, 60, 84) ~ "2nd quartile",
     between(spend_per_resident, 85, 131) ~ "3rd quartile",
     TRUE ~ "4th quartile"
   ))
 
-#creating quartile bins for median park size, ranges based on five number summary
-  parks_q1 <- parks_q1 %>% 
-    mutate(size_bins = case_when(
-    between(med_park_size_data, 0, 3.2) ~ "1st quartile",
-    between(med_park_size_data, 3.21, 5.0) ~ "2nd quartile",
-    between(med_park_size_data, 5.01, 7.7) ~ "3rd quartile",
-    TRUE ~ "4th quartile"
-  )) 
+# to remove the $ and change from a categorical variable to a numerical variable 
+# selected relevant variables, pivot wider to see what cities have data from every year
+# drop na's from cities that do not have spending data from every year
+# pivot longer to return dataset to a structure that can be plotted on a line plot
 
-q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data, 
-                     size = size_bins, color = spend_bins)) + 
-        geom_point() +  
-        labs(title = "INSERT TITLE HERE",
-            subtitle = "Year: {frame_time}",
-             x = "Spending per Resident (in USD)", 
-             y = "Median Park Size (in acres)", 
-             size = "Size Bins", 
-            #it would be great if these legends had the actual values of the bins, maybe we change observation names? 
-             color = "Spend Bins") +
-        scale_x_continuous(breaks = seq(from = 0, to = 400, by = 50)) + 
-        transition_time(year)
-
-animate(q1_plot)
+ggplot(data = parks_q1, mapping = aes(x = year, y = spend_per_resident, group = city)) + 
+  geom_line(mapping = aes(color = bins))
 ```
 
-    ## Warning: No renderer available. Please install the gifski, av, or magick package
-    ## to create animated output
+<img src="README_files/figure-gfm/question 1-1.png" width="90%" />
 
 ``` r
-#NEED TO FIGURE OUT HOW TO ANIMATE THIS 
+    #it looks like the quartile / color changes for some cities over time, interesting observation prob could draw conclusion from 
 
-#gif_file <- save_gif(q1_plot(), width = 800, height = 450, res = 92)
+#NOTE: include med_park_size_data in parks_q1
 
-#figure this out 
+#in our proposal we said med_park_size_data would also be part of this viz so we need to make sure thats included in the dataset parks_q1
+  #from K: i tried to add it in the select() function, but then it only returns data on memphis 
 
-#anim_save(filename = question1_plot, animation = last_animation, path = NULL)
+#SUGGESTION FROM MINE: This is just a suggestion, in case your original plan doesn't yield as compelling a plot as you'd like: you might consider whether the park is located in a metropolitan city or not and explore relationships about other amenities in the park depending on this variable.
+  #create a binary variable if in metropolitan city or not 
 
-#animate(q1_plot, renderer = ffmpeg_renderer())
-
-
-#ggplot2::ggsave
-```
-
-Links:
-<https://github.com/thomasp85/gganimate/wiki/Animation-Composition>
-<https://cran.r-project.org/web/packages/gganimate/gganimate.pdf>
-<https://gganimate.com/>
-<https://www.datanovia.com/en/blog/gganimate-how-to-create-plots-with-beautiful-animation-in-r/>
-<http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html>
-<https://ropensci.org/blog/2018/07/23/gifski-release/>
-<https://gif.ski/> <https://github.com/r-rust/gifski>
-<https://gganimate.com/articles/gganimate.html#rendering-1>
-
-*note to self: what is the relationship between spending per resident
-and park size in different U.S. cities over time?*
-
-``` r
-#data wrangling
+us_cities <- maps::us.cities #from maps package
 ```
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
@@ -287,6 +239,41 @@ ggplot() +
 ```
 
 <img src="README_files/figure-gfm/question-2-1.png" width="90%" />
+
+``` r
+parks_2020_coords <- parks_2020_coords %>%
+  mutate(total_amenities = basketball_data + dogpark_data + playground_data + rec_sr_data + restroom_data +
+           splashground_data)
+
+
+
+parks_amenities <- parks_2020_coords %>%
+  select(city, basketball_data, dogpark_data, playground_data, rec_sr_data,
+                    restroom_data, splashground_data, total_amenities)
+
+
+#parks_2020_coords <- parks_2020_coords %>%
+ # mutate(rank_quartile = case_when(rank <= 5 ~ "1st quartile",
+  #                        rank > 5 & rank <= 10 ~ "2nd quartile",
+   #                       rank >= 88 & rank < 93 ~ "3rd quartile",
+    #                      rank >= 93 ~ "4th quartile"))
+
+ggplot(data = parks_amenities, mapping = aes(x = city, y = total_amenities, fill = total_amenities)) + 
+  geom_bar(stat = "identity") +
+  geom_text(data = parks_2020_coords, aes(label = rank), hjust = -.5, color = "black", family = "bold") +
+  coord_flip() +
+  labs(y = "Total Amenities", x = NULL)
+```
+
+<img src="README_files/figure-gfm/question-2-vis-2-1.png" width="90%" />
+
+``` r
+#ggplot(data = parks_2020_coords, mapping = aes(x = reorder(city, -rank), y = total_amenities, fill = total_amenities)) + 
+ # geom_bar(stat = "identity") +
+  #geom_text(aes(label = rank), hjust = -.5, color = "black", family = "bold") +
+  #coord_flip() +
+  #labs(y = "Total Amenities", x = NULL)
+```
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
 section, provide the code that generates your plots. Use scale functions
