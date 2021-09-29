@@ -295,10 +295,10 @@ ggplot() +
                  size = as.numeric(str_extract(park_pct_city_data,"\\d+"))/100)) +
   geom_text(data = parks_2020_coords %>% filter(updown == "up"),
             aes(x = longitude, y = latitude, label = paste0("#",rank)),
-            size = 3.5, vjust = -.7, family = "bold") +
+            size = 3.5, vjust = -.8, family = "bold") +
   geom_text(data = parks_2020_coords %>% filter(updown == "down"),
             aes(x = longitude, y = latitude, label = paste0("#",rank)),
-            size = 3.5, vjust = 1.7, family = "bold") +
+            size = 3.5, vjust = 1.8, family = "bold") +
   scale_size_continuous(labels = scales::percent) +
   scale_color_manual(values = c("#bc8a31", "#315d1b")) + 
   labs(x = NULL, y = NULL, size = "% of city that\nis parkland",
@@ -312,7 +312,7 @@ ggplot() +
         plot.subtitle = element_text(hjust = 0.1))
 ```
 
-```{r question-2-vis-2}
+```{r question-2-vis-2, message = FALSE}
 ### data wrangling
 
 #creating a total amenities variable
@@ -321,23 +321,24 @@ parks_2020_coords <- parks_2020_coords %>%
 
 #creating a long dataset for amenities
 parks_amenities <- parks_2020_coords %>%
-  pivot_longer(cols = c(playground_data, restroom_data, basketball_data), names_to = "amenity", values_to = "value")
+  pivot_longer(cols = c(playground_data, restroom_data, basketball_data), names_to = "amenity", values_to = "value") %>%
+  mutate(city_n = paste0("#", rank, " ", city))
 
 ### plot of amenities 
 
-ggplot(data = parks_amenities, mapping = aes(x = reorder(city, -rank))) + 
+ggplot(data = parks_amenities, mapping = aes(x = reorder(city_n, -rank))) + 
   geom_bar(stat = "identity", mapping = aes(y = value, fill = amenity)) +
-  geom_text(data = parks_2020_coords, mapping = aes(label = paste0("#",rank), y = total_amenities), hjust = -.1, 
-            color = "black",
-            family = "bold",
-            size = 2.5) +
+  # geom_text(data = parks_2020_coords, mapping = aes(label = paste0("#",rank), y = total_amenities), hjust = -.1, 
+  #           color = "black",
+  #           family = "bold",
+  #           size = 2.5) +
   coord_flip() +
-  scale_fill_discrete(labels = c("Basketball Courts", "Playgrounds", "Restrooms")) +
   guides(fill = guide_legend(reverse = TRUE)) +
   labs(title = "Top and bottom 10 city rankings by amenities",
-       y = "Total Amenities per 10K  Residents", x = NULL, fill = "Amenities",
-       caption = "The number at the end of each bar represents the city's ranking") +
-  scale_fill_manual(values = c("#bc8a31", "#738148", "#3b5c75")) + 
+       y = "Total Amenities per 10K  Residents", x = NULL, fill = "Amenities") +
+#       caption = "The number at the end of each bar represents the city's ranking") +
+  scale_fill_manual(values = c("#bc8a31", "#738148", "#3b5c75"),
+                    labels = c("Basketball Courts", "Playgrounds", "Restrooms")) + 
   theme(plot.title = element_text(hjust = 0),
         plot.subtitle = element_text(hjust = 0)) +
   theme_minimal()
