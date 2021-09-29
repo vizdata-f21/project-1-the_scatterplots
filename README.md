@@ -23,31 +23,42 @@ parks and we are hoping to explore these in our project.
 
 ### Introduction
 
-To answer our first question (above), we used the “parks” dataset and
-analyzed the relationship between the variables
-“spend\_per\_resident\_data”, “city”, “med\_park\_size\_data”, and
-“year”. We thought it’d very interesting to look into how the spending
-on parks varies across different cities and over the course of the last
-decade. We were also curious and wanted to analyze how spending per
-resident and park size varies across different regions/cities. Our group
-felt as though those were four of the most compelling variables in the
-dataset and we were all unsure of what the relationship would be between
-spending per resident and park size versus year and then region/city, so
-we were excited to create visualizations based upon those variables.
+To answer our first question, we used the `r parks` dataset and analyzed
+the relationship between the variables spend\_per\_resident\_data, city,
+med\_park\_size, and year. We thought it would be interesting to look
+into how city budgets have allocated money for spending on their public
+parks and how this has varied across different US cities over the course
+of nearly the last decade. We also wanted to analyze how spending per
+resident and park size varies across different U.S regions and cities.
+We wanted to explore the relationship between these variables in light
+of the COVID-19 pandemic, where people across the US flocked to their
+local public parks. Namely, we wanted to see if the relationship was one
+we would expect- where the more money spent on parks per capita, the
+higher the median park size would be.
 
 ### Approach
 
-To answer our first question addressing the relationship between
-spending per resident and year, we first created a new variable, called
-“bins”, to break down the spending per resident for each city into
-four quartiles (where the 1st quartile had the least spending per
-resident and the 4th quartile had the most). This allowed us to analyze
-how spending trends shifted over time for each quartile. For this
-visualization, we created a line graph where each line represents a city
-and the color represents the quartile (or “bin”) that the city falls
-into. The line graph allowed us to illustrate the trends in different
-cities’ spending per resident over time (from 2012-2020) in what we felt
-was the clearest way to demonstrate that relationship.
+In order to ensure the final visualization had entries the variables of
+interest for all years between 2012 and 2020, we did some data wrangling
+first and removed all cities which had NAs for
+spend\_per\_resident\_data, city, and med\_park\_size\_data. This left
+us with a data frame with 4 columns: spend\_per\_resident\_data, r city,
+med\_park\_size\_data, and year. At this point, all that was left to do
+was bin the data into quartiles for spending and for median park size.
+In order to bin the data appropriately, we used the fivenum command to
+find the quartiles in our data. This allowed us to analyze how spending
+trends shifted between 2012 and 2020 for each quartile, as well as
+visualize whether higher per capita spending resulted in larger median
+park size. While we initially felt that a line graph would be
+appropriate for this visualization, we quickly found that a line graph
+yielded a plot that was overwhelming and uncompelling. As such, we
+switched gears and decided to animate a scatterplot which allowed us to
+visualize the quartiles for both size and spending next to each other
+and see how these two things correlated to median park size and spending
+over the span of 2012 and 2020.
+
+For the second graph… kathryn if you wanna hop in here and write out
+your approach
 
 # add second graph approach
 
@@ -120,7 +131,8 @@ q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data,
 Quartiles for size are 0-3.2 acres, 3.2-5.0 acres, 5.0-7.7 acres, 7.7+ acres for 1st to 4th quartiles respectively.",
              color = "Spending") +
         theme(plot.caption = element_text(size = 8, hjust = 0), 
-              plot.title = element_text(size = 12)) +
+              plot.title = element_text(size = 12), 
+              legend.key.size = unit(.5, 'cm')) +
         scale_x_continuous(breaks = seq(from = 0, to = 400, by = 50)) + 
         scale_y_continuous(breaks = seq(from = 0, to = 20, by = 5)) +
         scale_color_manual(values = c("#8999b0","#738148","#7c5d2d","#447aab")) +
@@ -153,7 +165,7 @@ and park size in different U.S. cities over time?*
 parks_regions <- parks_q1 %>% 
   mutate(region = case_when(
          city %in% c("Boston", "Long Beach", "New York", "Philadelphia") ~ "Northeast", 
-        city %in% c("Atlanta", "Baltimore", "Jacksonville", "Louisville", 
+         city %in% c("Atlanta", "Baltimore", "Jacksonville", "Louisville", 
                     "Memphis", "Nashville", "Virginia Beach") ~ "Southeast", 
          city %in% c("Chicago", "Columbus", "Detroit", "Kansas City", 
                      "Milwaukee") ~ "Midwest", 
@@ -181,13 +193,6 @@ ggplot(parks_regions, aes(x = year, y = mean_spend, group = region)) +
          size = "Mean of Median Size (in acres)", 
          color = "Region")
 ```
-
-(2-3 code blocks, 2 figures, text/code comments as needed) In this
-section, provide the code that generates your plots. Use scale functions
-to provide nice axis labels and guides. You are welcome to use theme
-functions to customize the appearance of your plot, but you are not
-required to do so. All plots must be made with ggplot2. Do not use base
-R or lattice plotting functions.
 
 ### Discussion
 
@@ -303,12 +308,7 @@ parks_2020_coords <- parks_2020_coords %>%
 parks_amenities <- parks_2020_coords %>%
   pivot_longer(cols = c(playground_data, restroom_data, basketball_data), names_to = "amenity", values_to = "value")
 
-<<<<<<< HEAD
-
-
-=======
 ### plot of amenities 
->>>>>>> da8cf28269daa51582d769bc946268a0657c65b5
 
 ggplot(data = parks_amenities, mapping = aes(x = reorder(city, -rank))) + 
   geom_bar(stat = "identity", mapping = aes(y = value, fill = amenity)) +
