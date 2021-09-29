@@ -41,8 +41,8 @@ the higher the median park size would be.
 In order to ensure the final visualization had entries the variables of
 interest for all years between 2012 and 2020, we did some data wrangling
 first and removed all cities which had NAs for
-spend\_per\_resident\_data, city, and med\_park\_size\_data. This left
-us with a data frame with 4 columns: spend\_per\_resident\_data, `city`,
+`spend_per_resident_data`, `city`, and `med_park_size_data`. This left
+us with a data frame with 4 columns: `spend_per_resident_data`, `city`,
 `med_park_size_data`, and `year`. At this point, all that was left to do
 was bin the data into quartiles for spending and for median park size.
 In order to bin the data appropriately, we used the fivenum command to
@@ -158,9 +158,6 @@ Links:
 <https://gganimate.com/articles/gganimate.html#rendering-1>
 <https://stackoverflow.com/questions/52899017/slow-down-gganimate-in-r>
 
-*note to self: what is the relationship between spending per resident
-and park size in different U.S. cities over time?*
-
 ``` {question-2-vis-2}
 ### data wrangling
 
@@ -209,27 +206,37 @@ plots. Speculate about why the data looks the way it does.
 For our second question, we wanted to look at parks with the top and
 bottom 10 rankings in 2020 and compare the percentage of their land
 being parkland. We also wanted to compare the number of amenities each
-of those parks have, including dog parks, playgrounds, restrooms, etc.
-To address these questions, we merged the parks and cities datasets by
-city, and utilized the “city”, “longitude”, and “latitude” variables
-from the cities dataset, as well as the “rank” variable (to determine
-the top and bottom 10 park rankings) and variable for the amenities from
-the parks dataset. We thought this would be an interesting question to
-address as we wanted to illustrate and determine which variables were
-the most meaningful when determining the park rankings. We wanted to
-compare and interpret whether the top 10 parks had much more amenities
-than the bottom 10 parks, and also visualize where those parks are
-geographically in the US and how much of their cities’ respective land
-is parkland.
+of those parks have, including basketball courts, playgrounds, and
+restrooms. To address these questions, we merged the parks and cities
+datasets by city, and utilized the “city”, “longitude”, and “latitude”
+variables from the cities dataset, as well as the “rank” variable (to
+determine the top and bottom 10 park rankings) and variable for the
+amenities from the parks dataset. We thought this would be an
+interesting question to address as we wanted to illustrate and determine
+which variables were the most meaningful when determining the park
+rankings. We wanted to compare and interpret whether the top 10 parks
+had much more amenities than the bottom 10 parks, and also visualize
+where those parks are geographically in the US and how much of their
+cities’ respective land is parkland.
 
 ### Approach
 
-(1-2 paragraphs) Describe what types of plots you are going to make to
-address your question. For each plot, provide a clear explanation as to
-why this plot (e.g. boxplot, barplot, histogram, etc.) is best for
-providing the information you are asking about. The two plots should be
-of different types, and at least one of the two plots needs to use
-either color mapping or facets.
+In order to answer this question, we created a map of the United States
+with the top and bottom 10 ranked cities’ parks scaled by parkland to
+get a sense of both the geographic distribution of the top and bottom 10
+cities, but also how the top and bottom deciles and geographic regions
+vary by percentage of city that is parkland. A map was the obviosu
+choice for this analysis at it is the most intuitive way to visualize
+spatial data in a manner familiar to most audiences.
+
+We also created a visualization of 3 key amenities within these top and
+bottom 10 city parks (basketball courts, playgrounds, and restrooms) in
+the form of a stacked bar plot measuring the differences in the total
+number of these amenities per 10k residents in each of the 20 cities. By
+doing so, we were able to compare the relative quantity and type of
+amenities between the top and bottom ten cities to see how this affects
+their rank. A stacked bar plot was the best candidate for this part of
+the question because …
 
 ### Analysis
 
@@ -280,10 +287,10 @@ ggplot() +
                  size = as.numeric(str_extract(park_pct_city_data,"\\d+"))/100)) +
   geom_text(data = parks_2020_coords %>% filter(updown == "up"),
             aes(x = longitude, y = latitude, label = paste0("#",rank)),
-            size = 3.5, vjust = -.7, family = "bold") +
+            size = 3.5, vjust = -.8, family = "bold") +
   geom_text(data = parks_2020_coords %>% filter(updown == "down"),
             aes(x = longitude, y = latitude, label = paste0("#",rank)),
-            size = 3.5, vjust = 1.7, family = "bold") +
+            size = 3.5, vjust = 1.8, family = "bold") +
   scale_size_continuous(labels = scales::percent) +
   scale_color_manual(values = c("#bc8a31", "#315d1b")) + 
   labs(x = NULL, y = NULL, size = "% of city that\nis parkland",
@@ -306,32 +313,32 @@ ggplot() +
 parks_2020_coords <- parks_2020_coords %>%
   mutate(total_amenities = playground_data + restroom_data + basketball_data)
 
-#creating a long dataset for amenities
+#creating a long dataset for amenities, adding rank to city name for plot, and
+#shortening long city names
 parks_amenities <- parks_2020_coords %>%
-  pivot_longer(cols = c(playground_data, restroom_data, basketball_data), names_to = "amenity", values_to = "value")
+  pivot_longer(cols = c(playground_data, restroom_data, basketball_data),
+               names_to = "amenity", values_to = "value") %>%
+  mutate(city = ifelse(city == "Charlotte/Mecklenburg County", "Charlotte", city),
+         city_n = paste0("#", rank, " ", city))
 
 ### plot of amenities 
 
-ggplot(data = parks_amenities, mapping = aes(x = reorder(city, -rank))) + 
-  geom_bar(stat = "identity", mapping = aes(y = value, fill = amenity)) +
-  geom_text(data = parks_2020_coords, mapping = aes(label = paste0("#",rank), y = total_amenities), hjust = -.1, 
-            color = "black",
-            family = "bold",
-            size = 2.5) +
-  coord_flip() +
-  scale_fill_discrete(labels = c("Basketball Courts", "Playgrounds", "Restrooms")) +
+ggplot(data = parks_amenities, mapping = aes(y = reorder(city_n, -rank))) + 
+  geom_bar(stat = "identity", mapping = aes(x = value, fill = amenity)) +
+  geom_hline(yintercept = 10.5, linetype = "dashed", color = "#322718") + 
+  # geom_text(data = parks_2020_coords, mapping = aes(label = paste0("#",rank), y = total_amenities), hjust = -.1, 
+  #           color = "black",
+  #           family = "bold",
+  #           size = 2.5) +
   guides(fill = guide_legend(reverse = TRUE)) +
   labs(title = "Top and bottom 10 city rankings by amenities",
-       y = "Total Amenities per 10K  Residents", x = NULL, fill = "Amenities",
-       caption = "The number at the end of each bar represents the city's ranking") +
-  scale_fill_manual(values = c("#bc8a31", "#738148", "#3b5c75")) + 
-  theme(plot.title = element_text(hjust = 0),
-        plot.subtitle = element_text(hjust = 0)) +
-  theme_minimal()
+       x = "Total Amenities per 10K  Residents", y = NULL, fill = "Amenities") +
+#       caption = "The number at the end of each bar represents the city's ranking") +
+  scale_fill_manual(values = c("#bc8a31", "#738148", "#3b5c75"),
+                    labels = c("Basketball Courts", "Playgrounds", "Restrooms")) + 
+  theme_minimal() + 
+  theme(legend.position = c(0.8,0.2))
 ```
-
-    ## Scale for 'fill' is already present. Adding another scale for 'fill', which
-    ## will replace the existing scale.
 
 <img src="README_files/figure-gfm/question-2-vis-2-1.png" width="90%" />
 
@@ -349,13 +356,6 @@ ggplot(data = parks_amenities, mapping = aes(x = reorder(city, -rank))) +
   #coord_flip() +
   #labs(y = "Total Amenities", x = NULL)
 ```
-
-(2-3 code blocks, 2 figures, text/code comments as needed) In this
-section, provide the code that generates your plots. Use scale functions
-to provide nice axis labels and guides. You are welcome to use theme
-functions to customize the appearance of your plot, but you are not
-required to do so. All plots must be made with ggplot2. Do not use base
-R or lattice plotting functions.
 
 ### Discussion
 
