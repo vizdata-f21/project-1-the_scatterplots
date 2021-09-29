@@ -13,9 +13,7 @@ library(ggrepel)
 #install.packages("cowplot")  # a gganimate dependency
 #devtools::install_github('thomasp85/gganimate')
 #remotes::install_github("thomasp85/gganimate@v0.1.1")
-
 library(gganimate)
-
 install.packages("gifski")
 library(gifski)
 library(png)
