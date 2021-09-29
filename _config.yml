@@ -1,2 +1,6 @@
 theme: jekyll-theme-slate
 description: STA/ISS 313 - Project 1
+github:
+  organization: vizdata-f21
+  repository: project-1-the_scatterplots
+  default_branch: report-config
