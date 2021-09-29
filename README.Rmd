@@ -173,10 +173,7 @@ Quartiles for size are 0-3.2 acres, 3.2-5.0 acres, 5.0-7.7 acres, 7.7+ acres for
 
 animate(q1_plot, duration = 18)
 ```
-<<<<<<< HEAD
-=======
 
->>>>>>> 78bec8e51b5d455de2c7f2d88201ab2d34ff8504
 Links: 
 https://github.com/thomasp85/gganimate/wiki/Animation-Composition
 https://cran.r-project.org/web/packages/gganimate/gganimate.pdf
@@ -189,18 +186,9 @@ https://github.com/r-rust/gifski
 https://gganimate.com/articles/gganimate.html#rendering-1
 https://stackoverflow.com/questions/52899017/slow-down-gganimate-in-r
 
-
-<<<<<<< HEAD
-
 ```{r question-1-vis-2}
 # data wrangling
 # mutate new variable `regions` based off what region the city is located in
-=======
-```{r question-1-vis-2}
-# data wrangling
-# mutate new variable `regions` based off what region the city is located in
-
->>>>>>> 78bec8e51b5d455de2c7f2d88201ab2d34ff8504
 parks_regions <- parks_q1 %>% 
   mutate(region = case_when(
          city %in% c("Boston", "Long Beach", "New York", "Philadelphia") ~
@@ -283,13 +271,9 @@ In order to answer this question, we created a map of the United States with the
 top and bottom 10 ranked cities' parks scaled by parkland to get a sense of both
 the geographic distribution of the top and bottom 10 cities, but also how the top
 and bottom deciles and geographic regions vary by percentage of city that is
-parkland. A map was the obviosu choice for this analysis at it is the most intuitive
+parkland. A map was the obvious choice for this analysis at it is the most intuitive
 way to visualize spatial data in a manner familiar to most audiences.
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 78bec8e51b5d455de2c7f2d88201ab2d34ff8504
 We also created a visualization of 3 key amenities within these top and bottom 10
 city parks (basketball courts, playgrounds, and restrooms) in the form of a stacked
 bar plot measuring the differences in the total number of these amenities per 10k
@@ -300,11 +284,6 @@ of the question because we wanted to display a large quantity of cities (20), bu
 also be able to split them by the types of amenities without overwheling the
 audience.
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 78bec8e51b5d455de2c7f2d88201ab2d34ff8504
 ### Analysis
 
 ```{r question-2-vis-1}
@@ -372,7 +351,7 @@ ggplot() +
 ```
 
 ```{r question-2-vis-2, message = FALSE}
-# data wrangling
+### data wrangling
 
 #creating a total amenities variable
 parks_2020_coords <- parks_2020_coords %>%
@@ -386,7 +365,7 @@ parks_amenities <- parks_2020_coords %>%
   mutate(city = ifelse(city == "Charlotte/Mecklenburg County", "Charlotte", city),
          city_n = paste0("#", rank, " ", city))
 
-# plot of amenities 
+### plot of amenities 
 
 ggplot(data = parks_amenities, mapping = aes(y = reorder(city_n, -rank))) + 
   geom_bar(stat = "identity", mapping = aes(x = value, fill = amenity)) +
