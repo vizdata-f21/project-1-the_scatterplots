@@ -53,9 +53,9 @@ unequal access to quality parks and we are hoping to explore these in our projec
 
 ### Introduction
 
-To answer our first question, we used the ` r parks` dataset and analyzed the 
-relationship between the variables spend_per_resident_data, city, 
-med_park_size, and year. We thought it would be interesting to look 
+To answer our first question, we used the `parks` dataset and analyzed the 
+relationship between the variables `spend_per_resident_data`, `city`, 
+`med_park_size`, and `year`. We thought it would be interesting to look 
 into how city budgets have allocated money for spending on their public parks and 
 how this has varied across different US cities over the course of nearly the 
 last decade. We also wanted to analyze how spending per resident and park size 
@@ -70,7 +70,7 @@ In order to ensure the final visualization had entries the variables of interest
 2012 and 2020, we did some data wrangling first and removed all cities which had
 NAs for spend_per_resident_data, city, and med_park_size_data. 
 This left us with a data frame with 4 columns: spend_per_resident_data, 
-r city, med_park_size_data, and year. At this point, all that was 
+`city`, `med_park_size_data`, and `year`. At this point, all that was 
 left to do was bin the data into quartiles for spending and for median park size. 
 In order to bin the data appropriately, we used the fivenum command to find the 
 quartiles in our data. This allowed us to analyze how spending trends shifted 
@@ -151,9 +151,11 @@ q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data,
              caption = "Quartiles for spending are $0-$62, $63-$94, $95-$134, and $135+ for 1st to 4th quartiles, respectively. 
 Quartiles for size are 0-3.2 acres, 3.2-5.0 acres, 5.0-7.7 acres, 7.7+ acres for 1st to 4th quartiles respectively.",
              color = "Spending") +
+        theme_minimal()+
         theme(plot.caption = element_text(size = 8, hjust = 0), 
               plot.title = element_text(size = 12), 
-              legend.key.size = unit(.5, 'cm')) +
+              legend.key.size = unit(.65, 'cm'), 
+              legend.position = c(.9,.6)) +
         scale_x_continuous(breaks = seq(from = 0, to = 400, by = 50)) + 
         scale_y_continuous(breaks = seq(from = 0, to = 20, by = 5)) +
         scale_color_manual(values = c("#8999b0","#738148","#7c5d2d","#447aab")) +
