@@ -231,16 +231,11 @@ regions <- parks_regions %>%
 ### plot of mean spending per resident with respect to mean of median park size over time
 
 ggplot(data = parks_regions, 
-       aes(x = year, 
-           y = mean_spend, 
-           group = region)) + 
-  geom_line(aes(size = mean_med_size, 
-                color = region), 
-            lineend = "round", 
+       aes(x = year, y = mean_spend, group = region)) + 
+  geom_line(aes(size = mean_med_size, color = region), lineend = "round", 
             show.legend = FALSE) + 
   geom_text_repel(data = regions, 
-                  aes(label = region, 
-                      color = region), 
+                  aes(label = region, color = region), 
                   show.legend = FALSE, 
                   nudge_y = 5, 
                   nudge_x = -1.75,
@@ -250,6 +245,7 @@ ggplot(data = parks_regions,
                                 "#3b5c75", 
                                 "#4f3e23", 
                                 "#8999b0")) + 
+  scale_y_continuous(breaks = seq(from = 0, to = 180, by = 20)) + 
   labs(title = "Mean Spending per Resident Over Time with Respect to Mean of Median Park Size", 
          subtitle = "by US Region",
          x = "Year", 
