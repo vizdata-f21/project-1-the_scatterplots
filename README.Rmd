@@ -27,10 +27,10 @@ knitr::opts_chunk$set(fig.width = 10,
 ```
 
 ```{r load-data, echo = FALSE}
-parks <- read.csv("~/R/project-1-the_scatterplots/data/parks.csv")
-#parks <- read.csv("~/R/STA313/Projects/project-1-the_scatterplots/data/parks.csv")
-cities <- fromJSON("~/R/project-1-the_scatterplots/data/cities.json")
-#cities <- fromJSON("~/R/STA313/Projects/project-1-the_scatterplots/data/cities.json")
+#parks <- read.csv("~/R/project-1-the_scatterplots/data/parks.csv")
+parks <- read.csv("~/R/STA313/Projects/project-1-the_scatterplots/data/parks.csv")
+#cities <- fromJSON("~/R/project-1-the_scatterplots/data/cities.json")
+cities <- fromJSON("~/R/STA313/Projects/project-1-the_scatterplots/data/cities.json")
 ```
 
 ### Introduction
@@ -68,8 +68,8 @@ parks per capita, the higher the median park size would be.
 ### Approach
 In order to ensure the final visualization had entries the variables of interest for all years between 
 2012 and 2020, we did some data wrangling first and removed all cities which had
-NAs for spend_per_resident_data, city, and med_park_size_data. 
-This left us with a data frame with 4 columns: spend_per_resident_data, 
+NAs for `spend_per_resident_data`, `city`, and `med_park_size_data`. 
+This left us with a data frame with 4 columns: `spend_per_resident_data`, 
 `city`, `med_park_size_data`, and `year`. At this point, all that was 
 left to do was bin the data into quartiles for spending and for median park size. 
 In order to bin the data appropriately, we used the fivenum command to find the 
@@ -176,9 +176,28 @@ Quartiles for size are 0-3.2 acres, 3.2-5.0 acres, 5.0-7.7 acres, 7.7+ acres for
 animate(q1_plot, duration = 18)
 ```
 
+<<<<<<< HEAD
+Links: 
+https://github.com/thomasp85/gganimate/wiki/Animation-Composition
+https://cran.r-project.org/web/packages/gganimate/gganimate.pdf
+https://gganimate.com/
+https://www.datanovia.com/en/blog/gganimate-how-to-create-plots-with-beautiful-animation-in-r/
+http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html
+https://ropensci.org/blog/2018/07/23/gifski-release/
+https://gif.ski/
+https://github.com/r-rust/gifski
+https://gganimate.com/articles/gganimate.html#rendering-1
+https://stackoverflow.com/questions/52899017/slow-down-gganimate-in-r
+
+
+```{question-2-vis-2}
+### data wrangling
+
+=======
 ```{r question-1-vis-2}
 # data wrangling
 # mutate new variable `regions` based off what region the city is located in
+>>>>>>> 88d3238bc109124264e335c17024c5c257bf1691
 parks_regions <- parks_q1 %>% 
   mutate(region = case_when(
          city %in% c("Boston", "Long Beach", "New York", "Philadelphia") ~
