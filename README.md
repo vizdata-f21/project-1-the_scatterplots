@@ -1,4 +1,4 @@
-Project title
+Project title (DON’T FORGET THIS)
 ================
 The Scatterplots
 
@@ -93,8 +93,22 @@ parks_q1 <- parks %>%
 #making the year variable numeric so we can join med_park_size_data back 
 parks_q1 <- parks_q1 %>% 
   mutate(year = as.numeric(year))
+<<<<<<< HEAD
+=======
+glimpse(parks_q1)
+```
+>>>>>>> d17ed5ecb296b79c39a530677707f0bb6686ac62
 
+    ## Rows: 333
+    ## Columns: 3
+    ## $ city               <fct> "Portland", "Portland", "Portland", "Portland", "Po…
+    ## $ year               <dbl> 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 201…
+    ## $ spend_per_resident <dbl> 250.00, 224.00, 251.00, 165.00, 154.00, 145.00, 155…
 
+<<<<<<< HEAD
+=======
+``` r
+>>>>>>> d17ed5ecb296b79c39a530677707f0bb6686ac62
 #joining based on city and year to include med_park_size_data in the dataset
 parks_q1 <- parks %>% 
   select(city, year, med_park_size_data) %>% 
@@ -120,9 +134,15 @@ parks_q1 <- parks_q1 %>%
   )) 
 
 q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data, 
+<<<<<<< HEAD
                      size = size_bins, color = spend_bins)) + 
         geom_point() +  
         labs(title = "INSERT TITLE HERE",
+=======
+                               group = city)) + 
+        geom_point(aes(size = size_bins, color = spend_bins)) +   
+        labs(title = "Median Park Sizs vs. Spending Per Resident\n from 2012-2020 in U.S. Cities",
+>>>>>>> d17ed5ecb296b79c39a530677707f0bb6686ac62
             subtitle = "Year: {frame_time}",
              x = "Spending per Resident (in USD)", 
              y = "Median Park Size (in acres)", 
@@ -131,15 +151,23 @@ q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data,
              color = "Spend Bins") +
         scale_x_continuous(breaks = seq(from = 0, to = 400, by = 50)) + 
         scale_y_continuous(breaks = seq(from = 0, to = 20, by = 5)) +
+<<<<<<< HEAD
         scale_color_manual(values = c("#997A6D","#3D7799","#C1D5E0","#B1BC6B")) +
         transition_time(as.integer(year), range = c(2012L, 2020L))
 
 animate(q1_plot)
+=======
+        scale_color_manual(values = c("#8999b0","#738148","#7c5d2d","#447aab")) +
+        transition_time(as.integer(year), range = c(2012L, 2020L))
+
+animate(q1_plot, duration = 18)
+>>>>>>> d17ed5ecb296b79c39a530677707f0bb6686ac62
 ```
 
     ## Warning: Using size for a discrete variable is not advised.
 
 <img src="README_files/figure-gfm/question 1-1.gif" width="90%" />
+<<<<<<< HEAD
 
 ``` r
  #TO DO: Update Color Scale, Fix Y Axis, Try to make the plot wider, add title, rename/better name legends 
@@ -160,7 +188,47 @@ and park size in different U.S. cities over time?*
 
 ``` r
 #data wrangling
+=======
+
+Links:
+<https://github.com/thomasp85/gganimate/wiki/Animation-Composition>
+<https://cran.r-project.org/web/packages/gganimate/gganimate.pdf>
+<https://gganimate.com/>
+<https://www.datanovia.com/en/blog/gganimate-how-to-create-plots-with-beautiful-animation-in-r/>
+<http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html>
+<https://ropensci.org/blog/2018/07/23/gifski-release/>
+<https://gif.ski/> <https://github.com/r-rust/gifski>
+<https://gganimate.com/articles/gganimate.html#rendering-1>
+<https://stackoverflow.com/questions/52899017/slow-down-gganimate-in-r>
+
+*note to self: what is the relationship between spending per resident
+and park size in different U.S. cities over time?*
+
+``` r
+#data wrangling
+parks_phoenix <- parks_q1 %>% 
+  filter(city == "Atlanta") %>% 
+  print()
 ```
+
+    ##      city year med_park_size_data spend_per_resident   spend_bins    size_bins
+    ## 1 Atlanta 2020               2.90             151.00 4th quartile 1st quartile
+    ## 2 Atlanta 2019               2.90             138.00 4th quartile 1st quartile
+    ## 3 Atlanta 2018               2.90             139.00 4th quartile 1st quartile
+    ## 4 Atlanta 2017               3.10             134.00 4th quartile 1st quartile
+    ## 5 Atlanta 2016               3.10             120.00 3rd quartile 1st quartile
+    ## 6 Atlanta 2015               3.10              98.00 3rd quartile 1st quartile
+    ## 7 Atlanta 2014               3.10              87.00 3rd quartile 1st quartile
+    ## 8 Atlanta 2013               2.95              90.33 3rd quartile 1st quartile
+    ## 9 Atlanta 2012               3.00              99.39 3rd quartile 1st quartile
+
+``` r
+ggplot(parks_phoenix, aes(x = year, y = spend_per_resident)) + 
+  geom_line(aes(size = med_park_size_data), lineend = "round")
+>>>>>>> d17ed5ecb296b79c39a530677707f0bb6686ac62
+```
+
+<img src="README_files/figure-gfm/question 1 plot 2-1.png" width="90%" />
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
 section, provide the code that generates your plots. Use scale functions
@@ -225,7 +293,7 @@ cities <- cities %>%
                latitude = c(38.8816),
                longitude = c(-77.0910)))
 
-#merging cities and parks dataframes
+#merging cities and parks data frames
 parks_2020_coords <- left_join(parks_2020, cities, by = "city")
 
 #creating an indicator variable for rank
@@ -257,7 +325,11 @@ ggplot() +
             aes(x = longitude, y = latitude, label = paste0("#",rank)),
             size = 3.5, vjust = 1.7, family = "bold") +
   scale_size_continuous(labels = scales::percent) +
+<<<<<<< HEAD
   scale_color_manual(values = c("#D55E00", "#009E73")) + 
+=======
+  scale_color_manual(values = c("#bc8a31", "#315d1b")) + 
+>>>>>>> d17ed5ecb296b79c39a530677707f0bb6686ac62
   labs(x = NULL, y = NULL, size = "% of city that\nis parkland",
        title = "Top and bottom 10 city rankings of parks",
        subtitle = "scaled by % of city that is parkland") +
@@ -306,11 +378,21 @@ ggplot(data = parks_amenities, mapping = aes(x = reorder(city, -rank))) +
   guides(fill = guide_legend(reverse = TRUE)) +
   labs(title = "Top and bottom 10 city rankings by amenities",
        y = "Total Amenities per 10K  Residents", x = NULL, fill = "Amenities") +
+<<<<<<< HEAD
+=======
+  scale_fill_manual(values = c("#bc8a31", "#738148", "#3b5c75")) + 
+>>>>>>> d17ed5ecb296b79c39a530677707f0bb6686ac62
   theme(plot.title = element_text(hjust = 0),
         plot.subtitle = element_text(hjust = 0)) +
   theme_minimal()
 ```
 
+<<<<<<< HEAD
+=======
+    ## Scale for 'fill' is already present. Adding another scale for 'fill', which
+    ## will replace the existing scale.
+
+>>>>>>> d17ed5ecb296b79c39a530677707f0bb6686ac62
 <img src="README_files/figure-gfm/question-2-vis-2-1.png" width="90%" />
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this

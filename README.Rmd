@@ -1,5 +1,5 @@
 ---
-title: Project title
+title: Project title (DON'T FORGET THIS)
 author: The Scatterplots
 output: github_document
 ---
@@ -119,9 +119,9 @@ parks_q1 <- parks_q1 %>%
   )) 
 
 q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data, 
-                     size = size_bins, color = spend_bins)) + 
-        geom_point() +  
-        labs(title = "INSERT TITLE HERE",
+                               group = city)) + 
+        geom_point(aes(size = size_bins, color = spend_bins)) +   
+        labs(title = "Median Park Sizs vs. Spending Per Resident\n from 2012-2020 in U.S. Cities",
             subtitle = "Year: {frame_time}",
              x = "Spending per Resident (in USD)", 
              y = "Median Park Size (in acres)", 
@@ -130,11 +130,10 @@ q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data,
              color = "Spend Bins") +
         scale_x_continuous(breaks = seq(from = 0, to = 400, by = 50)) + 
         scale_y_continuous(breaks = seq(from = 0, to = 20, by = 5)) +
-        scale_color_manual(values = c("#997A6D","#3D7799","#C1D5E0","#B1BC6B")) +
+        scale_color_manual(values = c("#8999b0","#738148","#7c5d2d","#447aab")) +
         transition_time(as.integer(year), range = c(2012L, 2020L))
 
-animate(q1_plot)
- #TO DO: Update Color Scale, Fix Y Axis, Try to make the plot wider, add title, rename/better name legends 
+animate(q1_plot, duration = 18)
 ```
 
 Links: 
@@ -147,11 +146,18 @@ https://ropensci.org/blog/2018/07/23/gifski-release/
 https://gif.ski/
 https://github.com/r-rust/gifski
 https://gganimate.com/articles/gganimate.html#rendering-1
+https://stackoverflow.com/questions/52899017/slow-down-gganimate-in-r
 
 *note to self: what is the relationship between spending per resident and park size in different U.S. cities over time?*
 
 ```{r question 1 plot 2}
 #data wrangling
+parks_phoenix <- parks_q1 %>% 
+  filter(city == "Atlanta") %>% 
+  print()
+
+ggplot(parks_phoenix, aes(x = year, y = spend_per_resident)) + 
+  geom_line(aes(size = med_park_size_data), lineend = "round")
 ```
 
 (2-3 code blocks, 2 figures, text/code comments as needed)
@@ -201,7 +207,7 @@ cities <- cities %>%
                latitude = c(38.8816),
                longitude = c(-77.0910)))
 
-#merging cities and parks dataframes
+#merging cities and parks data frames
 parks_2020_coords <- left_join(parks_2020, cities, by = "city")
 
 #creating an indicator variable for rank
@@ -233,7 +239,7 @@ ggplot() +
             aes(x = longitude, y = latitude, label = paste0("#",rank)),
             size = 3.5, vjust = 1.7, family = "bold") +
   scale_size_continuous(labels = scales::percent) +
-  scale_color_manual(values = c("#D55E00", "#009E73")) + 
+  scale_color_manual(values = c("#bc8a31", "#315d1b")) + 
   labs(x = NULL, y = NULL, size = "% of city that\nis parkland",
        title = "Top and bottom 10 city rankings of parks",
        subtitle = "scaled by % of city that is parkland") +
@@ -280,11 +286,20 @@ ggplot(data = parks_amenities, mapping = aes(x = reorder(city, -rank))) +
   guides(fill = guide_legend(reverse = TRUE)) +
   labs(title = "Top and bottom 10 city rankings by amenities",
        y = "Total Amenities per 10K  Residents", x = NULL, fill = "Amenities") +
+<<<<<<< HEAD
+=======
+  scale_fill_manual(values = c("#bc8a31", "#738148", "#3b5c75")) + 
+>>>>>>> d17ed5ecb296b79c39a530677707f0bb6686ac62
   theme(plot.title = element_text(hjust = 0),
         plot.subtitle = element_text(hjust = 0)) +
   theme_minimal()
 ```
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> d17ed5ecb296b79c39a530677707f0bb6686ac62
 (2-3 code blocks, 2 figures, text/code comments as needed)
 In this section, provide the code that generates your plots. Use scale functions to provide nice axis labels and guides.
 You are welcome to use theme functions to customize the appearance of your plot, but you are not required to do so.
