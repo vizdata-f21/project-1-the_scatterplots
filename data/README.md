@@ -1,11 +1,5 @@
 # data
 
-Place data file(s) in this folder.
-
-Then, include metadata about your dataset including information on provenance, codebook, etc.
-
-The codebook for your data file(s) using the following format.
-
 ## parks
 ### initial dataset from Tidy Tuesday
 
