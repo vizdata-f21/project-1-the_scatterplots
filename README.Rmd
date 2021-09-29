@@ -174,9 +174,7 @@ https://github.com/r-rust/gifski
 https://gganimate.com/articles/gganimate.html#rendering-1
 https://stackoverflow.com/questions/52899017/slow-down-gganimate-in-r
 
-*note to self: what is the relationship between spending per resident and park size in different U.S. cities over time?*
-
-```{question-2-vis-2}
+```{r question-1-vis-2}
 ### data wrangling
 
 parks_regions <- parks_q1 %>% 
@@ -195,7 +193,8 @@ parks_regions <- parks_q1 %>%
 
 parks_regions <- parks_regions %>% 
   group_by(region, year) %>% 
-  summarize(mean_spend = mean(spend_per_resident), mean_med_size = mean(med_park_size_data)) %>% 
+  summarize(mean_spend = mean(spend_per_resident), 
+            mean_med_size = mean(med_park_size_data)) %>% 
   print()
 
 ### plot of mean spending per resident with respect to mean of median park size over time
@@ -208,7 +207,8 @@ ggplot(parks_regions, aes(x = year, y = mean_spend, group = region)) +
          x = "Year", 
          y = "Mean Spending Per Resident (in USD)", 
          size = "Mean of Median Size (in acres)", 
-         color = "Region")
+         color = "Region") + 
+  theme_minimal()
 ```
 
 

@@ -156,10 +156,7 @@ Links:
 <https://gganimate.com/articles/gganimate.html#rendering-1>
 <https://stackoverflow.com/questions/52899017/slow-down-gganimate-in-r>
 
-*note to self: what is the relationship between spending per resident
-and park size in different U.S. cities over time?*
-
-``` {question-2-vis-2}
+``` r
 ### data wrangling
 
 parks_regions <- parks_q1 %>% 
@@ -178,9 +175,30 @@ parks_regions <- parks_q1 %>%
 
 parks_regions <- parks_regions %>% 
   group_by(region, year) %>% 
-  summarize(mean_spend = mean(spend_per_resident), mean_med_size = mean(med_park_size_data)) %>% 
+  summarize(mean_spend = mean(spend_per_resident), 
+            mean_med_size = mean(med_park_size_data)) %>% 
   print()
+```
 
+    ## `summarise()` has grouped output by 'region'. You can override using the `.groups` argument.
+
+    ## # A tibble: 45 × 4
+    ## # Groups:   region [5]
+    ##    region     year mean_spend mean_med_size
+    ##    <chr>     <dbl>      <dbl>         <dbl>
+    ##  1 Midwest    2012       84.5          4.24
+    ##  2 Midwest    2013       85.5          4.33
+    ##  3 Midwest    2014       87.6          5.58
+    ##  4 Midwest    2015       92.8          5.58
+    ##  5 Midwest    2016       97            5.58
+    ##  6 Midwest    2017      106.           5.52
+    ##  7 Midwest    2018      115.           5.74
+    ##  8 Midwest    2019      115.           5.72
+    ##  9 Midwest    2020      119.           5.72
+    ## 10 Northeast  2012      114.           2.33
+    ## # … with 35 more rows
+
+``` r
 ### plot of mean spending per resident with respect to mean of median park size over time
 
 ggplot(parks_regions, aes(x = year, y = mean_spend, group = region)) + 
@@ -191,8 +209,11 @@ ggplot(parks_regions, aes(x = year, y = mean_spend, group = region)) +
          x = "Year", 
          y = "Mean Spending Per Resident (in USD)", 
          size = "Mean of Median Size (in acres)", 
-         color = "Region")
+         color = "Region") + 
+  theme_minimal()
 ```
+
+<img src="README_files/figure-gfm/question-1-vis-2-1.png" width="90%" />
 
 ### Discussion
 
