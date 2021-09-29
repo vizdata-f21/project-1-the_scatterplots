@@ -1,6 +1,6 @@
 ---
 title: "Quality of U.S. Public Parks"
-subtitle: "Presentation subtitle (if any)"
+#subtitle: "Presentation subtitle (if any)"
 author: "The Scatterplots <br> Emely Gutierrez, Zach Khazzam, Matthew Ralph, Kathryn Thomas"
 institute: "Duke University"
 date: "`r Sys.Date()`"
@@ -19,10 +19,14 @@ output:
 # Add any additional packages you need to this chunk
 # Remove any packages from this list that you're not using
 library(tidyverse)
-library(tidymodels)
-library(palmerpenguins)
-library(knitr)
+library(jsonlite)
+library(scales)
+library(maps)
+library(gganimate)
+library(gifski)
+library(png)
 library(xaringanthemer)
+
 ```
 
 ```{r setup, include=FALSE}
@@ -37,16 +41,69 @@ knitr::opts_chunk$set(
 ```
 
 ```{r load-data, include=FALSE}
-# Load your data here
+parks <- read.csv("~/R/project-1-the_scatterplots/data/parks.csv")
+cities <- fromJSON("~/R/project-1-the_scatterplots/data/cities.json")
 ```
 
 ```{r style-slides, echo = FALSE}
 style_xaringan(
-  title_slide_background_image = "img/background.png"
+  title_slide_text_color = "#DCDCDC",
+  title_slide_background_image = "img/background.png",
+  inverse_background_color = "#738148",
+  text_color = "#315d1b",
+  header_color = "#315d1b"
 )
 ```
 
+# Introduction
+
+---
+
 class: inverse, middle, center
+
+# Question 1
+
+---
+
+### How many amenities do parks with the top 10 and bottom 10 rankings in 2020 have and how does this vary based on what proportion of the top 10 and bottom 10 cities’ land is parkland in 2020?
+
+- point 1
+
+- point 2
+
+---
+
+# Question 1
+
+```{r plots-1}
+```
+
+---
+
+class: inverse, middle, center
+
+# Question 2
+
+---
+
+### What is the relationship between spending per resident and park size in different U.S. regions and/or cities over time?
+
+- point 1
+
+- point 2
+
+---
+
+# Question 2
+
+```{r plots-2}
+```
+
+---
+
+# Thank You + Questions
+
+---
 
 # Using xaringan
 
@@ -87,10 +144,7 @@ or text in two columns $^*$
 ## Code
 
 ```{r boring-regression}
-# a boring regression
-model <- lm(dist ~ speed, data = cars)
-tidy(model)
-glance(model)
+
 ```
 
 ---
@@ -100,17 +154,14 @@ glance(model)
 ```{r recode-species, echo = FALSE}
 # In this chunk I'm doing a bunch of analysis that I don't want to present 
 # in my slides. But I need the resulting data frame for a plot I want to present.
-penguins_modified <- penguins %>%
-  mutate(species = fct_other(species, keep = "Adelie"))
+
 ```
 
 ```{r plot-penguins, echo = FALSE, warning = FALSE, fig.alt = "Body mass vs. flipper lenght of Palmer Penguins for species Adelie and all the others combined together. There is a relatively strong, positive relationship between the two variables. The Adelie penguins are clustered together but they don't exhibit a different trend than the rest of the penguins."}
 # Code hidden with echo = FALSE
 # Uses modified penguins dataset from previous chunk
 # Play around with height and width until you're happy with the look
-ggplot(penguins_modified, aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
-  geom_point() + 
-  theme_minimal()
+
 ```
 
 ---
@@ -125,9 +176,7 @@ ggplot(penguins_modified, aes(x = flipper_length_mm, y = body_mass_g, color = sp
 ```{r warning=FALSE, out.width="100%", fig.width=4, echo=FALSE}
 # see how I changed out.width and fig.width from defaults
 # to make the figure bigger
-ggplot(penguins, aes(x = bill_length_mm, y = species, color = species)) +
-  geom_boxplot() +
-  theme_minimal()
+
 ```
 ]
 
@@ -144,7 +193,6 @@ class: inverse, middle, center
 If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
 
 ```{r penguins-table, echo = FALSE}
-kable(head(penguins), format = "html")
 ```
 
 ---
@@ -152,7 +200,6 @@ kable(head(penguins), format = "html")
 ## Images
 
 ```{r castle, echo = FALSE, out.width = "40%", fig.align = "center", fig.cap = "Image credit: Danielle Navarro, Percolate."}
-include_graphics("img/watercolour_sys02_img32_percolate.jpg")
 ```
 
 Or you can also include a full page image. See next slide.
