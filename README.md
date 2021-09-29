@@ -93,16 +93,8 @@ parks_q1 <- parks %>%
 #making the year variable numeric so we can join med_park_size_data back 
 parks_q1 <- parks_q1 %>% 
   mutate(year = as.numeric(year))
-glimpse(parks_q1)
-```
 
-    ## Rows: 333
-    ## Columns: 3
-    ## $ city               <fct> "Portland", "Portland", "Portland", "Portland", "Po…
-    ## $ year               <dbl> 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 201…
-    ## $ spend_per_resident <dbl> 250.00, 224.00, 251.00, 165.00, 154.00, 145.00, 155…
 
-``` r
 #joining based on city and year to include med_park_size_data in the dataset
 parks_q1 <- parks %>% 
   select(city, year, med_park_size_data) %>% 
@@ -281,14 +273,14 @@ ggplot() +
 
 ``` r
 parks_2020_coords <- parks_2020_coords %>%
-  mutate(total_amenities = basketball_data + dogpark_data + playground_data + rec_sr_data + restroom_data +
-           splashground_data)
-
+  mutate(total_amenities = playground_data + restroom_data + basketball_data)
 
 
 parks_amenities <- parks_2020_coords %>%
-  select(city, basketball_data, dogpark_data, playground_data, rec_sr_data,
-                    restroom_data, splashground_data, total_amenities)
+  pivot_longer(cols = c(playground_data, restroom_data, basketball_data), names_to = "amenity", values_to = "value")
+
+
+
 
 
 #parks_2020_coords <- parks_2020_coords %>%
@@ -297,47 +289,29 @@ parks_amenities <- parks_2020_coords %>%
    #                       rank >= 88 & rank < 93 ~ "3rd quartile",
     #                      rank >= 93 ~ "4th quartile"))
 
-ggplot(data = parks_amenities, mapping = aes(x = city, y = total_amenities, fill = total_amenities)) + 
-  geom_bar(stat = "identity") +
-  geom_text(data = parks_2020_coords, aes(label = rank), hjust = -.5, color = "black", family = "bold") +
-  coord_flip() +
-  labs(y = "Total Amenities", x = NULL)
-
-#ggplot(data = parks_2020_coords, mapping = aes(x = reorder(city, -rank), y = total_amenities, fill = total_amenities)) + 
- # geom_bar(stat = "identity") +
-  #geom_text(aes(label = rank), hjust = -.5, color = "black", family = "bold") +
+#ggplot(data = parks_amenities, mapping = aes(x = city, y = total_amenities, fill = total_amenities)) + 
+  #geom_bar(stat = "identity") +
+  #geom_text(data = parks_2020_coords, aes(label = rank), hjust = -.5, color = "black", family = "bold") +
   #coord_flip() +
   #labs(y = "Total Amenities", x = NULL)
 
-parks_2020_long <- parks_2020 %>%
-  select(rank, city, basketball_data, playground_data, restroom_data) %>%
-  pivot_longer(cols = c(basketball_data, playground_data, restroom_data),
-               names_to = "amenity",
-               values_to = "per_10k") %>%
-  mutate(city = case_when(city == "Charlotte/Mecklenburg County" ~ "Charlotte",
-                          city == "Arlington, Virginia" ~ "Arlington, VA",
-                          TRUE ~ city))
-
-top_plot <- ggplot(parks_2020_long %>% filter(rank <= 10),
-                   aes(x = per_10k, y = reorder(paste0("#", rank, " ", city), -rank),
-                       fill = amenity)) + 
-  geom_col() +
-  scale_fill_discrete(labels = c("Basketball courts", "Playgrounds", "Restrooms")) +
-  labs(fill = "Amenity", y = "", x = "Number per 10k residents", title = "Amenities per 10k residents",
-       subtitle = "of top and bottom 10 city rankings of parks") +
+ggplot(data = parks_amenities, mapping = aes(x = reorder(city, -rank))) + 
+  geom_bar(stat = "identity", mapping = aes(y = value, fill = amenity)) +
+  geom_text(data = parks_2020_coords, mapping = aes(label = paste0("#",rank), y = total_amenities), hjust = -.1, 
+            color = "black",
+            family = "bold",
+            size = 2.5) +
+  coord_flip() +
+  scale_fill_discrete(labels = c("Basketball Courts", "Playgrounds", "Restrooms")) +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  labs(title = "Top and bottom 10 city rankings by amenities",
+       y = "Total Amenities per 10K  Residents", x = NULL, fill = "Amenities") +
+  theme(plot.title = element_text(hjust = 0),
+        plot.subtitle = element_text(hjust = 0)) +
   theme_minimal()
-
-bottom_plot <- ggplot(parks_2020_long %>% filter(rank > 10),
-                      aes(x = per_10k, y = reorder(paste0("  #", rank, " ", city), -rank),
-                          fill = amenity)) + 
-  geom_col() + 
-  scale_fill_discrete(labels = c("Basketball courts", "Playgrounds", "Restrooms")) +
-  xlim(0, 25) +
-  labs(fill = "Amenity", y = "", x = "Number per 10k residents") + 
-  theme_minimal()
-
-grid.arrange(top_plot, bottom_plot, nrow=2)
 ```
+
+<img src="README_files/figure-gfm/question-2-vis-2-1.png" width="90%" />
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
 section, provide the code that generates your plots. Use scale functions

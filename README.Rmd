@@ -27,8 +27,10 @@ knitr::opts_chunk$set(fig.width = 10,
 ```
 
 ```{r load-data, echo = FALSE}
-parks <- read.csv("~/R/project-1-the_scatterplots/data/parks.csv")
-cities <- fromJSON("~/R/project-1-the_scatterplots/data/cities.json")
+#parks <- read.csv("~/R/project-1-the_scatterplots/data/parks.csv")
+parks <- read.csv("~/R/STA313/Projects/project-1-the_scatterplots/data/parks.csv")
+#cities <- fromJSON("~/R/project-1-the_scatterplots/data/cities.json")
+cities <- fromJSON("~/R/STA313/Projects/project-1-the_scatterplots/data/cities.json")
 ```
 
 ### Introduction
@@ -51,16 +53,7 @@ unequal access to quality parks and we are hoping to explore these in our projec
 
 ### Introduction
 
-To answer our first question, we used the "parks" dataset and analyzed 
-the relationship between the variables "spend_per_resident_data", "city", 
-"med_park_size_data", and "year". We thought it'd very interesting to look into
-how the spending on parks varies across different cities and over the course of
-the last decade. We were also curious and wanted to analyze how spending per 
-resident and park size varies across different regions/cities. Our group felt 
-as though those were four of the most compelling variables in the dataset and 
-we were all unsure of what the relationship would be between spending per 
-resident and park size versus year and then region/city, so we were excited
-to create visualizations based upon those variables.
+To answer our first question (above), we used the "parks" dataset and analyzed the relationship between the variables "spend_per_resident_data", "city", "med_park_size_data", and "year". We thought it'd very interesting to look into how the spending on parks varies across different cities and over the course of the last decade. We were also curious and wanted to analyze how spending per resident and park size varies across different regions/cities. Our group felt as though those were four of the most compelling variables in the dataset and we were all unsure of what the relationship would be between spending per resident and park size versus year and then region/city, so we were excited to create visualizations based upon those variables.
 
 ### Approach
 
@@ -80,7 +73,6 @@ To answer our first question addressing the relationship between spending per re
 ```{r question 1}
 #data wrangling
 fivenum(parks$spend_per_resident_data)
-
 # to remove the $ and change from a categorical variable to a numerical variable 
 # selected relevant variables, pivot wider to see what cities have data from every year
 # drop na's from cities that do not have spending data from every year
@@ -100,7 +92,7 @@ parks_q1 <- parks %>%
 #making the year variable numeric so we can join med_park_size_data back 
 parks_q1 <- parks_q1 %>% 
   mutate(year = as.numeric(year))
-glimpse(parks_q1)
+
 
 #joining based on city and year to include med_park_size_data in the dataset
 parks_q1 <- parks %>% 
