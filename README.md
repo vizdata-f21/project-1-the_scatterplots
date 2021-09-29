@@ -117,8 +117,8 @@ q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data,
              caption = "Quartiles for spending are $0-$62, $63-$94, $95-$134, and $135+ for 1st to 4th quartiles, respectively. 
 Quartiles for size are 0-3.2 acres, 3.2-5.0 acres, 5.0-7.7 acres, 7.7+ acres for 1st to 4th quartiles respectively.",
              color = "Spending") +
-        theme(plot.caption = element_text(size = 5, hjust = 0), 
-              plot.title = element_text(size = 10)) +
+        theme(plot.caption = element_text(size = 8, hjust = 0), 
+              plot.title = element_text(size = 12)) +
         scale_x_continuous(breaks = seq(from = 0, to = 400, by = 50)) + 
         scale_y_continuous(breaks = seq(from = 0, to = 20, by = 5)) +
         scale_color_manual(values = c("#8999b0","#738148","#7c5d2d","#447aab")) +
@@ -167,18 +167,6 @@ parks_regions <- parks_regions %>%
   print()
 ```
 
-<<<<<<< HEAD
-    ##      city year med_park_size_data spend_per_resident     spending         size
-    ## 1 Atlanta 2020               2.90             151.00 4th quartile 1st quartile
-    ## 2 Atlanta 2019               2.90             138.00 4th quartile 1st quartile
-    ## 3 Atlanta 2018               2.90             139.00 4th quartile 1st quartile
-    ## 4 Atlanta 2017               3.10             134.00 3rd quartile 1st quartile
-    ## 5 Atlanta 2016               3.10             120.00 3rd quartile 1st quartile
-    ## 6 Atlanta 2015               3.10              98.00 3rd quartile 1st quartile
-    ## 7 Atlanta 2014               3.10              87.00 2nd quartile 1st quartile
-    ## 8 Atlanta 2013               2.95              90.33 2nd quartile 1st quartile
-    ## 9 Atlanta 2012               3.00              99.39 3rd quartile 1st quartile
-=======
     ## `summarise()` has grouped output by 'region'. You can override using the `.groups` argument.
 
     ## # A tibble: 45 × 4
@@ -196,7 +184,6 @@ parks_regions <- parks_regions %>%
     ##  9 Midwest    2020      119.           5.72
     ## 10 Northeast  2012      114.           2.33
     ## # … with 35 more rows
->>>>>>> 03b9b5ef46511839ad23b7760e42639b85c630e9
 
 ``` r
 ggplot(parks_regions, aes(x = year, y = mean_spend, group = region)) + 
