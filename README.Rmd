@@ -82,7 +82,6 @@ clearest way to demonstrate that relationship.
 
 ```{r question 1}
 #data wrangling
-fivenum(parks$spend_per_resident_data)
 # to remove the $ and change from a categorical variable to a numerical variable 
 # selected relevant variables, pivot wider to see what cities have data from every year
 # drop na's from cities that do not have spending data from every year
@@ -109,19 +108,20 @@ parks_q1 <- parks %>%
   select(city, year, med_park_size_data) %>% 
   right_join(parks_q1, by = c("city","year")) 
 
+fivenum(parks_q1$spend_per_resident)
 #creating quartile bins for spending per resident, ranges based on five number summary
 parks_q1 <- parks_q1 %>% 
   arrange(city) %>% 
-  mutate(spend_bins = case_when(
-    between(spend_per_resident, 0, 59) ~ "1st quartile",
-    between(spend_per_resident, 60, 84) ~ "2nd quartile",
-    between(spend_per_resident, 85, 131) ~ "3rd quartile",
+  mutate(spending = case_when(
+    between(spend_per_resident, 0, 62) ~ "1st quartile",
+    between(spend_per_resident, 63, 94) ~ "2nd quartile",
+    between(spend_per_resident, 95, 134) ~ "3rd quartile",
     TRUE ~ "4th quartile"
   ))
 
 #creating quartile bins for median park size, ranges based on five number summary
   parks_q1 <- parks_q1 %>% 
-    mutate(size_bins = case_when(
+    mutate(size = case_when(
     between(med_park_size_data, 0, 3.2) ~ "1st quartile",
     between(med_park_size_data, 3.21, 5.0) ~ "2nd quartile",
     between(med_park_size_data, 5.01, 7.7) ~ "3rd quartile",
@@ -130,14 +130,17 @@ parks_q1 <- parks_q1 %>%
 
 q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data, 
                                group = city)) + 
-        geom_point(aes(size = size_bins, color = spend_bins)) +   
-        labs(title = "Median Park Sizs vs. Spending Per Resident\n from 2012-2020 in U.S. Cities",
-            subtitle = "Year: {frame_time}",
-             x = "Spending per Resident (in USD)", 
-             y = "Median Park Size (in acres)", 
-             size = "Size Bins", 
-            #it would be great if these legends had the actual values of the bins, maybe we change observation names? 
-             color = "Spend Bins") +
+        geom_point(aes(size = size, color = spending)) +   
+        labs(title = "Median Park Size vs. Spending Per Resident from 2012-2020 in 37 U.S. Cities",
+             subtitle = "Year: {frame_time}",
+             x = "Spending per Resident (USD)", 
+             y = "Median Park Size (acres)", 
+             size = "Park Size", 
+             caption = "Quartiles for spending are $0-$62, $63-$94, $95-$134, and $135+ for 1st to 4th quartiles, respectively. 
+Quartiles for size are 0-3.2 acres, 3.2-5.0 acres, 5.0-7.7 acres, 7.7+ acres for 1st to 4th quartiles respectively.",
+             color = "Spending") +
+        theme(plot.caption = element_text(size = 5, hjust = 0), 
+              plot.title = element_text(size = 10)) +
         scale_x_continuous(breaks = seq(from = 0, to = 400, by = 50)) + 
         scale_y_continuous(breaks = seq(from = 0, to = 20, by = 5)) +
         scale_color_manual(values = c("#8999b0","#738148","#7c5d2d","#447aab")) +

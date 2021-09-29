@@ -55,15 +55,6 @@ was the clearest way to demonstrate that relationship.
 
 ``` r
 #data wrangling
-fivenum(parks$spend_per_resident_data)
-```
-
-    ## Warning in Ops.factor(x[floor(d)], x[ceiling(d)]): '+' not meaningful for
-    ## factors
-
-    ## [1] NA NA NA NA NA
-
-``` r
 # to remove the $ and change from a categorical variable to a numerical variable 
 # selected relevant variables, pivot wider to see what cities have data from every year
 # drop na's from cities that do not have spending data from every year
@@ -90,19 +81,25 @@ parks_q1 <- parks %>%
   select(city, year, med_park_size_data) %>% 
   right_join(parks_q1, by = c("city","year")) 
 
+fivenum(parks_q1$spend_per_resident)
+```
+
+    ## [1]  15  62  94 134 399
+
+``` r
 #creating quartile bins for spending per resident, ranges based on five number summary
 parks_q1 <- parks_q1 %>% 
   arrange(city) %>% 
-  mutate(spend_bins = case_when(
-    between(spend_per_resident, 0, 59) ~ "1st quartile",
-    between(spend_per_resident, 60, 84) ~ "2nd quartile",
-    between(spend_per_resident, 85, 131) ~ "3rd quartile",
+  mutate(spending = case_when(
+    between(spend_per_resident, 0, 62) ~ "1st quartile",
+    between(spend_per_resident, 63, 94) ~ "2nd quartile",
+    between(spend_per_resident, 95, 134) ~ "3rd quartile",
     TRUE ~ "4th quartile"
   ))
 
 #creating quartile bins for median park size, ranges based on five number summary
   parks_q1 <- parks_q1 %>% 
-    mutate(size_bins = case_when(
+    mutate(size = case_when(
     between(med_park_size_data, 0, 3.2) ~ "1st quartile",
     between(med_park_size_data, 3.21, 5.0) ~ "2nd quartile",
     between(med_park_size_data, 5.01, 7.7) ~ "3rd quartile",
@@ -111,14 +108,17 @@ parks_q1 <- parks_q1 %>%
 
 q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data, 
                                group = city)) + 
-        geom_point(aes(size = size_bins, color = spend_bins)) +   
-        labs(title = "Median Park Sizs vs. Spending Per Resident\n from 2012-2020 in U.S. Cities",
-            subtitle = "Year: {frame_time}",
-             x = "Spending per Resident (in USD)", 
-             y = "Median Park Size (in acres)", 
-             size = "Size Bins", 
-            #it would be great if these legends had the actual values of the bins, maybe we change observation names? 
-             color = "Spend Bins") +
+        geom_point(aes(size = size, color = spending)) +   
+        labs(title = "Median Park Size vs. Spending Per Resident from 2012-2020 in 37 U.S. Cities",
+             subtitle = "Year: {frame_time}",
+             x = "Spending per Resident (USD)", 
+             y = "Median Park Size (acres)", 
+             size = "Park Size", 
+             caption = "Quartiles for spending are $0-$62, $63-$94, $95-$134, and $135+ for 1st to 4th quartiles, respectively. 
+Quartiles for size are 0-3.2 acres, 3.2-5.0 acres, 5.0-7.7 acres, 7.7+ acres for 1st to 4th quartiles respectively.",
+             color = "Spending") +
+        theme(plot.caption = element_text(size = 5, hjust = 0), 
+              plot.title = element_text(size = 10)) +
         scale_x_continuous(breaks = seq(from = 0, to = 400, by = 50)) + 
         scale_y_continuous(breaks = seq(from = 0, to = 20, by = 5)) +
         scale_color_manual(values = c("#8999b0","#738148","#7c5d2d","#447aab")) +
@@ -152,15 +152,15 @@ parks_phoenix <- parks_q1 %>%
   print()
 ```
 
-    ##      city year med_park_size_data spend_per_resident   spend_bins    size_bins
+    ##      city year med_park_size_data spend_per_resident     spending         size
     ## 1 Atlanta 2020               2.90             151.00 4th quartile 1st quartile
     ## 2 Atlanta 2019               2.90             138.00 4th quartile 1st quartile
     ## 3 Atlanta 2018               2.90             139.00 4th quartile 1st quartile
-    ## 4 Atlanta 2017               3.10             134.00 4th quartile 1st quartile
+    ## 4 Atlanta 2017               3.10             134.00 3rd quartile 1st quartile
     ## 5 Atlanta 2016               3.10             120.00 3rd quartile 1st quartile
     ## 6 Atlanta 2015               3.10              98.00 3rd quartile 1st quartile
-    ## 7 Atlanta 2014               3.10              87.00 3rd quartile 1st quartile
-    ## 8 Atlanta 2013               2.95              90.33 3rd quartile 1st quartile
+    ## 7 Atlanta 2014               3.10              87.00 2nd quartile 1st quartile
+    ## 8 Atlanta 2013               2.95              90.33 2nd quartile 1st quartile
     ## 9 Atlanta 2012               3.00              99.39 3rd quartile 1st quartile
 
 ``` r
