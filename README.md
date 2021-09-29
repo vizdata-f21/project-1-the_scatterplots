@@ -319,19 +319,6 @@ parks_amenities <- parks_2020_coords %>%
 
 
 
-
-#parks_2020_coords <- parks_2020_coords %>%
- # mutate(rank_quartile = case_when(rank <= 5 ~ "1st quartile",
-  #                        rank > 5 & rank <= 10 ~ "2nd quartile",
-   #                       rank >= 88 & rank < 93 ~ "3rd quartile",
-    #                      rank >= 93 ~ "4th quartile"))
-
-#ggplot(data = parks_amenities, mapping = aes(x = city, y = total_amenities, fill = total_amenities)) + 
-  #geom_bar(stat = "identity") +
-  #geom_text(data = parks_2020_coords, aes(label = rank), hjust = -.5, color = "black", family = "bold") +
-  #coord_flip() +
-  #labs(y = "Total Amenities", x = NULL)
-
 ggplot(data = parks_amenities, mapping = aes(x = reorder(city, -rank))) + 
   geom_bar(stat = "identity", mapping = aes(y = value, fill = amenity)) +
   geom_text(data = parks_2020_coords, mapping = aes(label = paste0("#",rank), y = total_amenities), hjust = -.1, 
@@ -342,7 +329,8 @@ ggplot(data = parks_amenities, mapping = aes(x = reorder(city, -rank))) +
   scale_fill_discrete(labels = c("Basketball Courts", "Playgrounds", "Restrooms")) +
   guides(fill = guide_legend(reverse = TRUE)) +
   labs(title = "Top and bottom 10 city rankings by amenities",
-       y = "Total Amenities per 10K  Residents", x = NULL, fill = "Amenities") +
+       y = "Total Amenities per 10K  Residents", x = NULL, fill = "Amenities",
+       caption = "The number at the end of each bar represents the city's ranking") +
   scale_fill_manual(values = c("#bc8a31", "#738148", "#3b5c75")) + 
   theme(plot.title = element_text(hjust = 0),
         plot.subtitle = element_text(hjust = 0)) +
