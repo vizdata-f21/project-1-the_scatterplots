@@ -189,7 +189,10 @@ https://stackoverflow.com/questions/52899017/slow-down-gganimate-in-r
 ```{r question-1-vis-2}
 # data wrangling
 # mutate new variable `regions` based off what region the city is located in
+<<<<<<< HEAD
 
+=======
+>>>>>>> aa88d281e4373fabdaa024e94594ec1693f73c78
 parks_regions <- parks_q1 %>% 
   mutate(region = case_when(
          city %in% c("Boston", "Long Beach", "New York", "Philadelphia") ~
@@ -220,16 +223,11 @@ regions <- parks_regions %>%
 ### plot of mean spending per resident with respect to mean of median park size over time
 
 ggplot(data = parks_regions, 
-       aes(x = year, 
-           y = mean_spend, 
-           group = region)) + 
-  geom_line(aes(size = mean_med_size, 
-                color = region), 
-            lineend = "round", 
+       aes(x = year, y = mean_spend, group = region)) + 
+  geom_line(aes(size = mean_med_size, color = region), lineend = "round", 
             show.legend = FALSE) + 
   geom_text_repel(data = regions, 
-                  aes(label = region, 
-                      color = region), 
+                  aes(label = region, color = region), 
                   show.legend = FALSE, 
                   nudge_y = 5, 
                   nudge_x = -1.75,
@@ -239,6 +237,7 @@ ggplot(data = parks_regions,
                                 "#3b5c75", 
                                 "#4f3e23", 
                                 "#8999b0")) + 
+  scale_y_continuous(breaks = seq(from = 0, to = 180, by = 20)) + 
   labs(title = "Mean Spending per Resident Over Time with Respect to Mean of Median Park Size", 
          subtitle = "by US Region",
          x = "Year", 
@@ -310,7 +309,7 @@ In order to answer this question, we created a map of the United States with the
 top and bottom 10 ranked cities' parks scaled by parkland to get a sense of both
 the geographic distribution of the top and bottom 10 cities, but also how the top
 and bottom deciles and geographic regions vary by percentage of city that is
-parkland. A map was the obviosu choice for this analysis at it is the most intuitive
+parkland. A map was the obvious choice for this analysis at it is the most intuitive
 way to visualize spatial data in a manner familiar to most audiences.
 
 We also created a visualization of 3 key amenities within these top and bottom 10
@@ -390,7 +389,7 @@ ggplot() +
 ```
 
 ```{r question-2-vis-2, message = FALSE}
-# data wrangling
+### data wrangling
 
 #creating a total amenities variable
 parks_2020_coords <- parks_2020_coords %>%
@@ -404,7 +403,7 @@ parks_amenities <- parks_2020_coords %>%
   mutate(city = ifelse(city == "Charlotte/Mecklenburg County", "Charlotte", city),
          city_n = paste0("#", rank, " ", city))
 
-# plot of amenities 
+### plot of amenities 
 
 ggplot(data = parks_amenities, mapping = aes(y = reorder(city_n, -rank))) + 
   geom_bar(stat = "identity", mapping = aes(x = value, fill = amenity)) +

@@ -43,18 +43,18 @@
   --header-h3-font-size: 1.75rem;
 
   /* Colors */
-  --text-color: #000;
-  --header-color: #000;
+  --text-color: #315d1b;
+  --header-color: #315d1b;
   --background-color: #FFF;
   --link-color: rgb(249, 38, 114);
   --code-highlight-color: rgba(255,255,0,0.5);
   --inverse-text-color: #d6d6d6;
-  --inverse-background-color: #272822;
+  --inverse-background-color: #738148;
   --inverse-header-color: #f3f3f3;
   --inverse-link-color: rgb(249, 38, 114);
-  --title-slide-background-color: #272822;
-  --title-slide-text-color: #d6d6d6;
-  --header-background-color: #000;
+  --title-slide-background-color: #738148;
+  --title-slide-text-color: #DCDCDC;
+  --header-background-color: #315d1b;
   --header-background-text-color: #FFF;
 }
 
@@ -99,7 +99,7 @@ h1, h2, h3 {
   color: #000;
 }
 .remark-slide-number {
-  color: #272822;
+  color: #738148;
   opacity: 1;
   font-size: 0.9rem;
 }
