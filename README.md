@@ -57,10 +57,23 @@ visualize the quartiles for both size and spending next to each other
 and see how these two things correlated to median park size and spending
 over the span of 2012 and 2020.
 
-For the second graph… kathryn if you wanna hop in here and write out
-your approach
-
-# add second graph approach
+For the second graph, we wanted to consider the variables of
+`med_park_size_data` and `spend_per_resident` at the regional level as
+opposed to city level. We hoped that this visualization would discern
+differences between regions. To complete this goal, we first created a
+new variable called `region` using `mutate` and `case_when`. We
+referenced the National Geographic “United States Region” Map, which
+resulted in 5 regions: West, Southwest, Midwest, Southeast, and
+Northeast. After each city had a region connected with it in the
+dataset, we grouped by year and region to complete the summarize
+function. We then calculated the mean spending per resident for each
+region during each year and the mean median park size for each region
+during each year. We then plotted these means on a line plot over year
+on the x-axis and mean spending per resident on the y-axis, grouped by
+year. We used the size aesthetic to show the mean median park size
+because it made aesthetic sense for a size-based variable to be mapped
+to a size aesthetic. This yielded a lineplot, that we noticed had
+similar features to the Napoleon plot.
 
 ### Analysis
 
@@ -146,7 +159,6 @@ animate(q1_plot, duration = 18)
     ## Warning: Using size for a discrete variable is not advised.
 
 <img src="README_files/figure-gfm/question-1-vis-1-1.gif" width="90%" />
-
 Links:
 <https://github.com/thomasp85/gganimate/wiki/Animation-Composition>
 <https://cran.r-project.org/web/packages/gganimate/gganimate.pdf>
@@ -158,16 +170,13 @@ Links:
 <https://gganimate.com/articles/gganimate.html#rendering-1>
 <https://stackoverflow.com/questions/52899017/slow-down-gganimate-in-r>
 
-<<<<<<< HEAD
-``` {question-2-vis-2}
-=======
 ``` r
->>>>>>> 88d3238bc109124264e335c17024c5c257bf1691
-### data wrangling
-
+# data wrangling
+# mutate new variable `regions` based off what region the city is located in
 parks_regions <- parks_q1 %>% 
   mutate(region = case_when(
-         city %in% c("Boston", "Long Beach", "New York", "Philadelphia") ~ "Northeast", 
+         city %in% c("Boston", "Long Beach", "New York", "Philadelphia") ~
+           "Northeast", 
          city %in% c("Atlanta", "Baltimore", "Jacksonville", "Louisville", 
                     "Memphis", "Nashville", "Virginia Beach") ~ "Southeast", 
          city %in% c("Chicago", "Columbus", "Detroit", "Kansas City", 
@@ -179,6 +188,7 @@ parks_regions <- parks_q1 %>%
                      "Portland", "Sacramento", "San Diego", "San Francisco", 
                      "San Jose", "Seattle") ~ "West"))
 
+#group by region and year, then summarize mean of spending per resident and median park size 
 parks_regions <- parks_regions %>% 
   group_by(region, year) %>% 
   summarize(mean_spend = mean(spend_per_resident), 
@@ -205,17 +215,25 @@ parks_regions <- parks_regions %>%
     ## # … with 35 more rows
 
 ``` r
+#create a simplified data set to annotate 
+regions <- parks_regions %>%
+  count(year, region, mean_spend) %>%
+  filter(year == 2019)
+
 ### plot of mean spending per resident with respect to mean of median park size over time
 
-ggplot(parks_regions, aes(x = year, y = mean_spend, group = region)) + 
-  geom_line(aes(size = mean_med_size, color = region), lineend = "round") + 
+ggplot(data = parks_regions, aes(x = year, y = mean_spend, group = region)) + 
+  geom_line(aes(size = mean_med_size, color = region), lineend = "round", show.legend = FALSE) + 
+  geom_text_repel(data = regions, 
+                   aes(label = region, color = region), show.legend = FALSE, 
+                    nudge_y = 5, 
+                  nudge_x = -1.75,
+                  hjust = -.5) + 
   scale_color_manual(values = c("#738148", "#bc8a31", "#3b5c75", "#4f3e23", "#8999b0")) + 
     labs(title = "Mean Spending per Resident Over Time\n with Respect to Mean of Median Park Size", 
          subtitle = "by US Region",
          x = "Year", 
-         y = "Mean Spending Per Resident (in USD)", 
-         size = "Mean of Median Size (in acres)", 
-         color = "Region") + 
+         y = "Mean Spending Per Resident (in USD)") + 
   theme_minimal()
 ```
 
@@ -264,7 +282,9 @@ number of these amenities per 10k residents in each of the 20 cities. By
 doing so, we were able to compare the relative quantity and type of
 amenities between the top and bottom ten cities to see how this affects
 their rank. A stacked bar plot was the best candidate for this part of
-the question because …
+the question because we wanted to display a large quantity of cities
+(20), but also be able to split them by the types of amenities without
+overwheling the audience.
 
 ### Analysis
 
@@ -399,12 +419,30 @@ Our presentation can be found [here](presentation/presentation.html).
 
 ## Data
 
-Include a citation for your data here. See
-<http://libraryguides.vu.edu.au/c.php?g=386501&p=4347840> for guidance
-on proper citation for datasets. If you got your data off the web, make
-sure to note the retrieval date.
+Jones, R 2015, *1000 Largest US Cities By Population With Geographic
+Coordinates, in JSON*, electronic dataset, GitHub Gist, viewed 24
+September 2021,
+<http://www.https://gist.github.com/Miserlou/c5cd8364bf9b2420bb29>.
+
+The Trust for Public Land 2020, *2020 Park Score Index*, electronic
+dataset, GitHub, viewed 23 September 2021,
+\<<https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-06-22/parks.csv>
+\>.
 
 ## References
 
 List any references here. You should, at a minimum, list your data
 source.
+
+\#\#\#ADD DATA SOURCE
+
+  - <https://github.com/thomasp85/gganimate/wiki/Animation-Composition>
+  - <https://cran.r-project.org/web/packages/gganimate/gganimate.pdf>
+  - <https://gganimate.com/>
+  - <https://www.datanovia.com/en/blog/gganimate-how-to-create-plots-with-beautiful-animation-in-r/>
+  - <http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html>
+  - <https://ropensci.org/blog/2018/07/23/gifski-release/>
+  - <https://gif.ski/>
+  - <https://github.com/r-rust/gifski>
+  - <https://gganimate.com/articles/gganimate.html#rendering-1>
+  - <https://stackoverflow.com/questions/52899017/slow-down-gganimate-in-r>
