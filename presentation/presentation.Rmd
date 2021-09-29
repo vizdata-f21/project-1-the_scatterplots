@@ -96,11 +96,104 @@ class: inverse, middle, center
 
 # Question 2
 
-```{r plots-2}
+```{r plots-2-1, echo = FALSE, warning = FALSE}
+### data wrangling- 1st plot
+
+#top/bottom 10 cities
+parks_2020 <- parks %>%
+  filter(year == 2020,
+         rank <= 10 | rank >= 88)
+
+#matching cities dataframe with parks dataframe
+cities <- cities %>%
+  filter(state != "Maine") %>%
+  mutate(city = case_when(city == "Washington" ~ "Washington, D.C.",
+                          city == "Charlotte" ~ "Charlotte/Mecklenburg County",
+                          TRUE ~ city)) %>%
+  select(city, latitude, longitude) %>%
+  rbind(tibble(city = c("Arlington, Virginia"),
+               latitude = c(38.8816),
+               longitude = c(-77.0910)))
+
+#merging cities and parks data frames
+parks_2020_coords <- left_join(parks_2020, cities, by = "city")
+
+#creating an indicator variable for rank
+parks_2020_coords <- parks_2020_coords %>%
+  mutate(rank_div = ifelse(rank <= 10, "top", "bottom"))
+
+#dodging overlapping points
+parks_2020_coords <- parks_2020_coords %>%
+  mutate(longitude = case_when(rank == 1 ~ -93.5,
+                              rank == 3 ~ -92.6,
+                              rank == 2 ~ -76.6,
+                              rank == 4 ~ -77.5,
+                              rank == 89 ~ -96.7,
+                              rank == 94 ~ -97.5,
+                              TRUE ~ longitude),
+         updown = ifelse(rank %in% c(3, 89, 2), "down", "up"))
+
+### plot of top/bottom 10 cities scaled by % of parkland
+
+ggplot() +
+  geom_polygon(data = map_data("state"), aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray60") +
+  geom_point(data = parks_2020_coords,
+             aes(x = longitude, y = latitude, color = rank_div,
+                 size = as.numeric(str_extract(park_pct_city_data,"\\d+"))/100)) +
+  geom_text(data = parks_2020_coords %>% filter(updown == "up"),
+            aes(x = longitude, y = latitude, label = paste0("#",rank)),
+            size = 3.5, vjust = -.8, family = "bold") +
+  geom_text(data = parks_2020_coords %>% filter(updown == "down"),
+            aes(x = longitude, y = latitude, label = paste0("#",rank)),
+            size = 3.5, vjust = 1.8, family = "bold") +
+  scale_size_continuous(labels = scales::percent) +
+  scale_color_manual(values = c("#bc8a31", "#315d1b")) + 
+  labs(x = NULL, y = NULL, size = "% of city that\nis parkland",
+       title = "Top and bottom 10 city rankings of parks",
+       subtitle = "scaled by % of city that is parkland") +
+  coord_map() + 
+  theme_void() +
+  guides(color = "none") + 
+  theme(legend.position = c(.92,.3),
+        plot.title = element_text(hjust = 0.1),
+        plot.subtitle = element_text(hjust = 0.1))
 ```
 
 ---
 
+# Question 2
+
+```{r plots-2-2, echo = FALSE, warning = FALSE}
+### data wrangling-plot2
+
+#creating a total amenities variable
+parks_2020_coords <- parks_2020_coords %>%
+  mutate(total_amenities = playground_data + restroom_data + basketball_data)
+
+#creating a long dataset for amenities, adding rank to city name for plot, and
+#shortening long city names
+parks_amenities <- parks_2020_coords %>%
+  pivot_longer(cols = c(playground_data, restroom_data, basketball_data),
+               names_to = "amenity", values_to = "value") %>%
+  mutate(city = ifelse(city == "Charlotte/Mecklenburg County", "Charlotte", city),
+         city_n = paste0("#", rank, " ", city))
+
+### plot of amenities 
+
+ggplot(data = parks_amenities, mapping = aes(y = reorder(city_n, -rank))) + 
+  geom_bar(stat = "identity", mapping = aes(x = value, fill = amenity)) +
+  geom_hline(yintercept = 10.5, linetype = "dashed", color = "#322718") + 
+  guides(fill = guide_legend(reverse = TRUE)) +
+  labs(title = "Top and bottom 10 city rankings by amenities",
+       x = "Total Amenities per 10K  Residents", y = NULL, fill = "Amenities") +
+  scale_fill_manual(values = c("#bc8a31", "#738148", "#3b5c75"),
+                    labels = c("Basketball Courts", "Playgrounds", "Restrooms")) + 
+  theme_minimal() + 
+  theme(legend.position = c(0.8,0.2))
+```
+
+---
 # Thank You + Questions
 
 ---
