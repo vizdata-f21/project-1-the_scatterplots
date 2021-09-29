@@ -1,5 +1,5 @@
 ---
-title: "Presentation title"
+title: "Quality of U.S. Public Parks"
 subtitle: "Presentation subtitle (if any)"
 author: "The Scatterplots <br> Emely Gutierrez, Zach Khazzam, Matthew Ralph, Kathryn Thomas"
 institute: "Duke University"
