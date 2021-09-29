@@ -1,4 +1,4 @@
-Project title (DON’T FORGET THIS)
+Quality of U.S. Public Parks
 ================
 The Scatterplots
 
@@ -347,8 +347,6 @@ ggplot(data = parks_amenities, mapping = aes(x = reorder(city, -rank))) +
   #coord_flip() +
   #labs(y = "Total Amenities", x = NULL)
 ```
-
-\=======
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
 section, provide the code that generates your plots. Use scale functions
