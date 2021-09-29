@@ -54,7 +54,7 @@ was the clearest way to demonstrate that relationship.
 ### Analysis
 
 ``` r
-#data wrangling
+### data wrangling
 # to remove the $ and change from a categorical variable to a numerical variable 
 # selected relevant variables, pivot wider to see what cities have data from every year
 # drop na's from cities that do not have spending data from every year
@@ -106,6 +106,8 @@ parks_q1 <- parks_q1 %>%
     TRUE ~ "4th quartile"
   )) 
 
+### plot of median park size vs spending per resident over time
+  
 q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data, 
                                group = city)) + 
         geom_point(aes(size = size, color = spending)) +   
@@ -129,7 +131,7 @@ animate(q1_plot, duration = 18)
 
     ## Warning: Using size for a discrete variable is not advised.
 
-<img src="README_files/figure-gfm/question 1-1.gif" width="90%" />
+<img src="README_files/figure-gfm/question-1-vis-1-1.gif" width="90%" />
 
 Links:
 <https://github.com/thomasp85/gganimate/wiki/Animation-Composition>
@@ -145,8 +147,9 @@ Links:
 *note to self: what is the relationship between spending per resident
 and park size in different U.S. cities over time?*
 
-``` r
-#data wrangling
+``` {question-2-vis-2}
+### data wrangling
+
 parks_regions <- parks_q1 %>% 
   mutate(region = case_when(
          city %in% c("Boston", "Long Beach", "New York", "Philadelphia") ~ "Northeast", 
@@ -165,27 +168,9 @@ parks_regions <- parks_regions %>%
   group_by(region, year) %>% 
   summarize(mean_spend = mean(spend_per_resident), mean_med_size = mean(med_park_size_data)) %>% 
   print()
-```
 
-    ## `summarise()` has grouped output by 'region'. You can override using the `.groups` argument.
+### plot of mean spending per resident with respect to mean of median park size over time
 
-    ## # A tibble: 45 × 4
-    ## # Groups:   region [5]
-    ##    region     year mean_spend mean_med_size
-    ##    <chr>     <dbl>      <dbl>         <dbl>
-    ##  1 Midwest    2012       84.5          4.24
-    ##  2 Midwest    2013       85.5          4.33
-    ##  3 Midwest    2014       87.6          5.58
-    ##  4 Midwest    2015       92.8          5.58
-    ##  5 Midwest    2016       97            5.58
-    ##  6 Midwest    2017      106.           5.52
-    ##  7 Midwest    2018      115.           5.74
-    ##  8 Midwest    2019      115.           5.72
-    ##  9 Midwest    2020      119.           5.72
-    ## 10 Northeast  2012      114.           2.33
-    ## # … with 35 more rows
-
-``` r
 ggplot(parks_regions, aes(x = year, y = mean_spend, group = region)) + 
   geom_line(aes(size = mean_med_size, color = region), lineend = "round") + 
   scale_color_manual(values = c("#738148", "#bc8a31", "#3b5c75", "#4f3e23", "#8999b0")) + 
@@ -196,8 +181,6 @@ ggplot(parks_regions, aes(x = year, y = mean_spend, group = region)) +
          size = "Mean of Median Size (in acres)", 
          color = "Region")
 ```
-
-<img src="README_files/figure-gfm/question 1 plot 2-1.png" width="90%" />
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
 section, provide the code that generates your plots. Use scale functions
@@ -280,7 +263,8 @@ parks_2020_coords <- parks_2020_coords %>%
                               TRUE ~ longitude),
          updown = ifelse(rank %in% c(3, 89, 2), "down", "up"))
 
-### testing out mapping
+### plot of top/bottom 10 cities scaled by % of parkland
+
 ggplot() +
   geom_polygon(data = map_data("state"), aes(x = long, y = lat, group = group),
                fill = "white", color = "gray60") +
@@ -306,31 +290,20 @@ ggplot() +
         plot.subtitle = element_text(hjust = 0.1))
 ```
 
-<img src="README_files/figure-gfm/question-2-1.png" width="90%" />
+<img src="README_files/figure-gfm/question-2-vis-1-1.png" width="90%" />
 
 ``` r
+### data wrangling
+
+#creating a total amenities variable
 parks_2020_coords <- parks_2020_coords %>%
   mutate(total_amenities = playground_data + restroom_data + basketball_data)
 
-
+#creating a long dataset for amenities
 parks_amenities <- parks_2020_coords %>%
   pivot_longer(cols = c(playground_data, restroom_data, basketball_data), names_to = "amenity", values_to = "value")
 
-
-
-
-
-#parks_2020_coords <- parks_2020_coords %>%
- # mutate(rank_quartile = case_when(rank <= 5 ~ "1st quartile",
-  #                        rank > 5 & rank <= 10 ~ "2nd quartile",
-   #                       rank >= 88 & rank < 93 ~ "3rd quartile",
-    #                      rank >= 93 ~ "4th quartile"))
-
-#ggplot(data = parks_amenities, mapping = aes(x = city, y = total_amenities, fill = total_amenities)) + 
-  #geom_bar(stat = "identity") +
-  #geom_text(data = parks_2020_coords, aes(label = rank), hjust = -.5, color = "black", family = "bold") +
-  #coord_flip() +
-  #labs(y = "Total Amenities", x = NULL)
+### plot of amenities 
 
 ggplot(data = parks_amenities, mapping = aes(x = reorder(city, -rank))) + 
   geom_bar(stat = "identity", mapping = aes(y = value, fill = amenity)) +
@@ -353,6 +326,21 @@ ggplot(data = parks_amenities, mapping = aes(x = reorder(city, -rank))) +
     ## will replace the existing scale.
 
 <img src="README_files/figure-gfm/question-2-vis-2-1.png" width="90%" />
+
+``` r
+#discarded code
+#parks_2020_coords <- parks_2020_coords %>%
+ # mutate(rank_quartile = case_when(rank <= 5 ~ "1st quartile",
+  #                        rank > 5 & rank <= 10 ~ "2nd quartile",
+   #                       rank >= 88 & rank < 93 ~ "3rd quartile",
+    #                      rank >= 93 ~ "4th quartile"))
+
+#ggplot(data = parks_amenities, mapping = aes(x = city, y = total_amenities, fill = total_amenities)) + 
+  #geom_bar(stat = "identity") +
+  #geom_text(data = parks_2020_coords, aes(label = rank), hjust = -.5, color = "black", family = "bold") +
+  #coord_flip() +
+  #labs(y = "Total Amenities", x = NULL)
+```
 
 \=======
 
