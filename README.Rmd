@@ -254,7 +254,9 @@ bar plot measuring the differences in the total number of these amenities per 10
 residents in each of the 20 cities. By doing so, we were able to compare the relative
 quantity and type of amenities between the top and bottom ten cities to see how
 this affects their rank. A stacked bar plot was the best candidate for this part
-of the question because ...
+of the question because we wanted to display a large quantity of cities (20), but
+also be able to split them by the types of amenities without overwheling the
+audience.
 
 
 ### Analysis
