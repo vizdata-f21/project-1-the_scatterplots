@@ -174,7 +174,6 @@ Quartiles for size are 0-3.2 acres, 3.2-5.0 acres, 5.0-7.7 acres, 7.7+ acres for
 animate(q1_plot, duration = 18)
 ```
 
-<<<<<<< HEAD
 Links: 
 https://github.com/thomasp85/gganimate/wiki/Animation-Composition
 https://cran.r-project.org/web/packages/gganimate/gganimate.pdf
