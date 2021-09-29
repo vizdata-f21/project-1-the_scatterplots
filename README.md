@@ -111,6 +111,12 @@ fivenum(parks_q1$spend_per_resident)
     ## [1]  15  62  94 134 399
 
 ``` r
+fivenum(parks_q1$med_park_size_data)
+```
+
+    ## [1]  0.8  3.0  4.8  7.3 16.7
+
+``` r
 #creating quartile bins for spending per resident, ranges based on five number summary
 parks_q1 <- parks_q1 %>% 
   arrange(city) %>% 
@@ -124,9 +130,9 @@ parks_q1 <- parks_q1 %>%
 #creating quartile bins for median park size, ranges based on five number summary
   parks_q1 <- parks_q1 %>% 
     mutate(size = case_when(
-    between(med_park_size_data, 0, 3.2) ~ "1st quartile",
-    between(med_park_size_data, 3.21, 5.0) ~ "2nd quartile",
-    between(med_park_size_data, 5.01, 7.7) ~ "3rd quartile",
+    between(med_park_size_data, 0, 3.0) ~ "1st quartile",
+    between(med_park_size_data, 3.01, 4.8) ~ "2nd quartile",
+    between(med_park_size_data, 4.81, 7.3) ~ "3rd quartile",
     TRUE ~ "4th quartile"
   )) 
 
@@ -159,6 +165,7 @@ animate(q1_plot, duration = 18)
     ## Warning: Using size for a discrete variable is not advised.
 
 <img src="README_files/figure-gfm/question-1-vis-1-1.gif" width="90%" />
+
 Links:
 <https://github.com/thomasp85/gganimate/wiki/Animation-Composition>
 <https://cran.r-project.org/web/packages/gganimate/gganimate.pdf>
@@ -173,6 +180,7 @@ Links:
 ``` r
 # data wrangling
 # mutate new variable `regions` based off what region the city is located in
+
 parks_regions <- parks_q1 %>% 
   mutate(region = case_when(
          city %in% c("Boston", "Long Beach", "New York", "Philadelphia") ~
@@ -222,15 +230,27 @@ regions <- parks_regions %>%
 
 ### plot of mean spending per resident with respect to mean of median park size over time
 
-ggplot(data = parks_regions, aes(x = year, y = mean_spend, group = region)) + 
-  geom_line(aes(size = mean_med_size, color = region), lineend = "round", show.legend = FALSE) + 
+ggplot(data = parks_regions, 
+       aes(x = year, 
+           y = mean_spend, 
+           group = region)) + 
+  geom_line(aes(size = mean_med_size, 
+                color = region), 
+            lineend = "round", 
+            show.legend = FALSE) + 
   geom_text_repel(data = regions, 
-                   aes(label = region, color = region), show.legend = FALSE, 
-                    nudge_y = 5, 
+                  aes(label = region, 
+                      color = region), 
+                  show.legend = FALSE, 
+                  nudge_y = 5, 
                   nudge_x = -1.75,
                   hjust = -.5) + 
-  scale_color_manual(values = c("#738148", "#bc8a31", "#3b5c75", "#4f3e23", "#8999b0")) + 
-    labs(title = "Mean Spending per Resident Over Time\n with Respect to Mean of Median Park Size", 
+  scale_color_manual(values = c("#738148", 
+                                "#bc8a31", 
+                                "#3b5c75", 
+                                "#4f3e23", 
+                                "#8999b0")) + 
+  labs(title = "Mean Spending per Resident Over Time with Respect to Mean of Median Park Size", 
          subtitle = "by US Region",
          x = "Year", 
          y = "Mean Spending Per Resident (in USD)") + 
@@ -241,9 +261,48 @@ ggplot(data = parks_regions, aes(x = year, y = mean_spend, group = region)) +
 
 ### Discussion
 
-(1-3 paragraphs) In the Discussion section, interpret the results of
-your analysis. Identify any trends revealed (or not revealed) by the
-plots. Speculate about why the data looks the way it does.
+We anticipated that the scatterplot would reveal that higher per capita
+spending on public parks would result in higher median park size,
+however we found that this was not the case upon plotting the data in
+figure 1. This plot elucidates the difference in median park size across
+the quartiles. If we focus on the cities that are in the 4th quartile
+for spending, we notice that more than half of them are in the first
+quartile for median park size across the years. Inversely, if we look
+closely at the cities that are in the 3rd quartile for spending, more
+than half of the median park sizes are in the 4th quartile. This trend
+holds true across the spending quartiles, with the most pronounced
+display of this effect being in the first spending quartile, where
+nearly all the cities are in the 3rd quartile of median park size. This
+disproves our initial suspicion that higher per capita spending on park
+size would result in larger median parks, at the very least amongst the
+37 cities plotted here.
+
+We hypothesize this might be the case because metropolitan cities with
+very densely populated areas likely have more money to spend on public
+parks, but less land that they can turn into a public park. We know that
+this hypothesis holds true for New York for example, as it is one of the
+cities that is in the 4th quartile for spending, but in the 1st quartile
+for median park size.
+
+For the line plot over time, we suspected there would be significant
+differences among regions, due to different natural geography, urban
+planning, and values placed on public parks. The plot confirmed this
+hypothesis. In 2012, the Midwest, Southeast, and Southwest all spent
+under $90 per resident on average. Over the next 8 years, the Midwest
+increased their spending by \~$30 on average, the Southeast increased
+their spending \~$20 per resident, and the Southwest had no substantial
+increase or decrease in spending. The Northeast and West stood out in
+2012 with regards to average spending. The Northeast spent \~$115 per
+resident and the West spent \~$160 per resident. By 2020, both the West
+and Northeast were spending between \~$170 and \~$180 per resident, on
+average. There are few significant changes in mean median park size,
+except for some fluctuation within the Northeast and an increase in the
+Midwest in 2014. From this plot, we can conclude that while the West and
+Northeast do not have the most acreage of public parks in their cities,
+they are spending more per resident. The overall increase in spending
+over time, for all five regions, tells us that local politicians have
+both had the means and the will to increase local park budgets over the
+past eight years.
 
 ## How many amenities do parks with the top 10 and bottom 10 rankings in 2020 have and how does this vary based on what proportion of the top 10 and bottom 10 cities’ land is parkland in 2020?
 
@@ -355,7 +414,7 @@ ggplot() +
 <img src="README_files/figure-gfm/question-2-vis-1-1.png" width="90%" />
 
 ``` r
-### data wrangling
+# data wrangling
 
 #creating a total amenities variable
 parks_2020_coords <- parks_2020_coords %>%
@@ -369,19 +428,14 @@ parks_amenities <- parks_2020_coords %>%
   mutate(city = ifelse(city == "Charlotte/Mecklenburg County", "Charlotte", city),
          city_n = paste0("#", rank, " ", city))
 
-### plot of amenities 
+# plot of amenities 
 
 ggplot(data = parks_amenities, mapping = aes(y = reorder(city_n, -rank))) + 
   geom_bar(stat = "identity", mapping = aes(x = value, fill = amenity)) +
   geom_hline(yintercept = 10.5, linetype = "dashed", color = "#322718") + 
-  # geom_text(data = parks_2020_coords, mapping = aes(label = paste0("#",rank), y = total_amenities), hjust = -.1, 
-  #           color = "black",
-  #           family = "bold",
-  #           size = 2.5) +
   guides(fill = guide_legend(reverse = TRUE)) +
   labs(title = "Top and bottom 10 city rankings by amenities",
        x = "Total Amenities per 10K  Residents", y = NULL, fill = "Amenities") +
-#       caption = "The number at the end of each bar represents the city's ranking") +
   scale_fill_manual(values = c("#bc8a31", "#738148", "#3b5c75"),
                     labels = c("Basketball Courts", "Playgrounds", "Restrooms")) + 
   theme_minimal() + 
@@ -389,21 +443,6 @@ ggplot(data = parks_amenities, mapping = aes(y = reorder(city_n, -rank))) +
 ```
 
 <img src="README_files/figure-gfm/question-2-vis-2-1.png" width="90%" />
-
-``` r
-#discarded code
-#parks_2020_coords <- parks_2020_coords %>%
- # mutate(rank_quartile = case_when(rank <= 5 ~ "1st quartile",
-  #                        rank > 5 & rank <= 10 ~ "2nd quartile",
-   #                       rank >= 88 & rank < 93 ~ "3rd quartile",
-    #                      rank >= 93 ~ "4th quartile"))
-
-#ggplot(data = parks_amenities, mapping = aes(x = city, y = total_amenities, fill = total_amenities)) + 
-  #geom_bar(stat = "identity") +
-  #geom_text(data = parks_2020_coords, aes(label = rank), hjust = -.5, color = "black", family = "bold") +
-  #coord_flip() +
-  #labs(y = "Total Amenities", x = NULL)
-```
 
 ### Discussion
 
