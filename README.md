@@ -147,11 +147,27 @@ and park size in different U.S. cities over time?*
 
 ``` r
 #data wrangling
-parks_phoenix <- parks_q1 %>% 
-  filter(city == "Atlanta") %>% 
+parks_regions <- parks_q1 %>% 
+  mutate(region = case_when(
+         city %in% c("Boston", "Long Beach", "New York", "Philadelphia") ~ "Northeast", 
+        city %in% c("Atlanta", "Baltimore", "Jacksonville", "Louisville", 
+                    "Memphis", "Nashville", "Virginia Beach") ~ "Southeast", 
+         city %in% c("Chicago", "Columbus", "Detroit", "Kansas City", 
+                     "Milwaukee") ~ "Midwest", 
+         city %in% c("Albuquerque", "Austin", "Dallas", "El Paso", 
+                     "Fort Worth", "Houston", "Mesa", "Oklahoma City",
+                     "Phoenix", "San Antonio", "Tucson") ~ "Southwest", 
+         city %in% c("Denver", "Fresno", "Las Vegas", "Los Angeles", 
+                     "Portland", "Sacramento", "San Diego", "San Francisco", 
+                     "San Jose", "Seattle") ~ "West"))
+
+parks_regions <- parks_regions %>% 
+  group_by(region, year) %>% 
+  summarize(mean_spend = mean(spend_per_resident), mean_med_size = mean(med_park_size_data)) %>% 
   print()
 ```
 
+<<<<<<< HEAD
     ##      city year med_park_size_data spend_per_resident     spending         size
     ## 1 Atlanta 2020               2.90             151.00 4th quartile 1st quartile
     ## 2 Atlanta 2019               2.90             138.00 4th quartile 1st quartile
@@ -162,10 +178,36 @@ parks_phoenix <- parks_q1 %>%
     ## 7 Atlanta 2014               3.10              87.00 2nd quartile 1st quartile
     ## 8 Atlanta 2013               2.95              90.33 2nd quartile 1st quartile
     ## 9 Atlanta 2012               3.00              99.39 3rd quartile 1st quartile
+=======
+    ## `summarise()` has grouped output by 'region'. You can override using the `.groups` argument.
+
+    ## # A tibble: 45 × 4
+    ## # Groups:   region [5]
+    ##    region     year mean_spend mean_med_size
+    ##    <chr>     <dbl>      <dbl>         <dbl>
+    ##  1 Midwest    2012       84.5          4.24
+    ##  2 Midwest    2013       85.5          4.33
+    ##  3 Midwest    2014       87.6          5.58
+    ##  4 Midwest    2015       92.8          5.58
+    ##  5 Midwest    2016       97            5.58
+    ##  6 Midwest    2017      106.           5.52
+    ##  7 Midwest    2018      115.           5.74
+    ##  8 Midwest    2019      115.           5.72
+    ##  9 Midwest    2020      119.           5.72
+    ## 10 Northeast  2012      114.           2.33
+    ## # … with 35 more rows
+>>>>>>> 03b9b5ef46511839ad23b7760e42639b85c630e9
 
 ``` r
-ggplot(parks_phoenix, aes(x = year, y = spend_per_resident)) + 
-  geom_line(aes(size = med_park_size_data), lineend = "round")
+ggplot(parks_regions, aes(x = year, y = mean_spend, group = region)) + 
+  geom_line(aes(size = mean_med_size, color = region), lineend = "round") + 
+  scale_color_manual(values = c("#738148", "#bc8a31", "#3b5c75", "#4f3e23", "#8999b0")) + 
+    labs(title = "Mean Spending per Resident Over Time\n with Respect to Mean of Median Park Size", 
+         subtitle = "by US Region",
+         x = "Year", 
+         y = "Mean Spending Per Resident (in USD)", 
+         size = "Mean of Median Size (in acres)", 
+         color = "Region")
 ```
 
 <img src="README_files/figure-gfm/question 1 plot 2-1.png" width="90%" />

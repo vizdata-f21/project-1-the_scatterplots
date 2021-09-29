@@ -27,10 +27,10 @@ knitr::opts_chunk$set(fig.width = 10,
 ```
 
 ```{r load-data, echo = FALSE}
-#parks <- read.csv("~/R/project-1-the_scatterplots/data/parks.csv")
-parks <- read.csv("~/R/STA313/Projects/project-1-the_scatterplots/data/parks.csv")
-#cities <- fromJSON("~/R/project-1-the_scatterplots/data/cities.json")
-cities <- fromJSON("~/R/STA313/Projects/project-1-the_scatterplots/data/cities.json")
+parks <- read.csv("~/R/project-1-the_scatterplots/data/parks.csv")
+#parks <- read.csv("~/R/STA313/Projects/project-1-the_scatterplots/data/parks.csv")
+cities <- fromJSON("~/R/project-1-the_scatterplots/data/cities.json")
+#cities <- fromJSON("~/R/STA313/Projects/project-1-the_scatterplots/data/cities.json")
 ```
 
 ### Introduction
@@ -165,12 +165,34 @@ https://stackoverflow.com/questions/52899017/slow-down-gganimate-in-r
 
 ```{r question 1 plot 2}
 #data wrangling
-parks_phoenix <- parks_q1 %>% 
-  filter(city == "Atlanta") %>% 
+parks_regions <- parks_q1 %>% 
+  mutate(region = case_when(
+         city %in% c("Boston", "Long Beach", "New York", "Philadelphia") ~ "Northeast", 
+        city %in% c("Atlanta", "Baltimore", "Jacksonville", "Louisville", 
+                    "Memphis", "Nashville", "Virginia Beach") ~ "Southeast", 
+         city %in% c("Chicago", "Columbus", "Detroit", "Kansas City", 
+                     "Milwaukee") ~ "Midwest", 
+         city %in% c("Albuquerque", "Austin", "Dallas", "El Paso", 
+                     "Fort Worth", "Houston", "Mesa", "Oklahoma City",
+                     "Phoenix", "San Antonio", "Tucson") ~ "Southwest", 
+         city %in% c("Denver", "Fresno", "Las Vegas", "Los Angeles", 
+                     "Portland", "Sacramento", "San Diego", "San Francisco", 
+                     "San Jose", "Seattle") ~ "West"))
+
+parks_regions <- parks_regions %>% 
+  group_by(region, year) %>% 
+  summarize(mean_spend = mean(spend_per_resident), mean_med_size = mean(med_park_size_data)) %>% 
   print()
 
-ggplot(parks_phoenix, aes(x = year, y = spend_per_resident)) + 
-  geom_line(aes(size = med_park_size_data), lineend = "round")
+ggplot(parks_regions, aes(x = year, y = mean_spend, group = region)) + 
+  geom_line(aes(size = mean_med_size, color = region), lineend = "round") + 
+  scale_color_manual(values = c("#738148", "#bc8a31", "#3b5c75", "#4f3e23", "#8999b0")) + 
+    labs(title = "Mean Spending per Resident Over Time\n with Respect to Mean of Median Park Size", 
+         subtitle = "by US Region",
+         x = "Year", 
+         y = "Mean Spending Per Resident (in USD)", 
+         size = "Mean of Median Size (in acres)", 
+         color = "Region")
 ```
 
 (2-3 code blocks, 2 figures, text/code comments as needed)
