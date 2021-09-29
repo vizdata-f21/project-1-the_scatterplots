@@ -53,18 +53,28 @@ unequal access to quality parks and we are hoping to explore these in our projec
 
 ### Introduction
 
-To answer our first question (above), we used the "parks" dataset and analyzed the relationship between the variables "spend_per_resident_data", "city", "med_park_size_data", and "year". We thought it'd very interesting to look into how the spending on parks varies across different cities and over the course of the last decade. We were also curious and wanted to analyze how spending per resident and park size varies across different regions/cities. Our group felt as though those were four of the most compelling variables in the dataset and we were all unsure of what the relationship would be between spending per resident and park size versus year and then region/city, so we were excited to create visualizations based upon those variables.
+To answer our first question (above), we used the "parks" dataset and analyzed 
+the relationship between the variables "spend_per_resident_data", "city", 
+"med_park_size_data", and "year". We thought it'd very interesting to look into
+how the spending on parks varies across different cities and over the course of 
+the last decade. We were also curious and wanted to analyze how spending per 
+resident and park size varies across different regions/cities. Our group felt
+as though those were four of the most compelling variables in the dataset and
+we were all unsure of what the relationship would be between spending per 
+resident and park size versus year and then region/city, so we were excited 
+to create visualizations based upon those variables.
 
 ### Approach
-
-(1-2 paragraphs)
-Describe what types of plots you are going to make to address your question.
-
-For each plot, provide a clear explanation as to why this plot (e.g. boxplot, barplot, histogram, etc.) is best for providing the information you are asking about. 
-
-The two plots should be of different types, and at least one of the two plots needs to use either color mapping or facets.
-
-To answer our first question addressing the relationship between spending per resident and year, we first created a new variable, called "bins", to break down the spending per resident for each city into four quartiles (where the 1st quartile had the least spending per resident and the 4th quartile had the most). This allowed us to analyze how spending trends shifted over time for each quartile. For this visualization, we created a line graph where each line represents a city and the color represents the quartile (or "bin") that the city falls into. The line graph allowed us to illustrate the trends in different cities' spending per resident over time (from 2012-2020) in what we felt was the clearest way to demonstrate that relationship.
+To answer our first question addressing the relationship between spending per 
+resident and year, we first created a new variable, called "bins", to break down 
+the spending per resident for each city into four quartiles (where the 1st 
+quartile had the least spending per resident and the 4th quartile had the most).
+This allowed us to analyze how spending trends shifted over time for each 
+quartile. For this visualization, we created a line graph where each line 
+represents a city and the color represents the quartile (or "bin") that the 
+city falls into. The line graph allowed us to illustrate the trends in different 
+cities' spending per resident over time (from 2012-2020) in what we felt was the
+clearest way to demonstrate that relationship.
 
 # add second graph approach
 
@@ -175,7 +185,19 @@ Speculate about why the data looks the way it does.
 
 ### Introduction
 
-For our second question, we wanted to look at parks with the top and bottom 10 rankings in 2020 and compare the percentage of their land being parkland. We also wanted to compare the number of amenities each of those parks have, including dog parks, playgrounds, restrooms, etc. To address these questions, we merged the parks and cities datasets by city, and utilized the "city", "longitude", and "latitude" variables from the cities dataset, as well as the "rank" variable (to determine the top and bottom 10 park rankings) and variable for the amenities from the parks dataset. We thought this would be an interesting question to address as we wanted to illustrate and determine which variables were the most meaningful when determining the park rankings. We wanted to compare and interpret whether the top 10 parks had much more amenities than the bottom 10 parks, and also visualize where those parks are geographically in the US and how much of their cities' respective land is parkland.
+For our second question, we wanted to look at parks with the top and bottom 10
+rankings in 2020 and compare the percentage of their land being parkland. We 
+also wanted to compare the number of amenities each of those parks have, 
+including dog parks, playgrounds, restrooms, etc. To address these questions,
+we merged the parks and cities datasets by city, and utilized the "city", 
+"longitude", and "latitude" variables from the cities dataset, as well as the 
+"rank" variable (to determine the top and bottom 10 park rankings) and variable 
+for the amenities from the parks dataset. We thought this would be an 
+interesting question to address as we wanted to illustrate and determine which 
+variables were the most meaningful when determining the park rankings. We wanted
+to compare and interpret whether the top 10 parks had much more amenities than 
+the bottom 10 parks, and also visualize where those parks are geographically in
+the US and how much of their cities' respective land is parkland.
 
 ### Approach
 
@@ -286,20 +308,14 @@ ggplot(data = parks_amenities, mapping = aes(x = reorder(city, -rank))) +
   guides(fill = guide_legend(reverse = TRUE)) +
   labs(title = "Top and bottom 10 city rankings by amenities",
        y = "Total Amenities per 10K  Residents", x = NULL, fill = "Amenities") +
-<<<<<<< HEAD
-=======
   scale_fill_manual(values = c("#bc8a31", "#738148", "#3b5c75")) + 
->>>>>>> d17ed5ecb296b79c39a530677707f0bb6686ac62
   theme(plot.title = element_text(hjust = 0),
         plot.subtitle = element_text(hjust = 0)) +
   theme_minimal()
 ```
 
-<<<<<<< HEAD
 =======
 
-
->>>>>>> d17ed5ecb296b79c39a530677707f0bb6686ac62
 (2-3 code blocks, 2 figures, text/code comments as needed)
 In this section, provide the code that generates your plots. Use scale functions to provide nice axis labels and guides.
 You are welcome to use theme functions to customize the appearance of your plot, but you are not required to do so.

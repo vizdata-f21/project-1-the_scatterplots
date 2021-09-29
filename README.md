@@ -37,16 +37,6 @@ we were excited to create visualizations based upon those variables.
 
 ### Approach
 
-(1-2 paragraphs) Describe what types of plots you are going to make to
-address your question.
-
-For each plot, provide a clear explanation as to why this plot
-(e.g. boxplot, barplot, histogram, etc.) is best for providing the
-information you are asking about.
-
-The two plots should be of different types, and at least one of the two
-plots needs to use either color mapping or facets.
-
 To answer our first question addressing the relationship between
 spending per resident and year, we first created a new variable, called
 “bins”, to break down the spending per resident for each city into
@@ -93,22 +83,8 @@ parks_q1 <- parks %>%
 #making the year variable numeric so we can join med_park_size_data back 
 parks_q1 <- parks_q1 %>% 
   mutate(year = as.numeric(year))
-<<<<<<< HEAD
-=======
-glimpse(parks_q1)
-```
->>>>>>> d17ed5ecb296b79c39a530677707f0bb6686ac62
 
-    ## Rows: 333
-    ## Columns: 3
-    ## $ city               <fct> "Portland", "Portland", "Portland", "Portland", "Po…
-    ## $ year               <dbl> 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 201…
-    ## $ spend_per_resident <dbl> 250.00, 224.00, 251.00, 165.00, 154.00, 145.00, 155…
 
-<<<<<<< HEAD
-=======
-``` r
->>>>>>> d17ed5ecb296b79c39a530677707f0bb6686ac62
 #joining based on city and year to include med_park_size_data in the dataset
 parks_q1 <- parks %>% 
   select(city, year, med_park_size_data) %>% 
@@ -134,15 +110,9 @@ parks_q1 <- parks_q1 %>%
   )) 
 
 q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data, 
-<<<<<<< HEAD
-                     size = size_bins, color = spend_bins)) + 
-        geom_point() +  
-        labs(title = "INSERT TITLE HERE",
-=======
                                group = city)) + 
         geom_point(aes(size = size_bins, color = spend_bins)) +   
         labs(title = "Median Park Sizs vs. Spending Per Resident\n from 2012-2020 in U.S. Cities",
->>>>>>> d17ed5ecb296b79c39a530677707f0bb6686ac62
             subtitle = "Year: {frame_time}",
              x = "Spending per Resident (in USD)", 
              y = "Median Park Size (in acres)", 
@@ -151,44 +121,15 @@ q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data,
              color = "Spend Bins") +
         scale_x_continuous(breaks = seq(from = 0, to = 400, by = 50)) + 
         scale_y_continuous(breaks = seq(from = 0, to = 20, by = 5)) +
-<<<<<<< HEAD
-        scale_color_manual(values = c("#997A6D","#3D7799","#C1D5E0","#B1BC6B")) +
-        transition_time(as.integer(year), range = c(2012L, 2020L))
-
-animate(q1_plot)
-=======
         scale_color_manual(values = c("#8999b0","#738148","#7c5d2d","#447aab")) +
         transition_time(as.integer(year), range = c(2012L, 2020L))
 
 animate(q1_plot, duration = 18)
->>>>>>> d17ed5ecb296b79c39a530677707f0bb6686ac62
 ```
 
     ## Warning: Using size for a discrete variable is not advised.
 
 <img src="README_files/figure-gfm/question 1-1.gif" width="90%" />
-<<<<<<< HEAD
-
-``` r
- #TO DO: Update Color Scale, Fix Y Axis, Try to make the plot wider, add title, rename/better name legends 
-```
-
-Links:
-<https://github.com/thomasp85/gganimate/wiki/Animation-Composition>
-<https://cran.r-project.org/web/packages/gganimate/gganimate.pdf>
-<https://gganimate.com/>
-<https://www.datanovia.com/en/blog/gganimate-how-to-create-plots-with-beautiful-animation-in-r/>
-<http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html>
-<https://ropensci.org/blog/2018/07/23/gifski-release/>
-<https://gif.ski/> <https://github.com/r-rust/gifski>
-<https://gganimate.com/articles/gganimate.html#rendering-1>
-
-*note to self: what is the relationship between spending per resident
-and park size in different U.S. cities over time?*
-
-``` r
-#data wrangling
-=======
 
 Links:
 <https://github.com/thomasp85/gganimate/wiki/Animation-Composition>
@@ -225,7 +166,6 @@ parks_phoenix <- parks_q1 %>%
 ``` r
 ggplot(parks_phoenix, aes(x = year, y = spend_per_resident)) + 
   geom_line(aes(size = med_park_size_data), lineend = "round")
->>>>>>> d17ed5ecb296b79c39a530677707f0bb6686ac62
 ```
 
 <img src="README_files/figure-gfm/question 1 plot 2-1.png" width="90%" />
@@ -325,11 +265,7 @@ ggplot() +
             aes(x = longitude, y = latitude, label = paste0("#",rank)),
             size = 3.5, vjust = 1.7, family = "bold") +
   scale_size_continuous(labels = scales::percent) +
-<<<<<<< HEAD
-  scale_color_manual(values = c("#D55E00", "#009E73")) + 
-=======
   scale_color_manual(values = c("#bc8a31", "#315d1b")) + 
->>>>>>> d17ed5ecb296b79c39a530677707f0bb6686ac62
   labs(x = NULL, y = NULL, size = "% of city that\nis parkland",
        title = "Top and bottom 10 city rankings of parks",
        subtitle = "scaled by % of city that is parkland") +
@@ -378,22 +314,18 @@ ggplot(data = parks_amenities, mapping = aes(x = reorder(city, -rank))) +
   guides(fill = guide_legend(reverse = TRUE)) +
   labs(title = "Top and bottom 10 city rankings by amenities",
        y = "Total Amenities per 10K  Residents", x = NULL, fill = "Amenities") +
-<<<<<<< HEAD
-=======
   scale_fill_manual(values = c("#bc8a31", "#738148", "#3b5c75")) + 
->>>>>>> d17ed5ecb296b79c39a530677707f0bb6686ac62
   theme(plot.title = element_text(hjust = 0),
         plot.subtitle = element_text(hjust = 0)) +
   theme_minimal()
 ```
 
-<<<<<<< HEAD
-=======
     ## Scale for 'fill' is already present. Adding another scale for 'fill', which
     ## will replace the existing scale.
 
->>>>>>> d17ed5ecb296b79c39a530677707f0bb6686ac62
 <img src="README_files/figure-gfm/question-2-vis-2-1.png" width="90%" />
+
+\=======
 
 (2-3 code blocks, 2 figures, text/code comments as needed) In this
 section, provide the code that generates your plots. Use scale functions
