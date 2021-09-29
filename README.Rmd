@@ -27,10 +27,10 @@ knitr::opts_chunk$set(fig.width = 10,
 ```
 
 ```{r load-data, echo = FALSE}
-parks <- read.csv("~/R/project-1-the_scatterplots/data/parks.csv")
-#parks <- read.csv("~/R/STA313/Projects/project-1-the_scatterplots/data/parks.csv")
-cities <- fromJSON("~/R/project-1-the_scatterplots/data/cities.json")
-#cities <- fromJSON("~/R/STA313/Projects/project-1-the_scatterplots/data/cities.json")
+#parks <- read.csv("~/R/project-1-the_scatterplots/data/parks.csv")
+parks <- read.csv("~/R/STA313/Projects/project-1-the_scatterplots/data/parks.csv")
+#cities <- fromJSON("~/R/project-1-the_scatterplots/data/cities.json")
+cities <- fromJSON("~/R/STA313/Projects/project-1-the_scatterplots/data/cities.json")
 ```
 
 ### Introduction
@@ -54,8 +54,8 @@ unequal access to quality parks and we are hoping to explore these in our projec
 ### Introduction
 
 To answer our first question, we used the ` r parks` dataset and analyzed the 
-relationship between the variables ` r spend_per_resident_data`, ` r city`, 
-`r med_park_size_data`, and `r year`. We thought it would be interesting to look 
+relationship between the variables spend_per_resident_data, city, 
+med_park_size, and year. We thought it would be interesting to look 
 into how city budgets have allocated money for spending on their public parks and 
 how this has varied across different US cities over the course of nearly the 
 last decade. We also wanted to analyze how spending per resident and park size 
@@ -68,9 +68,9 @@ parks per capita, the higher the median park size would be.
 ### Approach
 In order to ensure the final visualization had entries the variables of interest for all years between 
 2012 and 2020, we did some data wrangling first and removed all cities which had
-NAs for ` r spend_per_resident_data`, ` r city`, and `r med_park_size_data`. 
-This left us with a data frame with 4 columns: ` r spend_per_resident_data`, 
-` r city`, `r med_park_size_data`, and `r year`. At this point, all that was 
+NAs for spend_per_resident_data, city, and med_park_size_data. 
+This left us with a data frame with 4 columns: spend_per_resident_data, 
+r city, med_park_size_data, and year. At this point, all that was 
 left to do was bin the data into quartiles for spending and for median park size. 
 In order to bin the data appropriately, we used the fivenum command to find the 
 quartiles in our data. This allowed us to analyze how spending trends shifted 
