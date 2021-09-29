@@ -84,6 +84,8 @@ these two things correlated to median park size and spending over the span of
 2012 and 2020. 
 
 
+For the second graph... kathryn if you wanna hop in here and write out your approach
+
 # add second graph approach
 
 ### Analysis
@@ -136,13 +138,9 @@ parks_q1 <- parks_q1 %>%
     TRUE ~ "4th quartile"
   )) 
 
-<<<<<<< HEAD
-q1_plot <- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data, 
-=======
 ### plot of median park size vs spending per resident over time
   
 q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data, 
->>>>>>> b9bcdbb74775777f4687748ccb35c58cc7c590c5
                                group = city)) + 
         geom_point(aes(size = size, color = spending)) +   
         labs(title = "Median Park Size vs. Spending Per Resident from 2012-2020 in 37 U.S. Cities",
@@ -213,10 +211,7 @@ ggplot(parks_regions, aes(x = year, y = mean_spend, group = region)) +
          color = "Region")
 ```
 
-(2-3 code blocks, 2 figures, text/code comments as needed)
-In this section, provide the code that generates your plots. Use scale functions to provide nice axis labels and guides.
-You are welcome to use theme functions to customize the appearance of your plot, but you are not required to do so.
-All plots must be made with ggplot2. Do not use base R or lattice plotting functions.
+
 
 ### Discussion
 
@@ -328,12 +323,7 @@ parks_2020_coords <- parks_2020_coords %>%
 parks_amenities <- parks_2020_coords %>%
   pivot_longer(cols = c(playground_data, restroom_data, basketball_data), names_to = "amenity", values_to = "value")
 
-<<<<<<< HEAD
-
-
-=======
 ### plot of amenities 
->>>>>>> da8cf28269daa51582d769bc946268a0657c65b5
 
 ggplot(data = parks_amenities, mapping = aes(x = reorder(city, -rank))) + 
   geom_bar(stat = "identity", mapping = aes(y = value, fill = amenity)) +
