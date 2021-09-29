@@ -1,5 +1,5 @@
 ---
-title: Project title (DON'T FORGET THIS)
+title: Quality of U.S. Public Parks
 author: The Scatterplots
 output: github_document
 ---
