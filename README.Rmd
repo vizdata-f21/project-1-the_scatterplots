@@ -189,10 +189,7 @@ https://stackoverflow.com/questions/52899017/slow-down-gganimate-in-r
 ```{r question-1-vis-2}
 # data wrangling
 # mutate new variable `regions` based off what region the city is located in
-<<<<<<< HEAD
 
-=======
->>>>>>> aa88d281e4373fabdaa024e94594ec1693f73c78
 parks_regions <- parks_q1 %>% 
   mutate(region = case_when(
          city %in% c("Boston", "Long Beach", "New York", "Philadelphia") ~
