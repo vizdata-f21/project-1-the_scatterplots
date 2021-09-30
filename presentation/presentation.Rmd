@@ -27,7 +27,6 @@ library(gifski)
 library(png)
 library(xaringanthemer)
 library(ggrepel)
-
 ```
 
 ```{r setup, include=FALSE}
@@ -42,10 +41,10 @@ knitr::opts_chunk$set(
 ```
 
 ```{r load-data, include=FALSE}
-#parks <- read.csv("~/R/project-1-the_scatterplots/data/parks.csv")
-#cities <- fromJSON("~/R/project-1-the_scatterplots/data/cities.json")
-parks <- read.csv("~/R/STA313/Projects/project-1-the_scatterplots/data/parks.csv")
-cities <- fromJSON("~/R/STA313/Projects/project-1-the_scatterplots/data/cities.json")
+parks <- read.csv("~/R/project-1-the_scatterplots/data/parks.csv")
+cities <- fromJSON("~/R/project-1-the_scatterplots/data/cities.json")
+#parks <- read.csv("~/R/STA313/Projects/project-1-the_scatterplots/data/parks.csv")
+#cities <- fromJSON("~/R/STA313/Projects/project-1-the_scatterplots/data/cities.json")
 ```
 
 ```{r style-slides, echo = FALSE}
@@ -59,6 +58,20 @@ style_xaringan(
 ```
 
 # Introduction
+
+--
+
+- The Trust for Public Land’s ParkScore Index: an annually released report which ranks the parks of the 100 most populated cities in the United States according to 4 key metrics: 
+
+--
+    - access
+    - investment
+    - amenities
+    - acreage
+
+--
+
+- Covid-19 Pandemic emphasized need for public parks and the inequities that exist between cities
 
 ---
 
@@ -83,9 +96,6 @@ class: inverse, middle, center
 - Types of plots:
     - annotated scatter plot 
     - line chart over time
-
----
-
 
 ---
 
@@ -211,6 +221,7 @@ ggplot(data = parks_regions,
          y = "Mean Spending Per Resident (in USD)") +
   theme(text = element_text(size = 18)) + 
   theme_minimal() 
+
 ```
 
 ---
@@ -226,6 +237,11 @@ class: inverse, middle, center
 --
 
 - Focus in on Top 10 and Bottom 10 ranked cities in 2020
+
+--
+
+  - Top 10: Minneapolis, DC, St. Paul, Arlington, Cincinnati, Portland, Irvine, San Francisco, Boston, Chicago
+  - Bottom 10: Memphis, Irving, Hialeah, Baton Rouge, Fresno, Lubbock, Forth Worth, Charlotte, Mesa, Oklahoma City
 
 --
 
@@ -339,148 +355,9 @@ ggplot(data = parks_amenities, mapping = aes(y = reorder(city_n, -rank))) +
 ```
 
 ---
+
+class: inverse, middle, center
+
 # Thank You + Questions
 
----
 
-# Using xaringan
-
----
-
-## xaringan
-
-- The presentation is created using the `xaringan` package
-
-- Use `---` to separate slides and `--` for incremental builds
-
---
-
-- Like this
-
----
-
-## Layouts
-
-You can use plain text
-
-- or bullet points
-
-.pull-left[
-or text in two columns $^*$
-]
-.pull-right[
-- like
-- this
-]
-
-.footnote[
-[*] And add footnotes
-]
-
----
-
-## Code
-
-```{r boring-regression}
-
-```
-
----
-
-## Plots
-
-```{r recode-species, echo = FALSE}
-# In this chunk I'm doing a bunch of analysis that I don't want to present
-# in my slides. But I need the resulting data frame for a plot I want to present.
-
-```
-
-```{r plot-penguins, echo = FALSE, warning = FALSE, fig.alt = "Body mass vs. flipper lenght of Palmer Penguins for species Adelie and all the others combined together. There is a relatively strong, positive relationship between the two variables. The Adelie penguins are clustered together but they don't exhibit a different trend than the rest of the penguins."}
-# Code hidden with echo = FALSE
-# Uses modified penguins dataset from previous chunk
-# Play around with height and width until you're happy with the look
-
-```
-
----
-
-## Plot and text
-
-.pull-left[
-- Some text
-- goes here
-]
-.pull-right[
-```{r warning=FALSE, out.width="100%", fig.width=4, echo=FALSE}
-# see how I changed out.width and fig.width from defaults
-# to make the figure bigger
-
-```
-]
-
----
-
-class: inverse, middle, center
-
-# A new section...
-
----
-
-## Tables
-
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
-
-```{r penguins-table, echo = FALSE}
-```
-
----
-
-## Images
-
-```{r castle, echo = FALSE, out.width = "40%", fig.align = "center", fig.cap = "Image credit: Danielle Navarro, Percolate."}
-```
-
-Or you can also include a full page image. See next slide.
-
----
-
-background-image: url(img/watercolour_sys02_img32_percolate.jpg)
-
----
-
-## Math Expressions
-
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. &#36;\alpha+\beta$ renders $\alpha+\beta$. You can use the display style with double dollar signs:
-
-```
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-```
-
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-
-Limitations:
-
-1. The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
-
-1. There should not be spaces after the opening `$` or before the closing `$`.
-
-1. Math does not work on the title slide (see [#61](https://github.com/yihui/xaringan/issues/61) for a workaround).
-
----
-
-class: inverse, middle, center
-
-# Wrap up
-
----
-
-## Feeling adventurous?
-
-- Want to find out more about `xaringan`? See https://slides.yihui.name/xaringan/#1.
-
-- You are welcomed to use the default styling of the slides. In fact, that's what I expect majority of you will do. You will differentiate yourself with the content of your presentation.
-
-- But some of you might want to play around with slide styling. The
-`xaringanthemer` provides some solutions for this that: https://pkg.garrickadenbuie.com/xaringanthemer.
-
-- And if you want more bells and whistles, there is also `xaringanExtra`: https://pkg.garrickadenbuie.com/xaringanExtra.
