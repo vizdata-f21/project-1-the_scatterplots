@@ -445,8 +445,7 @@ Our presentation can be found [here](presentation/presentation.html).
 
 Jones, R 2015, *1000 Largest US Cities By Population With Geographic Coordinates, in JSON*, electronic dataset, GitHub Gist, viewed 24 September 2021, <http://www.https://gist.github.com/Miserlou/c5cd8364bf9b2420bb29>.
 
-The Trust for Public Land 2020, *2020 Park Score Index*, electronic dataset, GitHub, viewed 23 September 2021, <https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-06-22/parks.csv
->.
+The Trust for Public Land 2020, *2020 Park Score Index*, electronic dataset, GitHub, viewed 23 September 2021, <https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-06-22/parks.csv>.
 
 ## References
 

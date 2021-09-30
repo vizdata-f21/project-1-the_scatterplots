@@ -480,8 +480,7 @@ September 2021,
 
 The Trust for Public Land 2020, *2020 Park Score Index*, electronic
 dataset, GitHub, viewed 23 September 2021,
-\<<https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-06-22/parks.csv>
-\>.
+<https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-06-22/parks.csv>.
 
 ## References
 
