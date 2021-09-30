@@ -27,7 +27,6 @@ library(gifski)
 library(png)
 library(xaringanthemer)
 library(ggrepel)
-
 ```
 
 ```{r setup, include=FALSE}
