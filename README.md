@@ -166,20 +166,10 @@ animate(q1_plot, duration = 18)
 
 <img src="README_files/figure-gfm/question-1-vis-1-1.gif" width="90%" />
 
-Links:
-<https://github.com/thomasp85/gganimate/wiki/Animation-Composition>
-<https://cran.r-project.org/web/packages/gganimate/gganimate.pdf>
-<https://gganimate.com/>
-<https://www.datanovia.com/en/blog/gganimate-how-to-create-plots-with-beautiful-animation-in-r/>
-<http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html>
-<https://ropensci.org/blog/2018/07/23/gifski-release/>
-<https://gif.ski/> <https://github.com/r-rust/gifski>
-<https://gganimate.com/articles/gganimate.html#rendering-1>
-<https://stackoverflow.com/questions/52899017/slow-down-gganimate-in-r>
-
 ``` r
 # data wrangling
 # mutate new variable `regions` based off what region the city is located in
+
 parks_regions <- parks_q1 %>% 
   mutate(region = case_when(
          city %in% c("Boston", "Long Beach", "New York", "Philadelphia") ~
@@ -424,7 +414,6 @@ parks_amenities <- parks_2020_coords %>%
          city_n = paste0("#", rank, " ", city))
 
 ### plot of amenities 
-
 ggplot(data = parks_amenities, mapping = aes(y = reorder(city_n, -rank))) + 
   geom_bar(stat = "identity", mapping = aes(x = value, fill = amenity)) +
   geom_hline(yintercept = 10.5, linetype = "dashed", color = "#322718") + 
@@ -441,39 +430,41 @@ ggplot(data = parks_amenities, mapping = aes(y = reorder(city_n, -rank))) +
 
 ### Discussion
 
-As you can clearly see in the map visualization of the United States
-illustrating where the top and bottom 10 ranked cities’ parks lie, the
-top 10 cities’ parks clearly have a higher % of parkland than the bottom
-10 cities. This is exactly what we would’ve hypothesized, as cities that
-have a larger % of parkland would likely have more amenities, spend per
-resident, and more. It was also interesting to see where the top and
-bottom deciles geographic distributions were. As you can see from the
-chart, all 10 of the bottom ranked cities’ were basically all in the
-southern part of the US, while the top ranked cities’ are all in the
-northern part of the US and California. We believe that this could imply
-that local goverments in the north of the US are likely more dedicated
-to creating higher quality parks compared to parks in the south.
+The United States map visualization illustrates the location of the top
+10 and bottom 10 ranked cities. This plot demonstrates that the cities
+ranked 1-10 have a visually higher percentage of city land dedicated to
+parks than the lowest-ranked cities in the dataset. This conclusion is
+in line with our initial hypothesis. We expected cities with a high
+overall score, calculated by the number of amenities per 10k residents,
+median park size, spending per resident, etc., to also have more city
+land dedicated to public parks. This assumption was on the grounds that
+a monetary dedication to public parks would result in a zoning
+dedication as well.
 
-For the stacked bar plot of three key amenities within the top and
-bottom 10 cities’ parks, you can also see that the total amenities per
-10,000 residents is pretty significantly higher overall for the top 10
-cities. This is definitely what we hypothesized, as we would expect
-parks that most would consider higher quality to have more restrooms,
-playgrounds, and basketball courts on average. This also correlates to
-our findings in the map visualization, as the top ranked charts have a
-higher % of parkland (on average), therefore we would hypothesis that
-they’d be more likely to have more total amenities.
+The geographic distribution of the 20 cities we plotted also provided
+interesting observations. The 10 cities with the lowest scores were all
+in the South and Southeast regions of the United States. The top 10
+cities in 2020 are all in the Northeast, Midwest, and California. We
+assume that this might imply that local governments in these regions are
+more invested in creating higher-quality parks for their residents.
+Another possibility is that the Northeast, Midwest, and California
+cities have a wealthier tax base and can invest more tax-payer money
+into public parks.
 
-The amenity that stood out the most was the number of restrooms, as you
-can see that restrooms per 10,000 residents for the top 10 ranked cities
-are significantly higher than those in the bottom 10 cities. This is not
-suprising, as higher quality that likely have more parkland overall
-should have more restrooms, but what was surprising to our group was
-that the difference in the number of restrooms was so much more
-significantly higher than basketball courts and playgrounds. This could
-be explained, however, as people may not be likely to use a park
-bathroom, so higher quality parks would have significantly more
-bathrooms, as people would be more likely to use it.
+The stacked bar plot highlights three critical amenities for the top 10
+and bottom 10 cities in 2020. In general, total amenities per 10K
+residents are higher in the top 10 cities than in the bottom 10 cities.
+This observation aligns with our prior assumptions because logically,
+higher-quality public parks will have more amenities, particularly
+restrooms, playgrounds, and basketball courts. This trend also
+correlates with our conclusion from the United States map visualization
+because the top 10 cities have a higher percentage of parkland and more
+amenities per resident.
+
+The number of restrooms was interesting because the number of restrooms
+per 10,000 residents for the top 10 ranked cities is significantly
+higher than those in the bottom 10 cities. This makes sense, because
+higher quality parks should have more restrooms.
 
 ## Presentation
 
@@ -488,16 +479,11 @@ September 2021,
 
 The Trust for Public Land 2020, *2020 Park Score Index*, electronic
 dataset, GitHub, viewed 23 September 2021,
-\<<https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-06-22/parks.csv>
-\>.
+<https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-06-22/parks.csv>.
 
 ## References
 
-List any references here. You should, at a minimum, list your data
-source.
-
-\#\#\#ADD DATA SOURCE
-
+  - <https://www.tpl.org/parks-and-an-equitable-recovery-parkscore-report>
   - <https://github.com/thomasp85/gganimate/wiki/Animation-Composition>
   - <https://cran.r-project.org/web/packages/gganimate/gganimate.pdf>
   - <https://gganimate.com/>
@@ -508,3 +494,4 @@ source.
   - <https://github.com/r-rust/gifski>
   - <https://gganimate.com/articles/gganimate.html#rendering-1>
   - <https://stackoverflow.com/questions/52899017/slow-down-gganimate-in-r>
+  - <https://www.nationalgeographic.org/maps/united-states-regions/>
