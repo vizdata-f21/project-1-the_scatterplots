@@ -180,7 +180,6 @@ Links:
 ``` r
 # data wrangling
 # mutate new variable `regions` based off what region the city is located in
-
 parks_regions <- parks_q1 %>% 
   mutate(region = case_when(
          city %in% c("Boston", "Long Beach", "New York", "Philadelphia") ~
@@ -231,16 +230,11 @@ regions <- parks_regions %>%
 ### plot of mean spending per resident with respect to mean of median park size over time
 
 ggplot(data = parks_regions, 
-       aes(x = year, 
-           y = mean_spend, 
-           group = region)) + 
-  geom_line(aes(size = mean_med_size, 
-                color = region), 
-            lineend = "round", 
+       aes(x = year, y = mean_spend, group = region)) + 
+  geom_line(aes(size = mean_med_size, color = region), lineend = "round", 
             show.legend = FALSE) + 
   geom_text_repel(data = regions, 
-                  aes(label = region, 
-                      color = region), 
+                  aes(label = region, color = region), 
                   show.legend = FALSE, 
                   nudge_y = 5, 
                   nudge_x = -1.75,
@@ -250,6 +244,7 @@ ggplot(data = parks_regions,
                                 "#3b5c75", 
                                 "#4f3e23", 
                                 "#8999b0")) + 
+  scale_y_continuous(breaks = seq(from = 0, to = 180, by = 20)) + 
   labs(title = "Mean Spending per Resident Over Time with Respect to Mean of Median Park Size", 
          subtitle = "by US Region",
          x = "Year", 
@@ -330,7 +325,7 @@ In order to answer this question, we created a map of the United States
 with the top and bottom 10 ranked cities’ parks scaled by parkland to
 get a sense of both the geographic distribution of the top and bottom 10
 cities, but also how the top and bottom deciles and geographic regions
-vary by percentage of city that is parkland. A map was the obviosu
+vary by percentage of city that is parkland. A map was the obvious
 choice for this analysis at it is the most intuitive way to visualize
 spatial data in a manner familiar to most audiences.
 
@@ -414,7 +409,7 @@ ggplot() +
 <img src="README_files/figure-gfm/question-2-vis-1-1.png" width="90%" />
 
 ``` r
-# data wrangling
+### data wrangling
 
 #creating a total amenities variable
 parks_2020_coords <- parks_2020_coords %>%
@@ -428,7 +423,7 @@ parks_amenities <- parks_2020_coords %>%
   mutate(city = ifelse(city == "Charlotte/Mecklenburg County", "Charlotte", city),
          city_n = paste0("#", rank, " ", city))
 
-# plot of amenities 
+### plot of amenities 
 
 ggplot(data = parks_amenities, mapping = aes(y = reorder(city_n, -rank))) + 
   geom_bar(stat = "identity", mapping = aes(x = value, fill = amenity)) +
@@ -446,11 +441,39 @@ ggplot(data = parks_amenities, mapping = aes(y = reorder(city_n, -rank))) +
 
 ### Discussion
 
-(1-3 paragraphs) In the Discussion section, interpret the results of
-your analysis. Identify any trends revealed (or not revealed) by the
-plots. Speculate about why the data looks the way it does.
+As you can clearly see in the map visualization of the United States
+illustrating where the top and bottom 10 ranked cities’ parks lie, the
+top 10 cities’ parks clearly have a higher % of parkland than the bottom
+10 cities. This is exactly what we would’ve hypothesized, as cities that
+have a larger % of parkland would likely have more amenities, spend per
+resident, and more. It was also interesting to see where the top and
+bottom deciles geographic distributions were. As you can see from the
+chart, all 10 of the bottom ranked cities’ were basically all in the
+southern part of the US, while the top ranked cities’ are all in the
+northern part of the US and California. We believe that this could imply
+that local goverments in the north of the US are likely more dedicated
+to creating higher quality parks compared to parks in the south.
 
-For the second question, our first visualization
+For the stacked bar plot of three key amenities within the top and
+bottom 10 cities’ parks, you can also see that the total amenities per
+10,000 residents is pretty significantly higher overall for the top 10
+cities. This is definitely what we hypothesized, as we would expect
+parks that most would consider higher quality to have more restrooms,
+playgrounds, and basketball courts on average. This also correlates to
+our findings in the map visualization, as the top ranked charts have a
+higher % of parkland (on average), therefore we would hypothesis that
+they’d be more likely to have more total amenities.
+
+The amenity that stood out the most was the number of restrooms, as you
+can see that restrooms per 10,000 residents for the top 10 ranked cities
+are significantly higher than those in the bottom 10 cities. This is not
+suprising, as higher quality that likely have more parkland overall
+should have more restrooms, but what was surprising to our group was
+that the difference in the number of restrooms was so much more
+significantly higher than basketball courts and playgrounds. This could
+be explained, however, as people may not be likely to use a park
+bathroom, so higher quality parks would have significantly more
+bathrooms, as people would be more likely to use it.
 
 ## Presentation
 
