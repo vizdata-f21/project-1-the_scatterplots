@@ -26,6 +26,7 @@ library(gganimate)
 library(gifski)
 library(png)
 library(xaringanthemer)
+library(ggrepel)
 
 ```
 
@@ -67,17 +68,148 @@ class: inverse, middle, center
 
 ---
 
-### How many amenities do parks with the top 10 and bottom 10 rankings in 2020 have and how does this vary based on what proportion of the top 10 and bottom 10 cities’ land is parkland in 2020?
+### What is the relationship between spending per resident and park size in different U.S. regions and/or cities over time?
 
-- point 1
+--
 
-- point 2
+- Focus in cities that had spending data for each year from 2012 to 2020.
+
+--
+
+- Metrics of interest: spending per resident, median park size, U.S. Cities and their regions.
+
+--
+
+- Types of plots:
+    - annotated scatter plot 
+    - line chart over time
+
+---
+
 
 ---
 
 # Question 1
 
-```{r plots-1}
+```{r question-1-plot-1, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 0.1, fig.width = 10}
+parks_q1 <- parks %>%
+  select(year, city, spend_per_resident_data) %>% 
+  mutate(across(starts_with("spend_per_resident_data"), ~gsub("\\$", "", .) 
+                  %>% as.numeric)) %>% 
+  pivot_wider(names_from = "year", 
+              values_from = "spend_per_resident_data") %>% 
+  drop_na() %>% #this is where we lose it 
+  pivot_longer(cols = starts_with("20"),
+               names_to = "year", 
+               values_to = "spend_per_resident") 
+
+#making the year variable numeric so we can join med_park_size_data back 
+parks_q1 <- parks_q1 %>% 
+  mutate(year = as.numeric(year))
+
+
+#joining based on city and year to include med_park_size_data in the dataset
+parks_q1 <- parks %>% 
+  select(city, year, med_park_size_data) %>% 
+  right_join(parks_q1, by = c("city","year")) 
+
+#creating quartile bins for spending per resident, ranges based on five number summary
+parks_q1 <- parks_q1 %>% 
+  arrange(city) %>% 
+  mutate(spending = case_when(
+    between(spend_per_resident, 0, 62) ~ "1st quartile",
+    between(spend_per_resident, 63, 94) ~ "2nd quartile",
+    between(spend_per_resident, 95, 134) ~ "3rd quartile",
+    TRUE ~ "4th quartile"
+  ))
+
+#creating quartile bins for median park size, ranges based on five number summary
+  parks_q1 <- parks_q1 %>% 
+    mutate(size = case_when(
+    between(med_park_size_data, 0, 3.0) ~ "1st quartile",
+    between(med_park_size_data, 3.01, 4.8) ~ "2nd quartile",
+    between(med_park_size_data, 4.81, 7.3) ~ "3rd quartile",
+    TRUE ~ "4th quartile"
+  )) 
+
+### plot of median park size vs spending per resident over time
+  
+q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data, 
+                               group = city)) + 
+        geom_point(aes(size = size, color = spending)) +   
+        labs(title = "Median Park Size vs. Spending Per Resident from 2012-2020 in 37 U.S. Cities",
+             subtitle = "Year: {frame_time}",
+             x = "Spending per Resident (USD)", 
+             y = "Median Park Size (acres)", 
+             size = "Park Size", 
+             caption = "Quartiles for spending are $0-$62, $63-$94, $95-$134, and $135+ for 1st to 4th quartiles, respectively. 
+Quartiles for size are 0-3.2 acres, 3.2-5.0 acres, 5.0-7.7 acres, 7.7+ acres for 1st to 4th quartiles respectively.",
+             color = "Spending") +
+        theme_minimal()+
+        theme(plot.caption = element_text(size = 8, hjust = 0), 
+              plot.title = element_text(size = 12), 
+              legend.key.size = unit(.65, 'cm'), 
+              legend.position = c(.9,.6)) +
+        scale_x_continuous(breaks = seq(from = 0, to = 400, by = 50)) + 
+        scale_y_continuous(breaks = seq(from = 0, to = 20, by = 5)) +
+        scale_color_manual(values = c("#8999b0","#738148","#7c5d2d","#447aab")) +
+        transition_time(as.integer(year), range = c(2012L, 2020L))
+
+animate(q1_plot, duration = 18)
+```
+
+---
+# Question 1 
+```{r question 1 plot 2, echo = FALSE, warning = FALSE, message = FALSE, fig.width = 10}
+parks_regions <- parks_q1 %>% 
+  mutate(region = case_when(
+         city %in% c("Boston", "Long Beach", "New York", "Philadelphia") ~
+           "Northeast", 
+         city %in% c("Atlanta", "Baltimore", "Jacksonville", "Louisville", 
+                    "Memphis", "Nashville", "Virginia Beach") ~ "Southeast", 
+         city %in% c("Chicago", "Columbus", "Detroit", "Kansas City", 
+                     "Milwaukee") ~ "Midwest", 
+         city %in% c("Albuquerque", "Austin", "Dallas", "El Paso", 
+                     "Fort Worth", "Houston", "Mesa", "Oklahoma City",
+                     "Phoenix", "San Antonio", "Tucson") ~ "Southwest", 
+         city %in% c("Denver", "Fresno", "Las Vegas", "Los Angeles", 
+                     "Portland", "Sacramento", "San Diego", "San Francisco", 
+                     "San Jose", "Seattle") ~ "West"))
+
+#group by region and year, then summarize mean of spending per resident and median park size 
+parks_regions <- parks_regions %>% 
+  group_by(region, year) %>% 
+  summarize(mean_spend = mean(spend_per_resident), 
+            mean_med_size = mean(med_park_size_data))
+
+#create a simplified data set to annotate 
+regions <- parks_regions %>%
+  count(year, region, mean_spend) %>%
+  filter(year == 2019)
+
+### plot of mean spending per resident with respect to mean of median park size over time
+
+ggplot(data = parks_regions, 
+       aes(x = year, y = mean_spend, group = region)) + 
+  geom_line(aes(size = mean_med_size, color = region), lineend = "round", 
+            show.legend = FALSE) + 
+  geom_text_repel(data = regions, 
+                  aes(label = region, color = region), 
+                  show.legend = FALSE, 
+                  nudge_y = 5, 
+                  nudge_x = -1.75,
+                  hjust = -.5) + 
+  scale_color_manual(values = c("#738148", 
+                                "#bc8a31", 
+                                "#3b5c75", 
+                                "#4f3e23", 
+                                "#8999b0")) + 
+  scale_y_continuous(breaks = seq(from = 0, to = 180, by = 20)) + 
+  labs(title = "Mean Spending per Resident Over Time with Respect to Mean of Median Park Size", 
+         subtitle = "by US Region",
+         x = "Year", 
+         y = "Mean Spending Per Resident (in USD)") + 
+  theme_minimal()
 ```
 
 ---
@@ -87,8 +219,8 @@ class: inverse, middle, center
 # Question 2
 
 ---
+### How many amenities do parks with the top 10 and bottom 10 rankings in 2020 have and how does this vary based on what proportion of the top 10 and bottom 10 cities’ land is parkland in 2020?
 
-### What is the relationship between spending per resident and park size in different U.S. regions and/or cities over time?
 
 --
 
