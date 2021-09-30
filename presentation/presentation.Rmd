@@ -89,7 +89,7 @@ class: inverse, middle, center
 
 # Question 1
 
-```{r question-1-plot-1, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 0.1, fig.width = 10}
+```{r question-1-plot-1, echo = FALSE, warning = FALSE, message = FALSE}
 parks_q1 <- parks %>%
   select(year, city, spend_per_resident_data) %>% 
   mutate(across(starts_with("spend_per_resident_data"), ~gsub("\\$", "", .) 
@@ -207,7 +207,8 @@ ggplot(data = parks_regions,
          subtitle = "by US Region",
          x = "Year", 
          y = "Mean Spending Per Resident (in USD)") + 
-  theme_minimal()
+  theme(text = element_text(size = 18)) + 
+  theme_minimal() 
 ```
 
 ---
