@@ -160,7 +160,7 @@ animate(q1_plot, duration = 18, width = 8, height = 5, units = "in", res = 300)
 
 ---
 # Question 1
-```{r question 1 plot 2, echo = FALSE, warning = FALSE, message = FALSE, fig.width = 10}
+```{r question 1 plot 2, echo = FALSE, warning = FALSE, message = FALSE}
 parks_regions <- parks_q1 %>%
   mutate(region = case_when(
          city %in% c("Boston", "Long Beach", "New York", "Philadelphia") ~
@@ -207,16 +207,10 @@ ggplot(data = parks_regions,
   scale_y_continuous(breaks = seq(from = 0, to = 180, by = 20)) +
   labs(title = "Mean Spending per Resident Over Time with Respect to Mean of Median Park Size",
          subtitle = "by US Region",
-<<<<<<< HEAD
          x = "Year",
          y = "Mean Spending Per Resident (in USD)") +
-  theme_minimal()
-=======
-         x = "Year", 
-         y = "Mean Spending Per Resident (in USD)") + 
   theme(text = element_text(size = 18)) + 
   theme_minimal() 
->>>>>>> 413e726b6d96f7dc986eea49df57e795fb8d950d
 ```
 
 ---
