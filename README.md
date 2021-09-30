@@ -484,9 +484,7 @@ dataset, GitHub, viewed 23 September 2021,
 
 ## References
 
-List any references here. You should, at a minimum, list your data
-source.
-
+  - <https://www.tpl.org/parks-and-an-equitable-recovery-parkscore-report>
   - <https://github.com/thomasp85/gganimate/wiki/Animation-Composition>
   - <https://cran.r-project.org/web/packages/gganimate/gganimate.pdf>
   - <https://gganimate.com/>
