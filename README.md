@@ -464,8 +464,7 @@ amenities per resident.
 The number of restrooms was interesting because the number of restrooms
 per 10,000 residents for the top 10 ranked cities is significantly
 higher than those in the bottom 10 cities. This makes sense, because
-higher quality parks should have more restrooms. *add something about
-basketball + playgrounds*
+higher quality parks should have more restrooms.
 
 ## Presentation
 
