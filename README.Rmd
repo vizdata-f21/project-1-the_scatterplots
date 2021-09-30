@@ -174,25 +174,10 @@ Quartiles for size are 0-3.2 acres, 3.2-5.0 acres, 5.0-7.7 acres, 7.7+ acres for
 animate(q1_plot, duration = 18)
 ```
 
-Links: 
-https://github.com/thomasp85/gganimate/wiki/Animation-Composition
-https://cran.r-project.org/web/packages/gganimate/gganimate.pdf
-https://gganimate.com/
-https://www.datanovia.com/en/blog/gganimate-how-to-create-plots-with-beautiful-animation-in-r/
-http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html
-https://ropensci.org/blog/2018/07/23/gifski-release/
-https://gif.ski/
-https://github.com/r-rust/gifski
-https://gganimate.com/articles/gganimate.html#rendering-1
-https://stackoverflow.com/questions/52899017/slow-down-gganimate-in-r
-
 ```{r question-1-vis-2}
 # data wrangling
 # mutate new variable `regions` based off what region the city is located in
-<<<<<<< HEAD
-=======
 
->>>>>>> 3479b03cbcb068b7fd12d055fae3381db6241d77
 parks_regions <- parks_q1 %>% 
   mutate(region = case_when(
          city %in% c("Boston", "Long Beach", "New York", "Philadelphia") ~
@@ -404,7 +389,6 @@ parks_amenities <- parks_2020_coords %>%
          city_n = paste0("#", rank, " ", city))
 
 ### plot of amenities 
-
 ggplot(data = parks_amenities, mapping = aes(y = reorder(city_n, -rank))) + 
   geom_bar(stat = "identity", mapping = aes(x = value, fill = amenity)) +
   geom_hline(yintercept = 10.5, linetype = "dashed", color = "#322718") + 
@@ -447,7 +431,11 @@ courts. This trend also correlates with our conclusion from the United States
 map visualization because the top 10 cities have a higher percentage of parkland 
 and more amenities per resident. 
 
-The amenity that stood out the most was the number of restrooms, as you can see that restrooms per 10,000 residents for the top 10 ranked cities are significantly higher than those in the bottom 10 cities. This is not suprising, as higher quality that likely have more parkland overall should have more restrooms, but what was surprising to our group was that the difference in the number of restrooms was so much more significantly higher than basketball courts and playgrounds. This could be explained, however, as people may not be likely to use a park bathroom, so higher quality parks would have significantly more bathrooms, as people would be more likely to use it. 
+The number of restrooms was interesting because the number of restrooms per 
+10,000 residents for the top 10 ranked cities is significantly higher than those 
+in the bottom 10 cities. This makes sense, because higher quality parks should 
+have more restrooms.
+*add something about basketball + playgrounds* 
 
 ## Presentation
 
