@@ -91,7 +91,7 @@ class: inverse, middle, center
 
 # Question 1
 
-```{r question-1-plot-1, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 0.1, fig.width = 10}
+```{r question-1-plot-1, echo = FALSE, warning = FALSE, message = FALSE}
 parks_q1 <- parks %>%
   select(year, city, spend_per_resident_data) %>% 
   mutate(across(starts_with("spend_per_resident_data"), ~gsub("\\$", "", .) 
@@ -155,60 +155,60 @@ Quartiles for size are 0-3.2 acres, 3.2-5.0 acres, 5.0-7.7 acres, 7.7+ acres for
         scale_color_manual(values = c("#8999b0","#738148","#7c5d2d","#447aab")) +
         transition_time(as.integer(year), range = c(2012L, 2020L))
 
-animate(q1_plot, duration = 18)
+animate(q1_plot, duration = 18, width = 8, height = 5, units = "in", res = 300)
 ```
 
 ---
-# Question 1 
+# Question 1
 ```{r question 1 plot 2, echo = FALSE, warning = FALSE, message = FALSE, fig.width = 10}
-parks_regions <- parks_q1 %>% 
+parks_regions <- parks_q1 %>%
   mutate(region = case_when(
          city %in% c("Boston", "Long Beach", "New York", "Philadelphia") ~
-           "Northeast", 
-         city %in% c("Atlanta", "Baltimore", "Jacksonville", "Louisville", 
-                    "Memphis", "Nashville", "Virginia Beach") ~ "Southeast", 
-         city %in% c("Chicago", "Columbus", "Detroit", "Kansas City", 
-                     "Milwaukee") ~ "Midwest", 
-         city %in% c("Albuquerque", "Austin", "Dallas", "El Paso", 
+           "Northeast",
+         city %in% c("Atlanta", "Baltimore", "Jacksonville", "Louisville",
+                    "Memphis", "Nashville", "Virginia Beach") ~ "Southeast",
+         city %in% c("Chicago", "Columbus", "Detroit", "Kansas City",
+                     "Milwaukee") ~ "Midwest",
+         city %in% c("Albuquerque", "Austin", "Dallas", "El Paso",
                      "Fort Worth", "Houston", "Mesa", "Oklahoma City",
-                     "Phoenix", "San Antonio", "Tucson") ~ "Southwest", 
-         city %in% c("Denver", "Fresno", "Las Vegas", "Los Angeles", 
-                     "Portland", "Sacramento", "San Diego", "San Francisco", 
+                     "Phoenix", "San Antonio", "Tucson") ~ "Southwest",
+         city %in% c("Denver", "Fresno", "Las Vegas", "Los Angeles",
+                     "Portland", "Sacramento", "San Diego", "San Francisco",
                      "San Jose", "Seattle") ~ "West"))
 
-#group by region and year, then summarize mean of spending per resident and median park size 
-parks_regions <- parks_regions %>% 
-  group_by(region, year) %>% 
-  summarize(mean_spend = mean(spend_per_resident), 
+#group by region and year, then summarize mean of spending per resident and median park size
+parks_regions <- parks_regions %>%
+  group_by(region, year) %>%
+  summarize(mean_spend = mean(spend_per_resident),
             mean_med_size = mean(med_park_size_data))
 
-#create a simplified data set to annotate 
+#create a simplified data set to annotate
 regions <- parks_regions %>%
   count(year, region, mean_spend) %>%
   filter(year == 2019)
 
 ### plot of mean spending per resident with respect to mean of median park size over time
 
-ggplot(data = parks_regions, 
-       aes(x = year, y = mean_spend, group = region)) + 
-  geom_line(aes(size = mean_med_size, color = region), lineend = "round", 
-            show.legend = FALSE) + 
-  geom_text_repel(data = regions, 
-                  aes(label = region, color = region), 
-                  show.legend = FALSE, 
-                  nudge_y = 5, 
+ggplot(data = parks_regions,
+       aes(x = year, y = mean_spend, group = region)) +
+  geom_line(aes(size = mean_med_size, color = region), lineend = "round",
+            show.legend = FALSE) +
+  geom_text_repel(data = regions,
+                  aes(label = region, color = region),
+                  show.legend = FALSE,
+                  nudge_y = 5,
                   nudge_x = -1.75,
-                  hjust = -.5) + 
-  scale_color_manual(values = c("#738148", 
-                                "#bc8a31", 
-                                "#3b5c75", 
-                                "#4f3e23", 
-                                "#8999b0")) + 
-  scale_y_continuous(breaks = seq(from = 0, to = 180, by = 20)) + 
-  labs(title = "Mean Spending per Resident Over Time with Respect to Mean of Median Park Size", 
+                  hjust = -.5) +
+  scale_color_manual(values = c("#738148",
+                                "#bc8a31",
+                                "#3b5c75",
+                                "#4f3e23",
+                                "#8999b0")) +
+  scale_y_continuous(breaks = seq(from = 0, to = 180, by = 20)) +
+  labs(title = "Mean Spending per Resident Over Time with Respect to Mean of Median Park Size",
          subtitle = "by US Region",
-         x = "Year", 
-         y = "Mean Spending Per Resident (in USD)") + 
+         x = "Year",
+         y = "Mean Spending Per Resident (in USD)") +
   theme_minimal()
 ```
 
@@ -292,13 +292,13 @@ ggplot() +
             aes(x = longitude, y = latitude, label = paste0("#",rank)),
             size = 3.5, vjust = 1.8, family = "bold") +
   scale_size_continuous(labels = scales::percent) +
-  scale_color_manual(values = c("#bc8a31", "#315d1b")) + 
+  scale_color_manual(values = c("#bc8a31", "#315d1b")) +
   labs(x = NULL, y = NULL, size = "% of city that\nis parkland",
        title = "Top and bottom 10 city rankings of parks",
        subtitle = "scaled by % of city that is parkland") +
-  coord_map() + 
+  coord_map() +
   theme_void() +
-  guides(color = "none") + 
+  guides(color = "none") +
   theme(legend.position = c(.92,.3),
         plot.title = element_text(hjust = 0.1),
         plot.subtitle = element_text(hjust = 0.1))
@@ -323,17 +323,17 @@ parks_amenities <- parks_2020_coords %>%
   mutate(city = ifelse(city == "Charlotte/Mecklenburg County", "Charlotte", city),
          city_n = paste0("#", rank, " ", city))
 
-### plot of amenities 
+### plot of amenities
 
-ggplot(data = parks_amenities, mapping = aes(y = reorder(city_n, -rank))) + 
+ggplot(data = parks_amenities, mapping = aes(y = reorder(city_n, -rank))) +
   geom_bar(stat = "identity", mapping = aes(x = value, fill = amenity)) +
-  geom_hline(yintercept = 10.5, linetype = "dashed", color = "#322718") + 
+  geom_hline(yintercept = 10.5, linetype = "dashed", color = "#322718") +
   guides(fill = guide_legend(reverse = TRUE)) +
   labs(title = "Top and bottom 10 city rankings by amenities",
        x = "Total Amenities per 10K  Residents", y = NULL, fill = "Amenities") +
   scale_fill_manual(values = c("#bc8a31", "#738148", "#3b5c75"),
-                    labels = c("Basketball Courts", "Playgrounds", "Restrooms")) + 
-  theme_minimal() + 
+                    labels = c("Basketball Courts", "Playgrounds", "Restrooms")) +
+  theme_minimal() +
   theme(legend.position = c(0.8,0.2))
 ```
 
@@ -389,7 +389,7 @@ or text in two columns $^*$
 ## Plots
 
 ```{r recode-species, echo = FALSE}
-# In this chunk I'm doing a bunch of analysis that I don't want to present 
+# In this chunk I'm doing a bunch of analysis that I don't want to present
 # in my slides. But I need the resulting data frame for a plot I want to present.
 
 ```
@@ -479,7 +479,7 @@ class: inverse, middle, center
 
 - You are welcomed to use the default styling of the slides. In fact, that's what I expect majority of you will do. You will differentiate yourself with the content of your presentation.
 
-- But some of you might want to play around with slide styling. The 
+- But some of you might want to play around with slide styling. The
 `xaringanthemer` provides some solutions for this that: https://pkg.garrickadenbuie.com/xaringanthemer.
 
 - And if you want more bells and whistles, there is also `xaringanExtra`: https://pkg.garrickadenbuie.com/xaringanExtra.
