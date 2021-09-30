@@ -440,8 +440,6 @@ The Trust for Public Land 2020, *2020 Park Score Index*, electronic dataset, Git
 
 List any references here. You should, at a minimum, list your data source.
 
-###ADD DATA SOURCE
-
 - https://github.com/thomasp85/gganimate/wiki/Animation-Composition
 - https://cran.r-project.org/web/packages/gganimate/gganimate.pdf
 - https://gganimate.com/
@@ -452,3 +450,4 @@ List any references here. You should, at a minimum, list your data source.
 - https://github.com/r-rust/gifski
 - https://gganimate.com/articles/gganimate.html#rendering-1
 - https://stackoverflow.com/questions/52899017/slow-down-gganimate-in-r
+- https://www.nationalgeographic.org/maps/united-states-regions/
