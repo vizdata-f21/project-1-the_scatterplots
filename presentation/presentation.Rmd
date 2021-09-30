@@ -206,7 +206,7 @@ ggplot(data = parks_regions,
   geom_text_repel(data = regions,
                   aes(label = region, color = region),
                   show.legend = FALSE,
-                  nudge_y = 5,
+                  nudge_y = 9,
                   nudge_x = -1.75,
                   hjust = -.5) +
   scale_color_manual(values = c("#738148",
