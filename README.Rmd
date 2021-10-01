@@ -409,10 +409,9 @@ a visually higher percentage of city land dedicated to parks than the
 lowest-ranked cities in the dataset. This conclusion is in line with our initial
 hypothesis. We expected cities with a high overall score, calculated by the 
 number of amenities per 10k residents, median park size, spending per resident, 
-etc., to also have more city land dedicated to public parks. This assumption 
-was on the grounds that a monetary dedication to public parks would result in a
-zoning dedication as well. The geographic distribution of the 20 cities we plotted 
-also provided interesting observations. The 10 cities with the lowest scores were 
+etc., to also have more city land dedicated to public parks. The geographic 
+distribution of the 20 cities we plotted also provided interesting observations. 
+The 10 cities with the lowest scores were 
 all in the South and Southeast regions of the United States. The top 10 cities
 in 2020 are all in the Northeast, Midwest, and the state of  California. 
 We assume that this might imply that local governments in these regions and state 
