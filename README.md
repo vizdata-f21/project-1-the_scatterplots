@@ -501,3 +501,4 @@ dataset, GitHub, viewed 23 September 2021,
   - <https://gganimate.com/articles/gganimate.html#rendering-1>
   - <https://stackoverflow.com/questions/52899017/slow-down-gganimate-in-r>
   - <https://www.nationalgeographic.org/maps/united-states-regions/>
+  - <https://colorpalette.org/nature-wilderness-vegetation-color-palette-4/>
