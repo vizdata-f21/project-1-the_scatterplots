@@ -439,17 +439,15 @@ overall score, calculated by the number of amenities per 10k residents,
 median park size, spending per resident, etc., to also have more city
 land dedicated to public parks. This assumption was on the grounds that
 a monetary dedication to public parks would result in a zoning
-dedication as well.
-
-The geographic distribution of the 20 cities we plotted also provided
-interesting observations. The 10 cities with the lowest scores were all
-in the South and Southeast regions of the United States. The top 10
-cities in 2020 are all in the Northeast, Midwest, and California. We
-assume that this might imply that local governments in these regions are
-more invested in creating higher-quality parks for their residents.
-Another possibility is that the Northeast, Midwest, and California
-cities have a wealthier tax base and can invest more tax-payer money
-into public parks.
+dedication as well. The geographic distribution of the 20 cities we
+plotted also provided interesting observations. The 10 cities with the
+lowest scores were all in the South and Southeast regions of the United
+States. The top 10 cities in 2020 are all in the Northeast, Midwest, and
+the state of California. We assume that this might imply that local
+governments in these regions and state are more invested in creating
+higher-quality parks for their residents. Another possibility is that
+the Northeast, Midwest, and California cities have a wealthier tax base
+and can invest more tax-payer money into public parks.
 
 The stacked bar plot highlights three critical amenities for the top 10
 and bottom 10 cities in 2020. In general, total amenities per 10K
@@ -459,12 +457,20 @@ higher-quality public parks will have more amenities, particularly
 restrooms, playgrounds, and basketball courts. This trend also
 correlates with our conclusion from the United States map visualization
 because the top 10 cities have a higher percentage of parkland and more
-amenities per resident.
+amenities per 10K residents.
 
-The number of restrooms was interesting because the number of restrooms
-per 10,000 residents for the top 10 ranked cities is significantly
-higher than those in the bottom 10 cities. This makes sense, because
-higher quality parks should have more restrooms.
+The number of restrooms provided a striking observation because the
+number of restrooms per 10,000 residents for the top 10 ranked cities is
+significantly higher than those in the bottom 10 cities. This makes
+sense, because higher quality parks should have more restrooms.
+Additionally, the top 10 cities have more playgrounds and basketball
+courts per resident, which makes sense because the number of ameneties
+is a factor in determining rank. The sheer number of basketball courts
+per 10K residents in Irvine is visually impressive. The three amenities
+selected for this plot (restrooms, playground, and basketball courts)
+represent three commonly used park amenities. This plot highlights the
+difference among these 20 cities in terms of monetary investment in
+amenity-filled public city parks.
 
 ## Presentation
 

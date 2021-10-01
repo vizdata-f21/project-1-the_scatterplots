@@ -427,12 +427,18 @@ aligns with our prior assumptions because logically, higher-quality public parks
 will have more amenities, particularly restrooms, playgrounds, and basketball 
 courts. This trend also correlates with our conclusion from the United States 
 map visualization because the top 10 cities have a higher percentage of parkland 
-and more amenities per resident. 
+and more amenities per 10K residents. 
 
-The number of restrooms was interesting because the number of restrooms per 
-10,000 residents for the top 10 ranked cities is significantly higher than those 
-in the bottom 10 cities. This makes sense, because higher quality parks should 
-have more restrooms.
+The number of restrooms provided a striking observation because the number of 
+restrooms per 10,000 residents for the top 10 ranked cities is significantly 
+higher than those in the bottom 10 cities. This makes sense, because higher 
+quality parks should have more restrooms. Additionally, the top 10 cities have 
+more playgrounds and basketball courts per resident, which makes sense because 
+the number of ameneties is a factor in determining rank. The sheer number of 
+basketball courts per 10K residents in Irvine is visually impressive. The three 
+amenities selected for this plot (restrooms, playground, and basketball courts) 
+represent three commonly used park amenities. This plot highlights the difference
+among these 20 cities in terms of monetary investment in amenity-filled public city parks.  
 
 ## Presentation
 
