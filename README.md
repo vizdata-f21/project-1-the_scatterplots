@@ -474,7 +474,9 @@ amenity-filled public city parks.
 
 ## Presentation
 
-Our presentation can be found [here](presentation/presentation.html).
+Our presentation can be found
+[here](https://labs-az-14.oit.duke.edu:30051/files/R/project-1-the_scatterplots/presentation/presentation.html#1)
+and the code can be found [here](presentation/presentation.html).
 
 ## Data
 
