@@ -392,7 +392,7 @@ line_plot <- ggplot(parks_2020_coords, aes(x = as.numeric(str_extract(park_pct_c
         panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank(),
         axis.title.y = element_blank())
 
-grid.arrange(map_plot, line_plot, nrow=2, heights=c(5, 2))
+grid.arrange(map_plot, line_plot, nrow = 2, heights = c(5, 2))
 ```
 
 ```{r question-2-vis-2, message = FALSE}

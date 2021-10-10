@@ -376,7 +376,11 @@ map_plot <- ggplot() +
   geom_text(data = parks_2020_coords %>% filter(updown == "down"),
             aes(x = longitude, y = latitude, label = paste0("#",rank)),
             size = 3.5, vjust = 1.8, family = "bold") +
+<<<<<<< HEAD
   scale_color_manual(values = c("#8dae98", "#322718")) + 
+=======
+  scale_color_manual(values = c("#322718", "#8dae98")) + 
+>>>>>>> a6c5c2231d44ed86c34001c0f652b580e33fc942
   labs(x = NULL, y = NULL, color = "Top/Bottom\nRanking",
        title = "Top and bottom 10 city rankings of parks") +
   coord_map() + 
@@ -389,7 +393,11 @@ line_plot <- ggplot(parks_2020_coords, aes(x = as.numeric(str_extract(park_pct_c
                               y = y_height, color = rank_div)) +
   geom_point(size = 5, show.legend = FALSE) + 
   geom_text(aes(label = paste0("#",rank)), color = "black", vjust = -1) +
+<<<<<<< HEAD
   scale_color_manual(values = c("#8dae98", "#322718")) + 
+=======
+  scale_color_manual(values = c("#322718", "#8dae98")) + 
+>>>>>>> a6c5c2231d44ed86c34001c0f652b580e33fc942
   ylim(-1.5, 1.5) + 
   scale_x_continuous(labels = scales::percent, limits = c(0, .25)) +
   labs(x = "% of city that is parkland") + 
@@ -398,7 +406,7 @@ line_plot <- ggplot(parks_2020_coords, aes(x = as.numeric(str_extract(park_pct_c
         panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank(),
         axis.title.y = element_blank())
 
-grid.arrange(map_plot, line_plot, nrow=2, heights=c(5, 2))
+grid.arrange(map_plot, line_plot, nrow = 2, heights = c(5, 2))
 ```
 
     ## Warning: Removed 1 rows containing missing values (geom_point).
