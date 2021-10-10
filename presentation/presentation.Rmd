@@ -221,10 +221,6 @@ ggplot(data = parks_regions,
          y = "Mean Spending Per Resident (in USD)") +
   theme(text = element_text(size = 18)) + 
   theme_minimal() 
-<<<<<<< HEAD
-=======
-
->>>>>>> 78aad82d45b9294fe088f7284c1fad39459430b4
 ```
 
 ---
