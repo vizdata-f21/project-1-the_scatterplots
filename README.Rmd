@@ -362,13 +362,12 @@ ggplot() +
             size = 3.5, vjust = 1.8, family = "bold") +
   scale_size_continuous(labels = scales::percent) +
   scale_color_manual(values = c("#bc8a31", "#315d1b")) + 
-  labs(x = NULL, y = NULL, size = "% of city that\nis parkland",
+  labs(x = NULL, y = NULL, size = "% of city\nthat is parkland", color = "ranking",
        title = "Top and bottom 10 city rankings of parks",
        subtitle = "scaled by % of city that is parkland") +
   coord_map() + 
-  theme_void() +
-  guides(color = "none") + 
-  theme(legend.position = c(.92,.3),
+  theme_void() + 
+  theme(legend.position = c(.918,.275), legend.key.size = unit(0.45, "cm"),
         plot.title = element_text(hjust = 0.1),
         plot.subtitle = element_text(hjust = 0.1))
 ```
