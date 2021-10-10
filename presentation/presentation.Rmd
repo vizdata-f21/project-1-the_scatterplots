@@ -206,7 +206,7 @@ ggplot(data = parks_regions,
   geom_text_repel(data = regions,
                   aes(label = region, color = region),
                   show.legend = FALSE,
-                  nudge_y = 5,
+                  nudge_y = 9,
                   nudge_x = -1.75,
                   hjust = -.5) +
   scale_color_manual(values = c("#738148",
@@ -215,13 +215,12 @@ ggplot(data = parks_regions,
                                 "#4f3e23",
                                 "#8999b0")) +
   scale_y_continuous(breaks = seq(from = 0, to = 180, by = 20)) +
-  labs(title = "Mean Spending per Resident Over Time with Respect to Mean of Median Park Size",
+  labs(title = "Mean Spending per Resident Over Time\n with Respect to Mean of Median Park Size",
          subtitle = "by US Region",
          x = "Year",
          y = "Mean Spending Per Resident (in USD)") +
   theme(text = element_text(size = 18)) + 
   theme_minimal() 
-
 ```
 
 ---
