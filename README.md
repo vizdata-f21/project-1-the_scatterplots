@@ -253,25 +253,24 @@ this hypothesis holds true for New York for example, as it is one of the
 cities that is in the 4th quartile for spending, but in the 1st quartile
 for median park size.
 
-For the line plot over time, we suspected there would be significant
-differences among regions, due to different natural geography, urban
-planning, and values placed on public parks. The plot confirmed this
-hypothesis. In 2012, the Midwest, Southeast, and Southwest all spent
-under $90 per resident on average. Over the next 8 years, the Midwest
-increased their spending by \~$30 on average, the Southeast increased
-their spending \~$20 per resident, and the Southwest had no substantial
-increase or decrease in spending. The Northeast and West stood out in
-2012 with regards to average spending. The Northeast spent \~$115 per
-resident and the West spent \~$160 per resident. By 2020, both the West
-and Northeast were spending between \~$170 and \~$180 per resident, on
-average. There are few significant changes in mean median park size,
-except for some fluctuation within the Northeast and an increase in the
-Midwest in 2014. From this plot, we can conclude that while the West and
-Northeast do not have the most acreage of public parks in their cities,
-they are spending more per resident. The overall increase in spending
-over time, for all five regions, tells us that local politicians have
-both had the means and the will to increase local park budgets over the
-past eight years.
+For the line plot over time, we suspected the five regions would have
+different trends, due to different natural geography, urban planning,
+and values placed on public parks. The plot confirmed this hypothesis.
+In 2012, the Midwest, Southeast, and Southwest all spent under $90 per
+resident on average. Over the next 8 years, the Midwest increased their
+spending by \~$30 on average, the Southeast increased their spending
+\~$20 per resident, and the Southwest had no substantial increase or
+decrease in spending. The Northeast and West stood out in 2012 with
+regards to average spending. The Northeast spent \~$115 per resident and
+the West spent \~$160 per resident. By 2020, both the West and Northeast
+were spending between \~$170 and \~$180 per resident, on average. There
+are few changes in mean median park size, except for some fluctuation
+within the Northeast and an increase in the Midwest in 2014. From this
+plot, we can conclude that while the West and Northeast do not have the
+most acreage of public parks in their cities, they are spending more per
+resident. The overall increase in spending over time, for all five
+regions, tells us that local politicians have both had the means and the
+will to increase local park budgets over the past eight years.
 
 ## How many amenities do parks with the top 10 and bottom 10 rankings in 2020 have and how does this vary based on what proportion of the top 10 and bottom 10 cities’ land is parkland in 2020?
 
@@ -296,12 +295,13 @@ cities’ respective land is parkland.
 ### Approach
 
 In order to answer this question, we created a map of the United States
-with the top and bottom 10 ranked cities’ parks scaled by parkland to
-get a sense of both the geographic distribution of the top and bottom 10
-cities, but also how the top and bottom deciles and geographic regions
-vary by percentage of city that is parkland. A map was the obvious
-choice for this analysis at it is the most intuitive way to visualize
-spatial data in a manner familiar to most audiences.
+with the top and bottom 10 ranked cities’ parks alongside the
+distribution of percentage of their parkland to get a sense of both the
+geographic distribution of the top and bottom 10 cities, but also how
+the top and bottom deciles and geographic regions vary by percentage of
+city that is parkland. A map was the obvious choice for this analysis at
+it is the most intuitive way to visualize spatial data in a manner
+familiar to most audiences.
 
 We also created a visualization of 3 key amenities within these top and
 bottom 10 city parks (basketball courts, playgrounds, and restrooms) in
@@ -342,6 +342,9 @@ parks_2020_coords <- left_join(parks_2020, cities, by = "city")
 parks_2020_coords <- parks_2020_coords %>%
   mutate(rank_div = ifelse(rank <= 10, "Top", "Bottom"))
 
+parks_2020_coords$rank_div <- factor(parks_2020_coords$rank_div, levels = c(
+  "Top", "Bottom"))
+
 #dodging overlapping points
 parks_2020_coords <- parks_2020_coords %>%
   mutate(longitude = case_when(rank == 1 ~ -93.5,
@@ -373,7 +376,7 @@ map_plot <- ggplot() +
   geom_text(data = parks_2020_coords %>% filter(updown == "down"),
             aes(x = longitude, y = latitude, label = paste0("#",rank)),
             size = 3.5, vjust = 1.8, family = "bold") +
-  scale_color_manual(values = c("#bc8a31", "#315d1b")) + 
+  scale_color_manual(values = c("#8dae98", "#322718")) + 
   labs(x = NULL, y = NULL, color = "Top/Bottom\nRanking",
        title = "Top and bottom 10 city rankings of parks") +
   coord_map() + 
@@ -386,7 +389,7 @@ line_plot <- ggplot(parks_2020_coords, aes(x = as.numeric(str_extract(park_pct_c
                               y = y_height, color = rank_div)) +
   geom_point(size = 5, show.legend = FALSE) + 
   geom_text(aes(label = paste0("#",rank)), color = "black", vjust = -1) +
-  scale_color_manual(values = c("#bc8a31", "#315d1b")) + 
+  scale_color_manual(values = c("#8dae98", "#322718")) + 
   ylim(-1.5, 1.5) + 
   scale_x_continuous(labels = scales::percent, limits = c(0, .25)) +
   labs(x = "% of city that is parkland") + 
@@ -438,15 +441,15 @@ ggplot(data = parks_amenities, mapping = aes(y = reorder(city_n, -rank))) +
 
 The United States map visualization illustrates the location of the top
 10 and bottom 10 ranked cities. This plot demonstrates that the cities
-ranked 1-10 have a visually higher percentage of city land dedicated to
-parks than the lowest-ranked cities in the dataset. This conclusion is
-in line with our initial hypothesis. We expected cities with a high
-overall score, calculated by the number of amenities per 10k residents,
-median park size, spending per resident, etc., to also have more city
-land dedicated to public parks. The geographic distribution of the 20
-cities we plotted also provided interesting observations. The 10 cities
-with the lowest scores were all in the South and Southeast regions of
-the United States. The top 10 cities in 2020 are all in the Northeast,
+ranked 1-10 have a higher percentage of city land dedicated to parks
+than the lowest-ranked cities in the dataset. This conclusion is in line
+with our initial hypothesis. We expected cities with a high overall
+score, calculated by the number of amenities per 10k residents, median
+park size, spending per resident, etc., to also have more city land
+dedicated to public parks. The geographic distribution of the 20 cities
+we plotted also provided interesting observations. The 10 cities with
+the lowest scores were all in the South and Southeast regions of the
+United States. The top 10 cities in 2020 are all in the Northeast,
 Midwest, and the state of California. We assume that this might imply
 that local governments in these regions and state are more invested in
 creating higher-quality parks for their residents. Another possibility

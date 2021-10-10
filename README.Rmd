@@ -336,6 +336,9 @@ parks_2020_coords <- left_join(parks_2020, cities, by = "city")
 parks_2020_coords <- parks_2020_coords %>%
   mutate(rank_div = ifelse(rank <= 10, "Top", "Bottom"))
 
+parks_2020_coords$rank_div <- factor(parks_2020_coords$rank_div, levels = c(
+  "Top", "Bottom"))
+
 #dodging overlapping points
 parks_2020_coords <- parks_2020_coords %>%
   mutate(longitude = case_when(rank == 1 ~ -93.5,
@@ -367,7 +370,7 @@ map_plot <- ggplot() +
   geom_text(data = parks_2020_coords %>% filter(updown == "down"),
             aes(x = longitude, y = latitude, label = paste0("#",rank)),
             size = 3.5, vjust = 1.8, family = "bold") +
-  scale_color_manual(values = c("#322718", "#8dae98")) + 
+  scale_color_manual(values = c("#8dae98", "#322718")) + 
   labs(x = NULL, y = NULL, color = "Top/Bottom\nRanking",
        title = "Top and bottom 10 city rankings of parks") +
   coord_map() + 
@@ -380,7 +383,7 @@ line_plot <- ggplot(parks_2020_coords, aes(x = as.numeric(str_extract(park_pct_c
                               y = y_height, color = rank_div)) +
   geom_point(size = 5, show.legend = FALSE) + 
   geom_text(aes(label = paste0("#",rank)), color = "black", vjust = -1) +
-  scale_color_manual(values = c("#322718", "#8dae98")) + 
+  scale_color_manual(values = c("#8dae98", "#322718")) + 
   ylim(-1.5, 1.5) + 
   scale_x_continuous(labels = scales::percent, limits = c(0, .25)) +
   labs(x = "% of city that is parkland") + 
