@@ -215,7 +215,7 @@ ggplot(data = parks_regions,
                                 "#4f3e23",
                                 "#8999b0")) +
   scale_y_continuous(breaks = seq(from = 0, to = 180, by = 20)) +
-  labs(title = "Mean Spending per Resident Over Time with Respect to Mean of Median Park Size",
+  labs(title = "Mean Spending per Resident Over Time\n with Respect to Mean of Median Park Size",
          subtitle = "by US Region",
          x = "Year",
          y = "Mean Spending Per Resident (in USD)") +
