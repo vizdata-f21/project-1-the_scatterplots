@@ -78,7 +78,7 @@ similar features to the Napoleon plot.
 ### Analysis
 
 ``` r
-### data wrangling
+# data wrangling
 # to remove the $ and change from a categorical variable to a numerical variable 
 # selected relevant variables, pivot wider to see what cities have data from every year
 # drop na's from cities that do not have spending data from every year
@@ -90,17 +90,17 @@ parks_q1 <- parks %>%
                   %>% as.numeric)) %>% 
   pivot_wider(names_from = "year", 
               values_from = "spend_per_resident_data") %>% 
-  drop_na() %>% #this is where we lose it 
+  drop_na() %>% 
   pivot_longer(cols = starts_with("20"),
                names_to = "year", 
                values_to = "spend_per_resident") 
 
-#making the year variable numeric so we can join med_park_size_data back 
+# making the year variable numeric so we can join med_park_size_data back 
 parks_q1 <- parks_q1 %>% 
   mutate(year = as.numeric(year))
 
 
-#joining based on city and year to include med_park_size_data in the dataset
+# joining based on city and year to include med_park_size_data in the dataset
 parks_q1 <- parks %>% 
   select(city, year, med_park_size_data) %>% 
   right_join(parks_q1, by = c("city","year")) 
@@ -117,26 +117,26 @@ fivenum(parks_q1$med_park_size_data)
     ## [1]  0.8  3.0  4.8  7.3 16.7
 
 ``` r
-#creating quartile bins for spending per resident, ranges based on five number summary
+# creating quartile bins for spending per resident, ranges based on five number summary
 parks_q1 <- parks_q1 %>% 
   arrange(city) %>% 
   mutate(spending = case_when(
     between(spend_per_resident, 0, 62) ~ "1st quartile",
     between(spend_per_resident, 63, 94) ~ "2nd quartile",
     between(spend_per_resident, 95, 134) ~ "3rd quartile",
-    TRUE ~ "4th quartile"
+     TRUE ~ "4th quartile"
   ))
 
-#creating quartile bins for median park size, ranges based on five number summary
+# creating quartile bins for median park size, ranges based on five number summary
   parks_q1 <- parks_q1 %>% 
     mutate(size = case_when(
-    between(med_park_size_data, 0, 3.0) ~ "1st quartile",
-    between(med_park_size_data, 3.01, 4.8) ~ "2nd quartile",
-    between(med_park_size_data, 4.81, 7.3) ~ "3rd quartile",
-    TRUE ~ "4th quartile"
+     between(med_park_size_data, 0, 3.0) ~ "1st quartile",
+     between(med_park_size_data, 3.01, 4.8) ~ "2nd quartile",
+     between(med_park_size_data, 4.81, 7.3) ~ "3rd quartile",
+       TRUE ~ "4th quartile"
   )) 
 
-### plot of median park size vs spending per resident over time
+# plot of median park size vs spending per resident over time
   
 q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data, 
                                group = city)) + 
@@ -185,39 +185,22 @@ parks_regions <- parks_q1 %>%
                      "Portland", "Sacramento", "San Diego", "San Francisco", 
                      "San Jose", "Seattle") ~ "West"))
 
-#group by region and year, then summarize mean of spending per resident and median park size 
+# group by region and year, then summarize mean of spending per resident and median park size 
 parks_regions <- parks_regions %>% 
   group_by(region, year) %>% 
   summarize(mean_spend = mean(spend_per_resident), 
-            mean_med_size = mean(med_park_size_data)) %>% 
-  print()
+            mean_med_size = mean(med_park_size_data))
 ```
 
     ## `summarise()` has grouped output by 'region'. You can override using the `.groups` argument.
 
-    ## # A tibble: 45 × 4
-    ## # Groups:   region [5]
-    ##    region     year mean_spend mean_med_size
-    ##    <chr>     <dbl>      <dbl>         <dbl>
-    ##  1 Midwest    2012       84.5          4.24
-    ##  2 Midwest    2013       85.5          4.33
-    ##  3 Midwest    2014       87.6          5.58
-    ##  4 Midwest    2015       92.8          5.58
-    ##  5 Midwest    2016       97            5.58
-    ##  6 Midwest    2017      106.           5.52
-    ##  7 Midwest    2018      115.           5.74
-    ##  8 Midwest    2019      115.           5.72
-    ##  9 Midwest    2020      119.           5.72
-    ## 10 Northeast  2012      114.           2.33
-    ## # … with 35 more rows
-
 ``` r
-#create a simplified data set to annotate 
+# create a simplified data set to annotate 
 regions <- parks_regions %>%
   count(year, region, mean_spend) %>%
   filter(year == 2019)
 
-### plot of mean spending per resident with respect to mean of median park size over time
+# plot of mean spending per resident with respect to mean of median park size over time
 
 ggplot(data = parks_regions, 
        aes(x = year, y = mean_spend, group = region)) + 
@@ -333,14 +316,14 @@ overwheling the audience.
 ### Analysis
 
 ``` r
-### data wrangling
+# data wrangling
 
-#top/bottom 10 cities
+# top/bottom 10 cities
 parks_2020 <- parks %>%
   filter(year == 2020,
          rank <= 10 | rank >= 88)
 
-#matching cities dataframe with parks dataframe
+# matching cities dataframe with parks dataframe
 cities <- cities %>%
   filter(state != "Maine") %>%
   mutate(city = case_when(city == "Washington" ~ "Washington, D.C.",
@@ -351,14 +334,14 @@ cities <- cities %>%
                latitude = c(38.8816),
                longitude = c(-77.0910)))
 
-#merging cities and parks data frames
+# merging cities and parks data frames
 parks_2020_coords <- left_join(parks_2020, cities, by = "city")
 
-#creating an indicator variable for rank
+# creating an indicator variable for rank
 parks_2020_coords <- parks_2020_coords %>%
   mutate(rank_div = ifelse(rank <= 10, "top", "bottom"))
 
-#dodging overlapping points
+# dodging overlapping points
 parks_2020_coords <- parks_2020_coords %>%
   mutate(longitude = case_when(rank == 1 ~ -93.5,
                               rank == 3 ~ -92.6,
@@ -369,7 +352,7 @@ parks_2020_coords <- parks_2020_coords %>%
                               TRUE ~ longitude),
          updown = ifelse(rank %in% c(3, 89, 2), "down", "up"))
 
-### plot of top/bottom 10 cities scaled by % of parkland
+# plot of top/bottom 10 cities scaled by % of parkland
 
 ggplot() +
   geom_polygon(data = map_data("state"), aes(x = long, y = lat, group = group),
@@ -399,21 +382,21 @@ ggplot() +
 <img src="README_files/figure-gfm/question-2-vis-1-1.png" width="90%" />
 
 ``` r
-### data wrangling
+# data wrangling
 
-#creating a total amenities variable
+# creating a total amenities variable
 parks_2020_coords <- parks_2020_coords %>%
   mutate(total_amenities = playground_data + restroom_data + basketball_data)
 
-#creating a long dataset for amenities, adding rank to city name for plot, and
-#shortening long city names
+# creating a long dataset for amenities, adding rank to city name for plot, and
+# shortening long city names
 parks_amenities <- parks_2020_coords %>%
   pivot_longer(cols = c(playground_data, restroom_data, basketball_data),
                names_to = "amenity", values_to = "value") %>%
   mutate(city = ifelse(city == "Charlotte/Mecklenburg County", "Charlotte", city),
          city_n = paste0("#", rank, " ", city))
 
-### plot of amenities 
+# plot of amenities 
 ggplot(data = parks_amenities, mapping = aes(y = reorder(city_n, -rank))) + 
   geom_bar(stat = "identity", mapping = aes(x = value, fill = amenity)) +
   geom_hline(yintercept = 10.5, linetype = "dashed", color = "#322718") + 
@@ -489,16 +472,16 @@ dataset, GitHub, viewed 23 September 2021,
 
 ## References
 
-  - <https://www.tpl.org/parks-and-an-equitable-recovery-parkscore-report>
-  - <https://github.com/thomasp85/gganimate/wiki/Animation-Composition>
-  - <https://cran.r-project.org/web/packages/gganimate/gganimate.pdf>
-  - <https://gganimate.com/>
-  - <https://www.datanovia.com/en/blog/gganimate-how-to-create-plots-with-beautiful-animation-in-r/>
-  - <http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html>
-  - <https://ropensci.org/blog/2018/07/23/gifski-release/>
-  - <https://gif.ski/>
-  - <https://github.com/r-rust/gifski>
-  - <https://gganimate.com/articles/gganimate.html#rendering-1>
-  - <https://stackoverflow.com/questions/52899017/slow-down-gganimate-in-r>
-  - <https://www.nationalgeographic.org/maps/united-states-regions/>
-  - <https://colorpalette.org/nature-wilderness-vegetation-color-palette-4/>
+-   <https://www.tpl.org/parks-and-an-equitable-recovery-parkscore-report>
+-   <https://github.com/thomasp85/gganimate/wiki/Animation-Composition>
+-   <https://cran.r-project.org/web/packages/gganimate/gganimate.pdf>
+-   <https://gganimate.com/>
+-   <https://www.datanovia.com/en/blog/gganimate-how-to-create-plots-with-beautiful-animation-in-r/>
+-   <http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html>
+-   <https://ropensci.org/blog/2018/07/23/gifski-release/>
+-   <https://gif.ski/>
+-   <https://github.com/r-rust/gifski>
+-   <https://gganimate.com/articles/gganimate.html#rendering-1>
+-   <https://stackoverflow.com/questions/52899017/slow-down-gganimate-in-r>
+-   <https://www.nationalgeographic.org/maps/united-states-regions/>
+-   <https://colorpalette.org/nature-wilderness-vegetation-color-palette-4/>
