@@ -234,24 +234,32 @@ We anticipated that the scatterplot would reveal that higher per capita
 spending on public parks would result in higher median park size,
 however we found that this was not the case upon plotting the data in
 figure 1. This plot elucidates the difference in median park size across
-the quartiles. If we focus on the cities that are in the 4th quartile
-for spending, we notice that more than half of them are in the first
-quartile for median park size across the years. Inversely, if we look
-closely at the cities that are in the 3rd quartile for spending, more
-than half of the median park sizes are in the 4th quartile. This trend
-holds true across the spending quartiles, with the most pronounced
-display of this effect being in the first spending quartile, where
-nearly all the cities are in the 3rd quartile of median park size. This
-disproves our initial suspicion that higher per capita spending on park
-size would result in larger median parks, at the very least amongst the
-37 cities plotted here.
+the quartiles. We decided to calculate the quartiles across the years in
+the data set, not adjusted to a certain year or recalculated on an
+annual basis because we felt this would be the most accurate way to see
+any change that happened over the years, such as cities switching from
+the third quartile to the second quartile for spending, for example. By
+keeping the dollar range which encompassed each quartile the same, we
+were able to visualize these changes on the animated plot. If we focus
+on the cities that are in the 4th quartile for spending, we notice that
+more than half of them are in the first quartile for median park size
+across the years. Inversely, if we look closely at the cities that are
+in the 3rd quartile for spending, more than half of the median park
+sizes are in the 4th quartile. This trend holds true across the spending
+quartiles, with the most pronounced display of this effect being in the
+first spending quartile, where nearly all the cities are in the 3rd
+quartile of median park size. This disproves our initial suspicion that
+higher per capita spending on park size would result in larger median
+parks, at the very least amongst the 37 cities plotted here.
 
 We hypothesize this might be the case because metropolitan cities with
 very densely populated areas likely have more money to spend on public
 parks, but less land that they can turn into a public park. We know that
 this hypothesis holds true for New York for example, as it is one of the
 cities that is in the 4th quartile for spending, but in the 1st quartile
-for median park size.
+for median park size. Another explanation could be that cities with
+higher real estate prices had more money to spend per capita on public
+parks, but again, less land to turn into parks.
 
 For the line plot over time, we suspected the five regions would have
 different trends, due to different natural geography, urban planning,
@@ -376,11 +384,7 @@ map_plot <- ggplot() +
   geom_text(data = parks_2020_coords %>% filter(updown == "down"),
             aes(x = longitude, y = latitude, label = paste0("#",rank)),
             size = 3.5, vjust = 1.8, family = "bold") +
-<<<<<<< HEAD
   scale_color_manual(values = c("#8dae98", "#322718")) + 
-=======
-  scale_color_manual(values = c("#322718", "#8dae98")) + 
->>>>>>> a6c5c2231d44ed86c34001c0f652b580e33fc942
   labs(x = NULL, y = NULL, color = "Top/Bottom\nRanking",
        title = "Top and bottom 10 city rankings of parks") +
   coord_map() + 
@@ -393,11 +397,7 @@ line_plot <- ggplot(parks_2020_coords, aes(x = as.numeric(str_extract(park_pct_c
                               y = y_height, color = rank_div)) +
   geom_point(size = 5, show.legend = FALSE) + 
   geom_text(aes(label = paste0("#",rank)), color = "black", vjust = -1) +
-<<<<<<< HEAD
   scale_color_manual(values = c("#8dae98", "#322718")) + 
-=======
-  scale_color_manual(values = c("#322718", "#8dae98")) + 
->>>>>>> a6c5c2231d44ed86c34001c0f652b580e33fc942
   ylim(-1.5, 1.5) + 
   scale_x_continuous(labels = scales::percent, limits = c(0, .25)) +
   labs(x = "% of city that is parkland") + 

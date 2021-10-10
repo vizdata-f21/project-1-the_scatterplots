@@ -26,10 +26,10 @@ knitr::opts_chunk$set(fig.width = 10,
 ```
 
 ```{r load-data, echo = FALSE}
-parks <- read.csv("~/R/project-1-the_scatterplots/data/parks.csv")
-#parks <- read.csv("~/R/STA313/Projects/project-1-the_scatterplots/data/parks.csv")
-cities <- fromJSON("~/R/project-1-the_scatterplots/data/cities.json")
-#cities <- fromJSON("~/R/STA313/Projects/project-1-the_scatterplots/data/cities.json")
+#parks <- read.csv("~/R/project-1-the_scatterplots/data/parks.csv")
+parks <- read.csv("~/R/STA313/Projects/project-1-the_scatterplots/data/parks.csv")
+#cities <- fromJSON("~/R/project-1-the_scatterplots/data/cities.json")
+cities <- fromJSON("~/R/STA313/Projects/project-1-the_scatterplots/data/cities.json")
 ```
 
 ### Introduction
@@ -235,7 +235,13 @@ ggplot(data = parks_regions,
 We anticipated that the scatterplot would reveal that higher per capita spending 
 on public parks would result in higher median park size, however we found that
 this was not the case upon plotting the data in figure 1. This plot elucidates
-the difference in median park size across the quartiles. If we focus on the 
+the difference in median park size across the quartiles. We decided to calculate 
+the quartiles across the years in the data set, not adjusted to a certain year 
+or recalculated on an annual basis because we felt this would be the most 
+accurate way to see any change that happened over the years, such as cities 
+switching from the third quartile to the second quartile for spending, for 
+example. By keeping the dollar range which encompassed each quartile the same, 
+we were able to visualize these changes on the animated plot. If we focus on the 
 cities that are in the 4th quartile for spending, we notice that more than half
 of them are in the first quartile for median park size across the years. 
 Inversely, if we look closely at the cities that are in the 3rd quartile for 
@@ -250,7 +256,9 @@ We hypothesize this might be the case because metropolitan cities with very dens
 populated areas likely have more money to spend on public parks, but less land 
 that they can turn into a public park. We know that this hypothesis holds true 
 for New York for example, as it is one of the cities that is in the 4th quartile
-for spending, but in the 1st quartile for median park size. 
+for spending, but in the 1st quartile for median park size. Another explanation 
+could be that cities with higher real estate prices had more money to spend per
+capita on public parks, but again, less land to turn into parks. 
 
 For the line plot over time, we suspected the five regions would have different trends, due to different natural geography, urban planning, and values 
 placed on public parks. The plot confirmed this hypothesis. In 2012, the Midwest, 
