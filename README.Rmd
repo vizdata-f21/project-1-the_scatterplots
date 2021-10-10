@@ -92,10 +92,12 @@ we grouped by year and region to complete the summarize function. We then
 calculated the mean spending per resident for each region during each year and
 the mean median park size for each region during each year.  We then plotted
 these means on a line plot over year on the x-axis and mean spending per 
-resident on the y-axis, grouped by year. We used the size aesthetic to show the 
-mean median park size because it made aesthetic sense for a size-based variable 
-to be mapped to a size aesthetic. This yielded a lineplot, that we noticed had 
-similar features to the Napoleon plot. 
+resident on the y-axis, grouped by year. We mapped the mean median park size to 
+both the size and alpha aesthetics because we believe these aesthetics visualized 
+the difference in size in a meaningful way. Visualizing the change in size across 
+time and regions using a size aeshetic allowed us to communicate the difference in
+park size. This yielded a lineplot, that we 
+noticed had similar features to the Napoleon plot. 
 
 ### Analysis
 
