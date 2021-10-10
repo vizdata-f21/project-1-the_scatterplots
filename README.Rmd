@@ -93,10 +93,12 @@ we grouped by year and region to complete the summarize function. We then
 calculated the mean spending per resident for each region during each year and
 the mean median park size for each region during each year.  We then plotted
 these means on a line plot over year on the x-axis and mean spending per 
-resident on the y-axis, grouped by year. We used the size aesthetic to show the 
-mean median park size because it made aesthetic sense for a size-based variable 
-to be mapped to a size aesthetic. This yielded a lineplot, that we noticed had 
-similar features to the Napoleon plot. 
+resident on the y-axis, grouped by year. We mapped the mean median park size to 
+both the size and alpha aesthetics because we believe these aesthetics visualized 
+the difference in size in a meaningful way. Visualizing the change in size across 
+time and regions using a size aeshetic allowed us to communicate the difference in
+park size. This yielded a lineplot, that we 
+noticed had similar features to the Napoleon plot. 
 
 ### Analysis
 
@@ -252,8 +254,7 @@ that they can turn into a public park. We know that this hypothesis holds true
 for New York for example, as it is one of the cities that is in the 4th quartile
 for spending, but in the 1st quartile for median park size. 
 
-For the line plot over time, we suspected there would be significant differences 
-among regions, due to different natural geography, urban planning, and values 
+For the line plot over time, we suspected the five regions would have different trends, due to different natural geography, urban planning, and values 
 placed on public parks. The plot confirmed this hypothesis. In 2012, the Midwest, 
 Southeast, and Southwest all spent under $90 per resident on average. Over the 
 next 8 years, the Midwest increased their spending by ~$30 on average, the 
@@ -261,8 +262,8 @@ Southeast increased their spending ~$20 per resident, and the Southwest had no
 substantial increase or decrease in spending. The Northeast and West stood out 
 in 2012 with regards to average spending. The Northeast spent ~$115 per resident 
 and the West spent ~$160 per resident. By 2020, both the West and Northeast were 
-spending between ~$170 and ~\$180 per resident, on average. There are few 
-significant changes in mean median park size, except for some fluctuation within 
+spending between ~$170 and ~\$180 per resident, on average. There are few changes 
+in mean median park size, except for some fluctuation within 
 the Northeast and an increase in the Midwest in 2014. From this plot, we can 
 conclude that while the West and Northeast do not have the most acreage of 
 public parks in their cities, they are spending more per resident. The overall 
