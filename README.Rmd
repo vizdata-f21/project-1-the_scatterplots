@@ -15,7 +15,7 @@ library(ggrepel)
 #remotes::install_github("thomasp85/gganimate@v0.1.1")
 library(gganimate)
 install.packages("gifski")
-library(gifski)
+#library(gifski)
 library(png)
 library(gridExtra)
 
@@ -93,12 +93,10 @@ we grouped by year and region to complete the summarize function. We then
 calculated the mean spending per resident for each region during each year and
 the mean median park size for each region during each year.  We then plotted
 these means on a line plot over year on the x-axis and mean spending per 
-resident on the y-axis, grouped by year. We mapped the mean median park size to 
-both the size and alpha aesthetics because we believe these aesthetics visualized 
-the difference in size in a meaningful way. Visualizing the change in size across 
-time and regions using a size aeshetic allowed us to communicate the difference in
-park size. This yielded a lineplot, that we 
-noticed had similar features to the Napoleon plot. 
+resident on the y-axis, grouped by year. We used the size aesthetic to show the 
+mean median park size because it made aesthetic sense for a size-based variable 
+to be mapped to a size aesthetic. This yielded a lineplot, that we noticed had 
+similar features to the Napoleon plot. 
 
 ### Analysis
 
@@ -369,7 +367,7 @@ map_plot <- ggplot() +
   geom_text(data = parks_2020_coords %>% filter(updown == "down"),
             aes(x = longitude, y = latitude, label = paste0("#",rank)),
             size = 3.5, vjust = 1.8, family = "bold") +
-  scale_color_manual(values = c("#bc8a31", "#315d1b")) + 
+  scale_color_manual(values = c("#322718", "#8dae98")) + 
   labs(x = NULL, y = NULL, color = "Top/Bottom\nRanking",
        title = "Top and bottom 10 city rankings of parks") +
   coord_map() + 
@@ -382,7 +380,7 @@ line_plot <- ggplot(parks_2020_coords, aes(x = as.numeric(str_extract(park_pct_c
                               y = y_height, color = rank_div)) +
   geom_point(size = 5, show.legend = FALSE) + 
   geom_text(aes(label = paste0("#",rank)), color = "black", vjust = -1) +
-  scale_color_manual(values = c("#bc8a31", "#315d1b")) + 
+  scale_color_manual(values = c("#322718", "#8dae98")) + 
   ylim(-1.5, 1.5) + 
   scale_x_continuous(labels = scales::percent, limits = c(0, .25)) +
   labs(x = "% of city that is parkland") + 
