@@ -172,16 +172,16 @@ animate(q1_plot, duration = 18)
 
 parks_regions <- parks_q1 %>% 
   mutate(region = case_when(
-         city %in% c("Boston", "Long Beach", "New York", "Philadelphia") ~
+          city %in% c("Boston", "Long Beach", "New York", "Philadelphia") ~
            "Northeast", 
-         city %in% c("Atlanta", "Baltimore", "Jacksonville", "Louisville", 
+          city %in% c("Atlanta", "Baltimore", "Jacksonville", "Louisville", 
                     "Memphis", "Nashville", "Virginia Beach") ~ "Southeast", 
-         city %in% c("Chicago", "Columbus", "Detroit", "Kansas City", 
+          city %in% c("Chicago", "Columbus", "Detroit", "Kansas City", 
                      "Milwaukee") ~ "Midwest", 
-         city %in% c("Albuquerque", "Austin", "Dallas", "El Paso", 
+          city %in% c("Albuquerque", "Austin", "Dallas", "El Paso", 
                      "Fort Worth", "Houston", "Mesa", "Oklahoma City",
                      "Phoenix", "San Antonio", "Tucson") ~ "Southwest", 
-         city %in% c("Denver", "Fresno", "Las Vegas", "Los Angeles", 
+          city %in% c("Denver", "Fresno", "Las Vegas", "Los Angeles", 
                      "Portland", "Sacramento", "San Diego", "San Francisco", 
                      "San Jose", "Seattle") ~ "West"))
 
@@ -204,7 +204,7 @@ regions <- parks_regions %>%
 
 ggplot(data = parks_regions, 
        aes(x = year, y = mean_spend, group = region)) + 
-  geom_line(aes(size = mean_med_size, color = region), lineend = "round", 
+  geom_line(aes(size = mean_med_size, alpha = mean_med_size, color = region), lineend = "round", 
             show.legend = FALSE) + 
   geom_text_repel(data = regions, 
                   aes(label = region, color = region), 
@@ -218,10 +218,11 @@ ggplot(data = parks_regions,
                                 "#4f3e23", 
                                 "#8999b0")) + 
   scale_y_continuous(breaks = seq(from = 0, to = 180, by = 20)) + 
-  labs(title = "Mean Spending per Resident Over Time with Respect to Mean of Median Park Size", 
+  labs(title = "Mean Spending per Resident Over Time\n with Respect to Mean of Median Park Size", 
          subtitle = "by US Region",
          x = "Year", 
-         y = "Mean Spending Per Resident (in USD)") + 
+         y = "Mean Spending Per Resident (in USD)", 
+       caption = "Line width and opacity corresponds to mean median park size (in acres)") + 
   theme_minimal()
 ```
 
@@ -316,14 +317,14 @@ overwheling the audience.
 ### Analysis
 
 ``` r
-# data wrangling
+### data wrangling
 
-# top/bottom 10 cities
+#top/bottom 10 cities
 parks_2020 <- parks %>%
   filter(year == 2020,
          rank <= 10 | rank >= 88)
 
-# matching cities dataframe with parks dataframe
+#matching cities dataframe with parks dataframe
 cities <- cities %>%
   filter(state != "Maine") %>%
   mutate(city = case_when(city == "Washington" ~ "Washington, D.C.",
@@ -334,50 +335,72 @@ cities <- cities %>%
                latitude = c(38.8816),
                longitude = c(-77.0910)))
 
-# merging cities and parks data frames
+#merging cities and parks data frames
 parks_2020_coords <- left_join(parks_2020, cities, by = "city")
 
-# creating an indicator variable for rank
+#creating an indicator variable for rank
 parks_2020_coords <- parks_2020_coords %>%
-  mutate(rank_div = ifelse(rank <= 10, "top", "bottom"))
+  mutate(rank_div = ifelse(rank <= 10, "Top", "Bottom"))
 
-# dodging overlapping points
+#dodging overlapping points
 parks_2020_coords <- parks_2020_coords %>%
   mutate(longitude = case_when(rank == 1 ~ -93.5,
-                              rank == 3 ~ -92.6,
-                              rank == 2 ~ -76.6,
-                              rank == 4 ~ -77.5,
-                              rank == 89 ~ -96.7,
-                              rank == 94 ~ -97.5,
-                              TRUE ~ longitude),
-         updown = ifelse(rank %in% c(3, 89, 2), "down", "up"))
+                               rank == 3 ~ -92.6,
+                               rank == 2 ~ -76.6,
+                               rank == 4 ~ -77.5,
+                               rank == 89 ~ -96.7,
+                               rank == 94 ~ -97.5,
+                               TRUE ~ longitude),
+         updown = ifelse(rank %in% c(3, 89, 2), "down", "up"),
+         y_height = case_when(rank == 3 ~ 1,
+                              rank == 91 ~ 1,
+                              rank == 96 ~ 1,
+                              rank == 89 ~ 1,
+                              rank == 97 ~ -1,
+                              rank == 94 ~ 1,
+                              TRUE ~ 0))
 
-# plot of top/bottom 10 cities scaled by % of parkland
+### plot of top/bottom 10 cities scaled by % of parkland
 
-ggplot() +
+map_plot <- ggplot() +
   geom_polygon(data = map_data("state"), aes(x = long, y = lat, group = group),
                fill = "white", color = "gray60") +
   geom_point(data = parks_2020_coords,
-             aes(x = longitude, y = latitude, color = rank_div,
-                 size = as.numeric(str_extract(park_pct_city_data,"\\d+"))/100)) +
+             aes(x = longitude, y = latitude, color = rank_div), size = 4) +
   geom_text(data = parks_2020_coords %>% filter(updown == "up"),
             aes(x = longitude, y = latitude, label = paste0("#",rank)),
             size = 3.5, vjust = -.8, family = "bold") +
   geom_text(data = parks_2020_coords %>% filter(updown == "down"),
             aes(x = longitude, y = latitude, label = paste0("#",rank)),
             size = 3.5, vjust = 1.8, family = "bold") +
-  scale_size_continuous(labels = scales::percent) +
   scale_color_manual(values = c("#bc8a31", "#315d1b")) + 
-  labs(x = NULL, y = NULL, size = "% of city that\nis parkland",
-       title = "Top and bottom 10 city rankings of parks",
-       subtitle = "scaled by % of city that is parkland") +
+  labs(x = NULL, y = NULL, color = "Top/Bottom\nRanking",
+       title = "Top and bottom 10 city rankings of parks") +
   coord_map() + 
   theme_void() +
-  guides(color = "none") + 
   theme(legend.position = c(.92,.3),
         plot.title = element_text(hjust = 0.1),
         plot.subtitle = element_text(hjust = 0.1))
+
+line_plot <- ggplot(parks_2020_coords, aes(x = as.numeric(str_extract(park_pct_city_data, "\\d+"))/100,
+                              y = y_height, color = rank_div)) +
+  geom_point(size = 5, show.legend = FALSE) + 
+  geom_text(aes(label = paste0("#",rank)), color = "black", vjust = -1) +
+  scale_color_manual(values = c("#bc8a31", "#315d1b")) + 
+  ylim(-1.5, 1.5) + 
+  scale_x_continuous(labels = scales::percent, limits = c(0, .25)) +
+  labs(x = "% of city that is parkland") + 
+  theme_minimal() +
+  theme(axis.ticks.y = element_blank(), axis.text.y = element_blank(),
+        panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank(),
+        axis.title.y = element_blank())
+
+grid.arrange(map_plot, line_plot, nrow=2, heights=c(5, 2))
 ```
+
+    ## Warning: Removed 1 rows containing missing values (geom_point).
+
+    ## Warning: Removed 1 rows containing missing values (geom_text).
 
 <img src="README_files/figure-gfm/question-2-vis-1-1.png" width="90%" />
 
