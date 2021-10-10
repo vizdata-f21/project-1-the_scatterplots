@@ -100,7 +100,7 @@ similar features to the Napoleon plot.
 ### Analysis
 
 ```{r question-1-vis-1}
-### data wrangling
+# data wrangling
 # to remove the $ and change from a categorical variable to a numerical variable 
 # selected relevant variables, pivot wider to see what cities have data from every year
 # drop na's from cities that do not have spending data from every year
@@ -112,43 +112,43 @@ parks_q1 <- parks %>%
                   %>% as.numeric)) %>% 
   pivot_wider(names_from = "year", 
               values_from = "spend_per_resident_data") %>% 
-  drop_na() %>% #this is where we lose it 
+  drop_na() %>% 
   pivot_longer(cols = starts_with("20"),
                names_to = "year", 
                values_to = "spend_per_resident") 
 
-#making the year variable numeric so we can join med_park_size_data back 
+# making the year variable numeric so we can join med_park_size_data back 
 parks_q1 <- parks_q1 %>% 
   mutate(year = as.numeric(year))
 
 
-#joining based on city and year to include med_park_size_data in the dataset
+# joining based on city and year to include med_park_size_data in the dataset
 parks_q1 <- parks %>% 
   select(city, year, med_park_size_data) %>% 
   right_join(parks_q1, by = c("city","year")) 
 
 fivenum(parks_q1$spend_per_resident)
 fivenum(parks_q1$med_park_size_data)
-#creating quartile bins for spending per resident, ranges based on five number summary
+# creating quartile bins for spending per resident, ranges based on five number summary
 parks_q1 <- parks_q1 %>% 
   arrange(city) %>% 
   mutate(spending = case_when(
     between(spend_per_resident, 0, 62) ~ "1st quartile",
     between(spend_per_resident, 63, 94) ~ "2nd quartile",
     between(spend_per_resident, 95, 134) ~ "3rd quartile",
-    TRUE ~ "4th quartile"
+     TRUE ~ "4th quartile"
   ))
 
-#creating quartile bins for median park size, ranges based on five number summary
+# creating quartile bins for median park size, ranges based on five number summary
   parks_q1 <- parks_q1 %>% 
     mutate(size = case_when(
-    between(med_park_size_data, 0, 3.0) ~ "1st quartile",
-    between(med_park_size_data, 3.01, 4.8) ~ "2nd quartile",
-    between(med_park_size_data, 4.81, 7.3) ~ "3rd quartile",
-    TRUE ~ "4th quartile"
+     between(med_park_size_data, 0, 3.0) ~ "1st quartile",
+     between(med_park_size_data, 3.01, 4.8) ~ "2nd quartile",
+     between(med_park_size_data, 4.81, 7.3) ~ "3rd quartile",
+       TRUE ~ "4th quartile"
   )) 
 
-### plot of median park size vs spending per resident over time
+# plot of median park size vs spending per resident over time
   
 q1_plot<- ggplot(parks_q1, aes(x = spend_per_resident, y = med_park_size_data, 
                                group = city)) + 
@@ -180,36 +180,35 @@ animate(q1_plot, duration = 18)
 
 parks_regions <- parks_q1 %>% 
   mutate(region = case_when(
-         city %in% c("Boston", "Long Beach", "New York", "Philadelphia") ~
+          city %in% c("Boston", "Long Beach", "New York", "Philadelphia") ~
            "Northeast", 
-         city %in% c("Atlanta", "Baltimore", "Jacksonville", "Louisville", 
+          city %in% c("Atlanta", "Baltimore", "Jacksonville", "Louisville", 
                     "Memphis", "Nashville", "Virginia Beach") ~ "Southeast", 
-         city %in% c("Chicago", "Columbus", "Detroit", "Kansas City", 
+          city %in% c("Chicago", "Columbus", "Detroit", "Kansas City", 
                      "Milwaukee") ~ "Midwest", 
-         city %in% c("Albuquerque", "Austin", "Dallas", "El Paso", 
+          city %in% c("Albuquerque", "Austin", "Dallas", "El Paso", 
                      "Fort Worth", "Houston", "Mesa", "Oklahoma City",
                      "Phoenix", "San Antonio", "Tucson") ~ "Southwest", 
-         city %in% c("Denver", "Fresno", "Las Vegas", "Los Angeles", 
+          city %in% c("Denver", "Fresno", "Las Vegas", "Los Angeles", 
                      "Portland", "Sacramento", "San Diego", "San Francisco", 
                      "San Jose", "Seattle") ~ "West"))
 
-#group by region and year, then summarize mean of spending per resident and median park size 
+# group by region and year, then summarize mean of spending per resident and median park size 
 parks_regions <- parks_regions %>% 
   group_by(region, year) %>% 
   summarize(mean_spend = mean(spend_per_resident), 
-            mean_med_size = mean(med_park_size_data)) %>% 
-  print()
+            mean_med_size = mean(med_park_size_data))
 
-#create a simplified data set to annotate 
+# create a simplified data set to annotate 
 regions <- parks_regions %>%
   count(year, region, mean_spend) %>%
   filter(year == 2019)
 
-### plot of mean spending per resident with respect to mean of median park size over time
+# plot of mean spending per resident with respect to mean of median park size over time
 
 ggplot(data = parks_regions, 
        aes(x = year, y = mean_spend, group = region)) + 
-  geom_line(aes(size = mean_med_size, color = region), lineend = "round", 
+  geom_line(aes(size = mean_med_size, alpha = mean_med_size, color = region), lineend = "round", 
             show.legend = FALSE) + 
   geom_text_repel(data = regions, 
                   aes(label = region, color = region), 
@@ -223,10 +222,11 @@ ggplot(data = parks_regions,
                                 "#4f3e23", 
                                 "#8999b0")) + 
   scale_y_continuous(breaks = seq(from = 0, to = 180, by = 20)) + 
-  labs(title = "Mean Spending per Resident Over Time with Respect to Mean of Median Park Size", 
+  labs(title = "Mean Spending per Resident Over Time\n with Respect to Mean of Median Park Size", 
          subtitle = "by US Region",
          x = "Year", 
-         y = "Mean Spending Per Resident (in USD)") + 
+         y = "Mean Spending Per Resident (in USD)", 
+       caption = "Line width and opacity corresponds to mean median park size (in acres)") + 
   theme_minimal()
 ```
 
@@ -310,14 +310,14 @@ audience.
 ### Analysis
 
 ```{r question-2-vis-1}
-### data wrangling
+# data wrangling
 
-#top/bottom 10 cities
+# top/bottom 10 cities
 parks_2020 <- parks %>%
   filter(year == 2020,
          rank <= 10 | rank >= 88)
 
-#matching cities dataframe with parks dataframe
+# matching cities dataframe with parks dataframe
 cities <- cities %>%
   filter(state != "Maine") %>%
   mutate(city = case_when(city == "Washington" ~ "Washington, D.C.",
@@ -328,14 +328,14 @@ cities <- cities %>%
                latitude = c(38.8816),
                longitude = c(-77.0910)))
 
-#merging cities and parks data frames
+# merging cities and parks data frames
 parks_2020_coords <- left_join(parks_2020, cities, by = "city")
 
-#creating an indicator variable for rank
+# creating an indicator variable for rank
 parks_2020_coords <- parks_2020_coords %>%
   mutate(rank_div = ifelse(rank <= 10, "top", "bottom"))
 
-#dodging overlapping points
+# dodging overlapping points
 parks_2020_coords <- parks_2020_coords %>%
   mutate(longitude = case_when(rank == 1 ~ -93.5,
                               rank == 3 ~ -92.6,
@@ -346,7 +346,7 @@ parks_2020_coords <- parks_2020_coords %>%
                               TRUE ~ longitude),
          updown = ifelse(rank %in% c(3, 89, 2), "down", "up"))
 
-### plot of top/bottom 10 cities scaled by % of parkland
+# plot of top/bottom 10 cities scaled by % of parkland
 
 ggplot() +
   geom_polygon(data = map_data("state"), aes(x = long, y = lat, group = group),
@@ -373,21 +373,21 @@ ggplot() +
 ```
 
 ```{r question-2-vis-2, message = FALSE}
-### data wrangling
+# data wrangling
 
-#creating a total amenities variable
+# creating a total amenities variable
 parks_2020_coords <- parks_2020_coords %>%
   mutate(total_amenities = playground_data + restroom_data + basketball_data)
 
-#creating a long dataset for amenities, adding rank to city name for plot, and
-#shortening long city names
+# creating a long dataset for amenities, adding rank to city name for plot, and
+# shortening long city names
 parks_amenities <- parks_2020_coords %>%
   pivot_longer(cols = c(playground_data, restroom_data, basketball_data),
                names_to = "amenity", values_to = "value") %>%
   mutate(city = ifelse(city == "Charlotte/Mecklenburg County", "Charlotte", city),
          city_n = paste0("#", rank, " ", city))
 
-### plot of amenities 
+# plot of amenities 
 ggplot(data = parks_amenities, mapping = aes(y = reorder(city_n, -rank))) + 
   geom_bar(stat = "identity", mapping = aes(x = value, fill = amenity)) +
   geom_hline(yintercept = 10.5, linetype = "dashed", color = "#322718") + 
