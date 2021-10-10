@@ -253,25 +253,24 @@ this hypothesis holds true for New York for example, as it is one of the
 cities that is in the 4th quartile for spending, but in the 1st quartile
 for median park size.
 
-For the line plot over time, we suspected there would be significant
-differences among regions, due to different natural geography, urban
-planning, and values placed on public parks. The plot confirmed this
-hypothesis. In 2012, the Midwest, Southeast, and Southwest all spent
-under $90 per resident on average. Over the next 8 years, the Midwest
-increased their spending by \~$30 on average, the Southeast increased
-their spending \~$20 per resident, and the Southwest had no substantial
-increase or decrease in spending. The Northeast and West stood out in
-2012 with regards to average spending. The Northeast spent \~$115 per
-resident and the West spent \~$160 per resident. By 2020, both the West
-and Northeast were spending between \~$170 and \~$180 per resident, on
-average. There are few significant changes in mean median park size,
-except for some fluctuation within the Northeast and an increase in the
-Midwest in 2014. From this plot, we can conclude that while the West and
-Northeast do not have the most acreage of public parks in their cities,
-they are spending more per resident. The overall increase in spending
-over time, for all five regions, tells us that local politicians have
-both had the means and the will to increase local park budgets over the
-past eight years.
+For the line plot over time, we suspected the five regions would have
+different trends, due to different natural geography, urban planning,
+and values placed on public parks. The plot confirmed this hypothesis.
+In 2012, the Midwest, Southeast, and Southwest all spent under $90 per
+resident on average. Over the next 8 years, the Midwest increased their
+spending by \~$30 on average, the Southeast increased their spending
+\~$20 per resident, and the Southwest had no substantial increase or
+decrease in spending. The Northeast and West stood out in 2012 with
+regards to average spending. The Northeast spent \~$115 per resident and
+the West spent \~$160 per resident. By 2020, both the West and Northeast
+were spending between \~$170 and \~$180 per resident, on average. There
+are few changes in mean median park size, except for some fluctuation
+within the Northeast and an increase in the Midwest in 2014. From this
+plot, we can conclude that while the West and Northeast do not have the
+most acreage of public parks in their cities, they are spending more per
+resident. The overall increase in spending over time, for all five
+regions, tells us that local politicians have both had the means and the
+will to increase local park budgets over the past eight years.
 
 ## How many amenities do parks with the top 10 and bottom 10 rankings in 2020 have and how does this vary based on what proportion of the top 10 and bottom 10 cities’ land is parkland in 2020?
 
@@ -373,7 +372,7 @@ map_plot <- ggplot() +
   geom_text(data = parks_2020_coords %>% filter(updown == "down"),
             aes(x = longitude, y = latitude, label = paste0("#",rank)),
             size = 3.5, vjust = 1.8, family = "bold") +
-  scale_color_manual(values = c("#bc8a31", "#315d1b")) + 
+  scale_color_manual(values = c("#322718", "#8dae98")) + 
   labs(x = NULL, y = NULL, color = "Top/Bottom\nRanking",
        title = "Top and bottom 10 city rankings of parks") +
   coord_map() + 
@@ -386,7 +385,7 @@ line_plot <- ggplot(parks_2020_coords, aes(x = as.numeric(str_extract(park_pct_c
                               y = y_height, color = rank_div)) +
   geom_point(size = 5, show.legend = FALSE) + 
   geom_text(aes(label = paste0("#",rank)), color = "black", vjust = -1) +
-  scale_color_manual(values = c("#bc8a31", "#315d1b")) + 
+  scale_color_manual(values = c("#322718", "#8dae98")) + 
   ylim(-1.5, 1.5) + 
   scale_x_continuous(labels = scales::percent, limits = c(0, .25)) +
   labs(x = "% of city that is parkland") + 
@@ -395,7 +394,7 @@ line_plot <- ggplot(parks_2020_coords, aes(x = as.numeric(str_extract(park_pct_c
         panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank(),
         axis.title.y = element_blank())
 
-grid.arrange(map_plot, line_plot, nrow=2, heights=c(5, 2))
+grid.arrange(map_plot, line_plot, nrow = 2, heights = c(5, 2))
 ```
 
     ## Warning: Removed 1 rows containing missing values (geom_point).
